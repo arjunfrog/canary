@@ -29,7 +29,7 @@ canary = "canary.cli:main"
 include = ["canary*"]
 
 [tool.setuptools.package-data]
-canary = ["schema.sql", "data/bank.db", "ui/fonts/*.ttf"]
+canary = ["schema.sql", "data/bank.db", "data/score_set.json", "ui/fonts/*.ttf"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

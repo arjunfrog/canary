@@ -24,14 +24,38 @@ STYLESHEET = f"""
 QLabel[role="muted"] {{ color: {MUTED.name()}; }}
 QLabel[role="error"] {{ color: {SEAL.name()}; }}
 QLabel[role="small"] {{ color: {MUTED.name()}; font-size: 14px; }}
+QLabel[role="link"] {{ color: {BALLPOINT.name()}; }}
 QPushButton {{ border: none; background: transparent; padding: 6px 2px; font-size: 20px; color: {CARBON.name()}; }}
 QPushButton[nav="true"]:checked {{ color: {BALLPOINT.name()}; border-bottom: 2px solid {BALLPOINT.name()}; }}
 QPushButton[primary="true"] {{ background: {BALLPOINT.name()}; color: white; padding: 9px 24px; font-size: 18px; }}
 QPushButton[primary="true"]:disabled {{ background: {RULE.name()}; color: {MUTED.name()}; }}
+QPushButton[primary="true"]:focus {{ border-bottom: 2px solid {CARBON.name()}; }}
+QPushButton[link="true"] {{ color: {BALLPOINT.name()}; font-size: 16px; padding: 4px 0px; border-bottom: 1px solid transparent; }}
+QPushButton[link="true"]:hover {{ border-bottom: 1px solid {BALLPOINT.name()}; }}
+QPushButton[link="true"]:disabled {{ color: {MUTED.name()}; }}
 QPushButton:focus {{ outline: none; border-bottom: 2px solid {BALLPOINT.name()}; }}
 QLineEdit {{ background: white; border: 1px solid {CARBON.name()}; padding: 9px 12px; font-size: 18px; }}
 QLineEdit:focus {{ border: 2px solid {BALLPOINT.name()}; }}
 QLineEdit:disabled {{ border-color: {RULE.name()}; }}
+QPlainTextEdit {{ background: white; border: 1px solid {RULE.name()}; padding: 8px 10px;
+                  selection-background-color: {BALLPOINT.name()}; selection-color: white; }}
+QPlainTextEdit[editable="true"] {{ border: 1px solid {CARBON.name()}; }}
+QPlainTextEdit[editable="true"]:focus {{ border: 2px solid {BALLPOINT.name()}; }}
+QScrollArea {{ border: none; background: transparent; }}
+QTableView {{ background: transparent; border: none; outline: none; }}
+QHeaderView {{ background: transparent; }}
+QHeaderView::section {{ background: transparent; color: {MUTED.name()}; border: none;
+                        border-bottom: 1px solid {DROPOUT.name()}; padding: 6px 12px 6px 0px; }}
+QScrollBar:vertical {{ background: transparent; width: 10px; margin: 0; }}
+QScrollBar::handle:vertical {{ background: {RULE.name()}; min-height: 32px; }}
+QScrollBar::handle:vertical:hover {{ background: {MUTED.name()}; }}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{ height: 0; }}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{ background: transparent; }}
+QScrollBar:horizontal {{ background: transparent; height: 10px; margin: 0; }}
+QScrollBar::handle:horizontal {{ background: {RULE.name()}; min-width: 32px; }}
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {{ width: 0; }}
+QDialog {{ background: {BOND.name()}; }}
+QToolTip {{ background: white; color: {CARBON.name()}; border: 1px solid {CARBON.name()}; }}
 """
 
 
@@ -40,19 +64,34 @@ def load_fonts() -> None:
         QFontDatabase.addApplicationFont(str(ttf))
 
 
+def _tabular(font: QFont) -> QFont:
+    """Tabular numbers, so digits line up in columns and do not jump while they change."""
+    try:
+        font.setFeature(QFont.Tag("tnum"), 1)
+    except (AttributeError, TypeError):          # older Qt: the font's default figures are used
+        pass
+    return font
+
+
 def display(px: int, semibold: bool = True) -> QFont:
     """Khand, for headings and numbers. Sizes are in pixels so macOS and Windows match."""
     font = QFont("Khand")
     font.setPixelSize(px)
     font.setWeight(QFont.Weight.DemiBold if semibold else QFont.Weight.Medium)
-    return font
+    return _tabular(font)
 
 
 def body(px: int = 16, weight: QFont.Weight = QFont.Weight.Normal) -> QFont:
     font = QFont("Mukta")
     font.setPixelSize(px)
     font.setWeight(weight)
-    return font
+    return _tabular(font)
+
+
+def reduce_motion() -> bool:
+    """CANARY_REDUCE_MOTION=1: show the funnel's final state instead of playing it."""
+    import os
+    return os.environ.get("CANARY_REDUCE_MOTION", "") == "1"
 
 
 def palette() -> QPalette:

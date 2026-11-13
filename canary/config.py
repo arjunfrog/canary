@@ -13,6 +13,7 @@ SCHEMA_SQL = PACKAGE_DIR / "schema.sql"
 
 IDLE_LOCK_SECONDS = 600                        # the app locks after this long with no key or mouse activity
 
+EXAM_ID = 1                                    # one exam per installation
 N_TRANSLATORS = 50
 N_PRINT_COPIES = 5000
 TRAPS_PER_TRANSLATOR = 6
