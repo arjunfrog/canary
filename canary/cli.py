@@ -15,7 +15,6 @@ from .vault import SECRET_NAMES, Vault, WrongPassphrase
 
 # command -> (help, task that builds it)
 NOT_BUILT = {
-    "sim": ("Run the limits simulation", 12),
     "check": ("Run the end-to-end health check", 13),
     "reset": ("Delete leaks, cases and evidence files", 13),
     "export-case": ("Save a case as a replay file", 13),
@@ -207,6 +206,20 @@ def cmd_evidence(args) -> int:
     return 0
 
 
+def cmd_sim(args) -> int:
+    from . import sim
+    started = time.monotonic()
+    result = sim.run_sim(trials=args.trials, seed=args.seed)
+    audit.record(db.connect(), "simulation run", {"trials": args.trials})
+    print(f"Wrote {sim.limits_path()} in {time.monotonic() - started:.1f} s. {args.trials:,} runs per point. "
+          f"Misread rates are {result['rates_source']}.")
+    for scenario in result["scenarios"]:
+        at14 = next(p for p in scenario["points"] if p["k"] == 14)
+        print(f"  {scenario['title']:52} 14 questions: traced {at14['traced_right'] * 100:5.1f}%, "
+              f"strong lead or better {at14['lead_right'] * 100:5.1f}%")
+    return 0
+
+
 def cmd_verify_audit(args) -> int:
     ok, bad = audit.verify(db.connect())
     print("Audit log verifies." if ok else f"Audit log is broken at row {bad}.")
@@ -331,6 +344,11 @@ def build_parser() -> argparse.ArgumentParser:
     issue = sub.add_parser("evidence", help="Issue the signed evidence file for a traced or strong-lead case")
     issue.add_argument("case_id", type=int)
     issue.set_defaults(fn=cmd_evidence)
+
+    sim = sub.add_parser("sim", help="Run the limits simulation and save it for the Limits screen")
+    sim.add_argument("--trials", type=int, default=20000)
+    sim.add_argument("--seed", type=int, default=7)
+    sim.set_defaults(fn=cmd_sim)
 
     add = sub.add_parser("add-leak", help="Queue a leak by hand")
     source = add.add_mutually_exclusive_group(required=True)

@@ -245,3 +245,47 @@ def test_evidence_cannot_be_issued_while_locked_or_without_a_named_copy(window):
     window.lock()
     case._issue_evidence()
     assert not evidence.manifest_path(traced).exists()
+
+
+# ---- task 12: the Limits screen
+
+def test_limits_screen_says_when_the_simulation_has_not_been_run(window):
+    page = window.pages["limits"]
+    window.show_page("limits")
+    assert not page.missing.isHidden() and page.loaded.isHidden() and not page.run_button.isHidden()
+    assert "has not been run on this laptop yet" in page.message.text()
+    assert window.marks.states() == [False] * 7
+
+
+def test_limits_screen_draws_from_the_saved_file_without_rerunning(window, monkeypatch):
+    from canary import sim
+    sim.run_sim(trials=1500)
+
+    def must_not_run(*args, **kwargs):
+        raise AssertionError("the Limits screen must draw from the saved file")
+    monkeypatch.setattr(sim, "run_sim", must_not_run)
+    page = window.pages["limits"]
+    window.show_page("limits")
+    assert page.missing.isHidden() and not page.loaded.isHidden()
+    assert len(page._buttons) == 7 and page._buttons[0].isChecked()
+    assert page.title.text() == "Translator leak, typed, values kept" and len(page.chart.points()) == 7
+    assert "Simulation, not field results" in page.note.text() and "assumed" in page.note.text()
+    assert window.marks.states() == [True, True, True, False, True, True, False]
+    page._buttons[3].click()
+    assert page.title.text().startswith("Translator leak with numbers removed") and "cannot name anyone" in page.sentence.text()
+    assert all(p["traced_right"] == 0 for p in page.chart.points())
+    window.show_page("leaks")
+    window.show_page("limits")
+    assert page._buttons[3].isChecked() and len(page._buttons) == 7        # the choice is kept
+
+
+def test_run_the_simulation_button_fills_the_screen(window):
+    page = window.pages["limits"]
+    window.show_page("limits")
+    page.run_button.click()
+    assert not page.loaded.isHidden() and len(page.chart.points()) == 7
+    assert [r[0] for r in db.connect().execute("SELECT action FROM audit_log ORDER BY id DESC LIMIT 1")] == ["simulation run"]
+    from canary import sim
+    sim.limits_path().write_text("{broken")
+    page.refresh()
+    assert "cannot be read" in page.message.text() and not page.run_button.isHidden()

@@ -54,7 +54,7 @@ def render_all(out_dir: Path, width: int = 1440, height: int = 900) -> list[Path
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     from PySide6.QtWidgets import QApplication
 
-    from .. import config, queries
+    from .. import config, queries, sim
     from ..vault import Vault
     from . import theme
     from .main_window import MainWindow
@@ -108,7 +108,14 @@ def render_all(out_dir: Path, width: int = 1440, height: int = 900) -> list[Path
             bar.setValue(bar.maximum())
             grab("case_lower")
             window.show_page("limits")
+            grab("limits_not_run")
+            sim.run_sim()
+            window.show_page("limits")
             grab("limits")
+            window.pages["limits"].select(4)
+            grab("limits_merged")
+            window.pages["limits"].select(3)
+            grab("limits_fails")
             window.vault = None                              # nothing was unlocked, so nothing to record on close
             window.close()
         finally:
