@@ -187,7 +187,7 @@ def test_the_status_line_reports_chats_telegram_and_the_photo_reader(app):
     line = StatusLine()
     status = queries.Status([("examleaks_demo", "Exam <b>leaks</b>"), ("neet_demo", "NEET")], {"queued": 1, "done": 3}, 4, True)
     line.show_status(status, lurker.ListenerState(True, "Telegram connected.", 2), FakeVault("k"), reader_reachable=True)
-    assert line.text() == "Watching 2 chats.  Telegram connected.  Photo reader ready.  1 leak waiting to be read."
+    assert line.text() == "Watching 2 chats.  Telegram connected.  Photo analysis is ready.  1 leak waiting to be read."
     line.show_status(status, lurker.ListenerState(True, "Telegram connected.", 2), FakeVault("k"), reader_reachable=False)
     assert "Photo reader not reachable." in line.text() and "Offline" not in line.text()
     line.show_status(status, lurker.ListenerState(True, "Telegram connected.", 2), FakeVault(None))
@@ -200,9 +200,9 @@ def test_offline_it_says_typed_leaks_still_work(app):
     status = queries.Status([], {}, 0, False)
     line.show_status(status, lurker.ListenerState(False, "Telegram is not reachable. Typed leaks still work."), FakeVault("k"),
                      reader_reachable=False)
-    assert line.text().startswith("Offline. Typed leaks still work.") and "python -m canary seed" in line.text()
+    assert line.text().startswith("Manual leak entry is available.") and "python -m canary seed" in line.text()
     line.show_status(status, lurker.ListenerState(False, "Telegram is not logged in. Run: python -m canary tg-login"), FakeVault(None))
-    assert line.text().startswith("Offline. Typed leaks still work.") and "tg-login" in line.text()
+    assert line.text().startswith("Manual leak entry is available.") and "tg-login" in line.text()
     line.show_replay()
     assert "Replay" in line.text()
 
