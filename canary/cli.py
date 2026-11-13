@@ -17,7 +17,6 @@ from .vault import SECRET_NAMES, Vault, WrongPassphrase
 
 # command -> (help, task that builds it)
 NOT_BUILT = {
-    "read": ("Read a photo and print the questions found", 5),
     "tg-login": ("Log the Telegram account in, once", 7),
     "watch": ("Watch a public channel or group", 7),
     "unwatch": ("Stop watching a channel or group", 7),
@@ -137,6 +136,26 @@ def cmd_verify_chain(args) -> int:
     return 0 if ok else 1
 
 
+def cmd_read(args) -> int:
+    from . import reader
+    vault = unlock()
+    if not vault.get("gemini_api_key"):
+        sys.exit("No Gemini key in the vault. Add one with: python -m canary vault set gemini_api_key")
+    try:
+        data = reader.read_image(Path(args.photo).read_bytes(), vault.get("gemini_api_key"), use_cache=not args.no_cache)
+    except reader.ReaderError as exc:
+        sys.exit(str(exc))
+    audit.record(db.connect(), "photo read by hand", {"questions": len(data["questions"])})
+    print(f"{len(data['questions'])} questions read by {data['model']}.")
+    for q in data["questions"]:
+        print(f"\n{q['number'] if q['number'] is not None else '?'}. {q['stem']}" + ("" if q["legible"] else "   [hard to read]"))
+        if q.get("stem_en"):
+            print(f"   in English: {q['stem_en']}")
+        for label, option in zip("ABCDEFGH", q["options"]):
+            print(f"   ({label}) {option}")
+    return 0
+
+
 def cmd_verify_audit(args) -> int:
     ok, bad = audit.verify(db.connect())
     print("Audit log verifies." if ok else f"Audit log is broken at row {bad}.")
@@ -244,6 +263,11 @@ def build_parser() -> argparse.ArgumentParser:
     chain.add_argument("--stage", choices=("translation", "print"), required=True)
     chain.add_argument("--copy", type=int, required=True)
     chain.set_defaults(fn=cmd_verify_chain)
+
+    read = sub.add_parser("read", help="Read a photo and print the questions found")
+    read.add_argument("photo", metavar="PHOTO")
+    read.add_argument("--no-cache", action="store_true", help="ask the reader again even if this photo was read before")
+    read.set_defaults(fn=cmd_read)
 
     add = sub.add_parser("add-leak", help="Queue a leak by hand")
     source = add.add_mutually_exclusive_group(required=True)

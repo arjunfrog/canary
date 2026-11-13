@@ -405,7 +405,8 @@ def make_handler(vault, on_case=None):
         api_key = vault.get("gemini_api_key")
         if not api_key:
             raise photo_reader.ReaderError("No Gemini key in the vault, so photos cannot be read. Typed leaks still work.")
-        return photo_reader.read_image(image, api_key), photo_reader.model_name()
+        data = photo_reader.read_image(image, api_key)
+        return data, data.get("model") or photo_reader.model_name()
 
     def handler(conn: sqlite3.Connection, leak: sqlite3.Row) -> None:
         case_id = analyze_leak(conn, leak, key, read_image)
