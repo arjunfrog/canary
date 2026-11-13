@@ -11,13 +11,11 @@ import shutil
 import sys
 from pathlib import Path
 
-from . import __version__, audit, config, db, worker
-from .analyze import analyze_leak
+from . import __version__, analyze, audit, config, db, worker
 from .vault import SECRET_NAMES, Vault, WrongPassphrase
 
 # command -> (help, task that builds it)
 NOT_BUILT = {
-    "decode": ("Decode a typed leak from a file", 2),
     "print-copies": ("Write copies as PDF, with sealed slips", 3),
     "seed": ("Create the exam, copies, people and custody chains", 4),
     "verify-chain": ("Check one copy's custody chain", 4),
@@ -73,6 +71,32 @@ def cmd_vault_set(args) -> int:
     return 0
 
 
+def fingerprint_key(vault: Vault) -> bytes:
+    return bytes.fromhex(vault.get("fingerprint_key"))
+
+
+def cmd_decode(args) -> int:
+    text = Path(args.text).read_text(encoding="utf-8", errors="replace")
+    result = analyze.analyse_text(text, fingerprint_key(unlock()))
+    if result.status == "unreadable":
+        print("We couldn't read this clearly. No verdict.")
+        return 0
+    stage = {"translation": "translation (leaked before printing)", "print": "print (leaked after printing)"}
+    print(f"stage:    {stage.get(result.stage, 'not known')}")
+    print(f"verdict:  {result.verdict}")
+    if result.decoded is None:
+        return 0
+    d = result.decoded
+    print(f"copy:     {d.copy_no if d.copy_no is not None else 'none named'}")
+    print(f"score:    {d.score} of {d.clues} clues matched")
+    print(f"expected false matches: {d.expected_false_matches:.3g}  (among {d.candidates} candidate copies)")
+    print("funnel:   clue  question  kind    copies left  expected false matches")
+    for step in result.steps:
+        print(f"          {step['clue']:>4}  {step['question_id']:8}  {step['kind']:6}  {step['remaining']:>11}  "
+              f"{step['expected_false_matches']:.3g}")
+    return 0
+
+
 def cmd_verify_audit(args) -> int:
     ok, bad = audit.verify(db.connect())
     print("Audit log verifies." if ok else f"Audit log is broken at row {bad}.")
@@ -125,10 +149,9 @@ def cmd_run(args) -> int:
     audit.record(conn, "unlocked")
     print(f"Canary {__version__} is running with no window. Data: {config.home()}")
     print("Worker: on.  Telegram listener: not built yet (task 7).  Ctrl+C to stop.")
-    del vault                                     # task 7 will pass it to the listener
 
     async def main() -> None:
-        await worker.run_worker(conn, analyze_leak, asyncio.Event())
+        await worker.run_worker(conn, analyze.make_handler(vault), asyncio.Event())
 
     try:
         asyncio.run(main())
@@ -164,6 +187,10 @@ def build_parser() -> argparse.ArgumentParser:
     vset.set_defaults(fn=cmd_vault_set)
 
     sub.add_parser("verify-audit", help="Check the audit log's hash chain").set_defaults(fn=cmd_verify_audit)
+
+    decode = sub.add_parser("decode", help="Decode a typed leak from a file")
+    decode.add_argument("--text", metavar="FILE", required=True)
+    decode.set_defaults(fn=cmd_decode)
 
     add = sub.add_parser("add-leak", help="Queue a leak by hand")
     source = add.add_mutually_exclusive_group(required=True)

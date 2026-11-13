@@ -4,7 +4,7 @@ import asyncio
 from PySide6.QtCore import QThread, Signal
 
 from .. import db, worker
-from ..analyze import analyze_leak
+from ..analyze import make_handler
 
 
 class Background(QThread):
@@ -21,9 +21,11 @@ class Background(QThread):
         self._loop = asyncio.new_event_loop()
         self._stop = asyncio.Event()
 
+        handler = make_handler(self._vault)
+
         async def main() -> None:
             while not self._stop.is_set():
-                if worker.process_next(conn, analyze_leak):
+                if worker.process_next(conn, handler):
                     self.changed.emit()
                     continue
                 try:

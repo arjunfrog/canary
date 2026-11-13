@@ -1,7 +1,6 @@
 import pytest
 
 from canary import cli, db, worker
-from canary.analyze import analyze_leak
 
 
 def queue(conn, text="a leak"):
@@ -31,9 +30,13 @@ def test_worker_takes_leaks_oldest_first(conn):
 
 def test_failing_handler_marks_the_leak_failed_and_the_worker_continues(conn):
     bad, good = queue(conn), queue(conn)
-    worker.process_next(conn, analyze_leak)               # the stub raises until task 6
+
+    def handler(c, leak):
+        raise RuntimeError("the photo reader is out of quota")
+
+    worker.process_next(conn, handler)
     assert status(conn, bad)["status"] == "failed"
-    assert "task 6" in status(conn, bad)["error"]
+    assert "out of quota" in status(conn, bad)["error"]
     assert status(conn, good)["status"] == "queued"
 
 
