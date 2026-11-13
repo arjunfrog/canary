@@ -91,7 +91,7 @@ class AddLeakDialog(QDialog):
         self.choose.clicked.connect(self._choose)
         self.image_label = plain("Or drop an image here: a photo or screenshot of the paper.", 15, role="muted")
         self.message = plain("", 15, role="error", wrap=True)
-        self.add = primary_button("Add this leak")
+        self.add = primary_button("Add  leak")
         self.add.clicked.connect(self._submit)
         self.cancel = link_button("Cancel")
         self.cancel.clicked.connect(self.reject)
@@ -108,7 +108,7 @@ class AddLeakDialog(QDialog):
         layout.setContentsMargins(32, 24, 32, 24)
         layout.setSpacing(12)
         layout.addWidget(heading("Add a leak", 34))
-        layout.addWidget(plain("Typed leaks are read on this laptop, with no network. Images go to the photo reader.", 15,
+        layout.addWidget(plain("Text is analyzed on this laptop. Images are sent to the configured photo reader for analysis.", 15,
                                role="muted", wrap=True))
         layout.addWidget(self.text, 1)
         layout.addLayout(image_row)
