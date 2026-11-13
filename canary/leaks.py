@@ -45,8 +45,14 @@ def add_manual_leak(conn: sqlite3.Connection, text: str | None = None, image_pat
             if Path(image_path).stat().st_size > MAX_IMAGE_BYTES:
                 raise LeakRefused("That image is larger than 10 MB.")
             data = Path(image_path).read_bytes()
-        except OSError:
-            raise LeakRefused("That file could not be opened.") from None
+        except PermissionError:
+            raise LeakRefused("macOS did not let Canary open that file. It probably belongs to another app, such as "
+                              "Messages or Photos. Save it to Downloads or the Desktop first, then choose it from there.") from None
+        except FileNotFoundError:
+            raise LeakRefused("That file is no longer there. If it came from another app, save it to Downloads or "
+                              "the Desktop first, then choose it from there.") from None
+        except OSError as exc:
+            raise LeakRefused(f"That file could not be opened ({exc.strerror or type(exc).__name__}).") from None
         stored, sha = save_image(data)
     else:
         text = text[:MAX_TEXT_CHARS]

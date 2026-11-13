@@ -234,3 +234,18 @@ def test_stem_numbers_alone_need_two_numbers_one_value_set_and_some_shared_wordi
     numbers = " and ".join(analyze.numbers_in(first.stem))
     assert matcher.by_stem_numbers(analyze.ReadQuestion(1, f"A pendulum swings {numbers} times before lunch")) is None
     assert matcher.by_stem_numbers(analyze.ReadQuestion(1, "A car starts from rest and covers some distance")) is None
+
+
+def test_a_file_another_app_keeps_private_gets_a_message_that_says_what_to_do(seeded, tmp_path, monkeypatch):
+    from pathlib import Path
+    photo = tmp_path / "IMG_6847.png"
+    photo.write_bytes(PNG)
+
+    def not_permitted(self):
+        raise PermissionError(1, "Operation not permitted")
+    monkeypatch.setattr(Path, "read_bytes", not_permitted)
+    with pytest.raises(leaks.LeakRefused, match="belongs to another app.*Save it to Downloads"):
+        leaks.add_manual_leak(seeded, image_path=photo)
+    with pytest.raises(leaks.LeakRefused, match="no longer there"):
+        leaks.add_manual_leak(seeded, image_path=tmp_path / "gone.png")
+    assert seeded.execute("SELECT count(*) FROM leaks").fetchone()[0] == 0
