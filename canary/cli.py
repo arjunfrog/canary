@@ -6,8 +6,6 @@ Every other command is registered and says which task builds it.
 import argparse
 import asyncio
 import getpass
-import hashlib
-import shutil
 import sys
 import time
 from pathlib import Path
@@ -163,23 +161,16 @@ def cmd_verify_audit(args) -> int:
 
 
 def cmd_add_leak(args) -> int:
+    from . import leaks
     conn = db.connect()
-    text = image_path = sha = None
-    if args.text:
-        text = Path(args.text).read_text()
-    else:
-        data = Path(args.image).read_bytes()
-        sha = hashlib.sha256(data).hexdigest()
-        dest = config.home() / "leaks" / f"{sha[:16]}{Path(args.image).suffix.lower()}"
-        shutil.copyfile(args.image, dest)
-        dest.chmod(0o600)
-        image_path = str(dest)
-    cur = conn.execute(
-        "INSERT INTO leaks (source, raw_text, image_path, image_sha256, posted_at, received_at) VALUES ('manual', ?, ?, ?, ?, ?)",
-        (text, image_path, sha, db.now(), db.now()))
-    conn.commit()
-    audit.record(conn, "leak added by hand", {"leak_id": cur.lastrowid})
-    print(f"Leak {cur.lastrowid} queued.")
+    try:
+        if args.text:
+            leak_id = leaks.add_manual_leak(conn, text=Path(args.text).read_text(encoding="utf-8", errors="replace"))
+        else:
+            leak_id = leaks.add_manual_leak(conn, image_path=args.image)
+    except (leaks.LeakRefused, OSError) as exc:
+        sys.exit(str(exc))
+    print(f"Leak {leak_id} queued.")
     return 0
 
 
