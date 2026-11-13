@@ -172,6 +172,8 @@ class RateLimit:
 
     def __init__(self, limit: int = MAX_PER_MINUTE, clock=time.monotonic):
         self.limit, self._clock, self._seen = limit, clock, {}
+        self._reported: dict[int, float] = {}
+        self.dropped: dict[int, int] = {}                # per chat, since it was last written to the audit log
 
     def allow(self, chat_id: int) -> bool:
         now = self._clock()
@@ -179,8 +181,18 @@ class RateLimit:
         allowed = len(recent) < self.limit
         if allowed:
             recent.append(now)
+        else:
+            self.dropped[chat_id] = self.dropped.get(chat_id, 0) + 1
         self._seen[chat_id] = recent
         return allowed
+
+    def should_report(self, chat_id: int) -> bool:
+        """True at most once a minute per chat, so a flooded chat cannot flood the audit log as well."""
+        now = self._clock()
+        if chat_id in self._reported and now - self._reported[chat_id] < 60:
+            return False
+        self._reported[chat_id] = now
+        return True
 
 
 def kind_of(message) -> str | None:
@@ -228,7 +240,9 @@ async def handle_message(conn: sqlite3.Connection, client, message, chat: Chat, 
         return None                                              # seen before
     if limiter is not None and not limiter.allow(chat.id):
         log.warning("Dropped message %s in %s: more than %s leaks a minute", message.id, chat.username, MAX_PER_MINUTE)
-        audit.record(conn, "leak dropped, chat too busy", {"chat": chat.username, "message_id": int(message.id)})
+        if limiter.should_report(chat.id):
+            audit.record(conn, "leaks dropped, chat too busy", {"chat": chat.username, "first_message_id": int(message.id),
+                                                                "limit_per_minute": limiter.limit})
         return None
     image_path = sha = None
     if kind_of(message) in ("photo", "image"):

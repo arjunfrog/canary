@@ -10,11 +10,10 @@ Handler = Callable[[sqlite3.Connection, sqlite3.Row], None]
 
 
 def claim_next(conn: sqlite3.Connection) -> sqlite3.Row | None:
-    """Take the oldest queued leak and mark it as being read."""
-    row = conn.execute("SELECT * FROM leaks WHERE status = 'queued' ORDER BY id LIMIT 1").fetchone()
-    if row is None:
-        return None
-    conn.execute("UPDATE leaks SET status = 'reading' WHERE id = ?", (row["id"],))
+    """Take the oldest queued leak and mark it as being read, in one statement so no two workers take the same one."""
+    row = conn.execute(
+        "UPDATE leaks SET status = 'reading' WHERE status = 'queued' AND id = "
+        "(SELECT id FROM leaks WHERE status = 'queued' ORDER BY id LIMIT 1) RETURNING *").fetchone()
     conn.commit()
     return row
 

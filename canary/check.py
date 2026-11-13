@@ -80,7 +80,7 @@ def check(conn: sqlite3.Connection, vault, say=print) -> bool:
     finally:
         for leak_id in made:
             conn.execute("DELETE FROM leaks WHERE id = ?", (leak_id,))          # cases and leak_questions go with it
-        conn.commit()
+        db.scrub(conn)                                                 # a typed-out copy must not linger in the file
     total = time.monotonic() - started
     audit.record(conn, "health check", {"passed": reason is None, "reason": reason})
     for name, seconds in timings:
@@ -99,7 +99,7 @@ def reset(conn: sqlite3.Connection) -> dict:
     conn.execute("DELETE FROM leak_questions")
     conn.execute("DELETE FROM cases")
     conn.execute("DELETE FROM leaks")
-    conn.commit()
+    db.scrub(conn)
     for folder, name in (("evidence", "evidence files"), ("leaks", "leak images"), ("cache", None)):
         root = config.home() / folder
         if not root.is_dir():

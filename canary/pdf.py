@@ -219,7 +219,9 @@ def export_copy(conn: sqlite3.Connection, key: bytes, stage: str, copy_no: int) 
 
 def print_copies(conn: sqlite3.Connection, key: bytes, translator: list[int], printed: list[int], out: Path) -> list[Path]:
     """Write the chosen copies, plus a sealed slip for each showing its stage and number."""
-    out.mkdir(parents=True, exist_ok=True)
+    if not out.exists():
+        out.mkdir(parents=True)
+        os.chmod(out, 0o700)                                   # these papers and slips say which copy is which
     written = []
     for stage, numbers in (("translation", translator), ("print", printed)):
         for copy_no in numbers:

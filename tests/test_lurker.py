@@ -137,17 +137,23 @@ def test_a_channel_post_stores_its_author_signature(conn):
     assert conn.execute("SELECT sender_name FROM leaks WHERE id = ?", (leak_id,)).fetchone()[0] == "Exam leaks demo"
 
 
-def test_at_most_ten_new_leaks_a_minute_per_chat_and_drops_are_logged(conn):
+def test_at_most_ten_new_leaks_a_minute_per_chat_and_drops_are_logged(conn, caplog):
     now = [0.0]
     limiter = lurker.RateLimit(clock=lambda: now[0])
     kept = [go(lurker.handle_message(conn, FakeClient(), message(100 + i, LONG), CHAT, limiter)) for i in range(13)]
     assert sum(1 for k in kept if k) == 10 and kept[10:] == [None, None, None]
-    dropped = conn.execute("SELECT count(*) FROM audit_log WHERE action = 'leak dropped, chat too busy'").fetchone()[0]
-    assert dropped == 3
+    assert sum("Dropped message" in r.getMessage() for r in caplog.records) == 3
+    # every drop is counted and logged, but the audit log gets one row a minute per chat, so a flood cannot fill it
+    assert limiter.dropped[CHAT.id] == 3
+    dropped = conn.execute("SELECT detail FROM audit_log WHERE action = 'leaks dropped, chat too busy'").fetchall()
+    assert len(dropped) == 1 and '"first_message_id": 110' in dropped[0][0]
     other = lurker.Chat(-1009, "another_chat", "Another")
     assert go(lurker.handle_message(conn, FakeClient(), message(1, LONG), other, limiter))    # other chats are unaffected
     now[0] = 61.0
     assert go(lurker.handle_message(conn, FakeClient(), message(200, LONG), CHAT, limiter))
+    for i in range(12):
+        go(lurker.handle_message(conn, FakeClient(), message(300 + i, LONG), CHAT, limiter))
+    assert conn.execute("SELECT count(*) FROM audit_log WHERE action = 'leaks dropped, chat too busy'").fetchone()[0] == 2
 
 
 def test_usernames_are_cleaned_and_anything_odd_is_refused():

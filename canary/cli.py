@@ -62,6 +62,7 @@ def fingerprint_key(vault: Vault) -> bytes:
 def cmd_decode(args) -> int:
     text = Path(args.text).read_text(encoding="utf-8", errors="replace")
     result = analyze.analyse_text(text, fingerprint_key(unlock()))
+    audit.record(db.connect(), "leak decoded by hand", {"verdict": result.verdict, "status": result.status})
     if result.status == "unreadable":
         print("We couldn't read this clearly. No verdict.")
         return 0
@@ -242,8 +243,12 @@ def cmd_export_case(args) -> int:
 
 
 def cmd_verify_audit(args) -> int:
-    ok, bad = audit.verify(db.connect())
+    conn = db.connect()
+    ok, bad = audit.verify(conn)
     print("Audit log verifies." if ok else f"Audit log is broken at row {bad}.")
+    rows, newest = audit.head(conn)
+    print(f"{rows} rows. Newest hash: {newest}")
+    print("Keep that hash somewhere else. If rows are ever cut off the end, it will no longer be in the log.")
     return 0 if ok else 1
 
 

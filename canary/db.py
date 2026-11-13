@@ -21,5 +21,12 @@ def connect(path: Path | None = None) -> sqlite3.Connection:
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode = WAL")
     conn.execute("PRAGMA foreign_keys = ON")
+    conn.execute("PRAGMA secure_delete = ON")       # deleted rows are overwritten, not left readable in the file
     conn.executescript(config.SCHEMA_SQL.read_text())
     return conn
+
+
+def scrub(conn: sqlite3.Connection) -> None:
+    """After deleting rows: fold the write-ahead log into the database and empty it, so no copy of them is left there."""
+    conn.commit()
+    conn.execute("PRAGMA wal_checkpoint(TRUNCATE)")

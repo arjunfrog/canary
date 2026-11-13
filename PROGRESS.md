@@ -19,7 +19,7 @@ Kept current so the work can be picked up again.
 | 11. Evidence file and response | Done | `tests/test_evidence.py` |
 | 12. Limits chart | Done | `tests/test_sim.py`, screenshots checked by eye |
 | 13. Health check, replay, packaging | Done on macOS | `canary check` passed 3 times from source and 3 times from `dist/Canary.app` |
-| Security review | Not started | |
+| Security review | Done | `tests/test_security.py`: 15 guard tests |
 | `canary score` and improvement rounds | Not started | |
 
 ## Decisions
@@ -51,6 +51,33 @@ Kept current so the work can be picked up again.
 - The packaged app drops the Qt plugins it has no use for, so only QtCore, QtGui, QtWidgets and QtDBus
   (which QtGui itself needs on macOS) are inside it.
 - Added commands the tasks did not name: `evidence ID` (issue from the command line) and `verify --expect`.
+
+## Security review: what was found and fixed
+
+Reviewed against each security rule in the brief, as a sceptical judge would.
+
+| Found | Fix |
+|---|---|
+| Two connections could chain an audit row onto the same previous row, making an honest log fail verification | `audit.record` reads and writes inside one `BEGIN IMMEDIATE` transaction. Tested with 4 threads |
+| Two workers (app plus `run --headless`) could claim the same leak | `claim_next` is one `UPDATE ... RETURNING` statement. Tested with 4 threads |
+| Rows deleted by `check` and `reset` stayed readable in the database file's freed pages | `PRAGMA secure_delete = ON`, and the write-ahead log is truncated after deletions |
+| A spammed chat could write one audit row per dropped message | One audit row per chat per minute; every drop still goes to the Python log |
+| "Save a copy" could finish after the window locked, if its folder dialog was open at the time | It checks the lock again after the dialog returns. Same for "Choose an image" |
+| Cutting rows off the end of the audit log cannot be detected by the chain alone | `verify-audit` prints the row count and newest hash to keep elsewhere. This limit is stated, not solved |
+| An evidence file re-signed with another key would verify against the key beside it | `verify` prints the key fingerprint and `--expect` pins it. `init` prints the fingerprint to publish |
+| The reader's cleaning stripped the joiners Indian scripts need | Zero-width joiner and non-joiner are kept; other control and format characters are dropped |
+| `decode --text` used the key without an audit row | It records "leak decoded by hand" |
+| The packaged app carried Qt Network, Qt Svg and nine image decoders it never uses | The spec drops them. Only JPEG, PNG and WebP can be decoded |
+| Funnel data could have named the surviving copies of an inconclusive case | Only counts are stored and drawn (done during task 8) |
+
+Known limits, stated rather than fixed:
+
+- The idle lock is a screen lock. The vault's secrets stay in memory so the worker and listener keep running.
+- `canary.db` is not encrypted (SQLCipher is an optional extra). It is protected by file modes and holds no secret.
+  `cases`, `add-leak`, `seed` and `export-case` need no passphrase, as in the skeleton.
+- `canary/data/bank.db` holds the real values and the reserves in the clear, inside the repo and the packaged app.
+  For a real exam the bank would have to live in the vault.
+- On Windows, file modes do nothing: the protection there is the user's profile folder plus the vault.
 
 ## Faked, and how to make it real
 

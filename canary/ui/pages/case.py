@@ -363,6 +363,8 @@ class CasePage(Page):
         if self.view is None or not self.view.evidence_path:
             return
         chosen = QFileDialog.getExistingDirectory(self, "Choose where to save a copy of the evidence file")
+        if self.app_window is not None and self.app_window.locked:
+            return                                             # it locked while the dialog was open
         if chosen:
             self.save_evidence_to(Path(chosen))
 

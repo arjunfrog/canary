@@ -93,7 +93,9 @@ def image_type(image: bytes) -> str | None:
 def _text(value, limit: int, what: str) -> str:
     if not isinstance(value, str):
         raise ReaderError(f"The photo reader's answer did not fit the expected shape ({what} is not text).")
-    cleaned = "".join(ch for ch in value if ch in "\n\t" or unicodedata.category(ch)[0] != "C")
+    # Control and format characters are dropped (they can hide or reorder text on screen), except the two
+    # joiners that Devanagari and other Indian scripts need to draw conjuncts.
+    cleaned = "".join(ch for ch in value if ch in "\n\t\u200c\u200d" or unicodedata.category(ch)[0] != "C")
     return cleaned[:limit]
 
 

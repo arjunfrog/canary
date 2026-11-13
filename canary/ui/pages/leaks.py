@@ -122,7 +122,7 @@ class AddLeakDialog(QDialog):
 
     def _choose(self) -> None:
         path, _ = QFileDialog.getOpenFileName(self, "Choose an image of the leak", "", "Images (*.jpg *.jpeg *.png *.webp)")
-        if path:
+        if path and not self.isHidden():                       # the window may have locked while the dialog was open
             self.set_image(path)
 
     def dragEnterEvent(self, event) -> None:
@@ -136,6 +136,8 @@ class AddLeakDialog(QDialog):
             event.acceptProposedAction()
 
     def _submit(self) -> None:
+        if self.isHidden() and self.parent() is not None and getattr(self.parent().app_window, "locked", False):
+            return
         text = self.text.toPlainText()
         if self.image_path and text.strip():
             self.message.setText("Add the text or the image, not both. Clear one of them.")
