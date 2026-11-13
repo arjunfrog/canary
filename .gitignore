@@ -1,6 +1,23 @@
 # Python
 .venv/
 __pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+
+#Tool caches and coverages output
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+htmlcov/
+
+#local environment files
+.env .*
+! .env.example
 *.egg-info/
 build/
 dist/
@@ -12,6 +29,7 @@ vault.bin
 *.db-wal
 *.db-shm
 .env
+! .env.example
 
 # macOS
 .DS_Store
