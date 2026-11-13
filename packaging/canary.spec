@@ -12,6 +12,7 @@ ROOT = Path(SPECPATH).parent
 # The read-only files the app loads at run time, placed where canary/config.py looks for them.
 datas = [
     (str(ROOT / "canary" / "data" / "bank.db"), "canary/data"),
+    (str(ROOT / "canary" / "data" / "score_set.json"), "canary/data"),
     (str(ROOT / "canary" / "schema.sql"), "canary"),
     (str(ROOT / "canary" / "ui" / "fonts"), "canary/ui/fonts"),
 ]

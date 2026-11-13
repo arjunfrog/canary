@@ -178,6 +178,39 @@ class Matcher:
                 self.templates.append(template)
                 self.owner.append(q)
         self.set_numbers = {q.id: [numbers_in(v.stem) for v in q.value_sets] for q in self.pool if q.kind == "numeric"}
+        vocabulary = set(_COMMON)
+        for q in bank.questions:
+            for text in (q.stem, *q.options, *(o for v in q.value_sets for o in v.options)):
+                vocabulary.update(_words(text))
+        self.vocabulary = frozenset(vocabulary)
+
+    def cleanly_written(self, text: str) -> bool:
+        """Is this ordinary, undamaged writing? Most of its words are real words, and it has no stray symbols.
+
+        A bad scan turns words into strings that are in no vocabulary, so damaged text fails this.
+        """
+        words = _words(text)
+        if len(words) < 3 or re.search(r"[#@~|]", text):
+            return False
+        return sum(w in self.vocabulary for w in words) >= 0.6 * len(words)
+
+    def options_clearly_differ(self, question, read: ReadQuestion) -> bool:
+        """The leak shows four options, and they are plainly not this bank question's options.
+
+        For a numeric question: the numbers fit none of its nine value sets. For any other: fewer than three
+        of the four options resemble any option of the bank question.
+        """
+        shown = read.options_for_matching
+        if len(shown) != 4:
+            return False
+        if question.kind == "numeric":
+            seen = sorted(_option_key(o) for o in shown)
+            if not all(k[1] for k in seen):
+                return False                                   # numbers missing or unreadable: no evidence either way
+            return all(sorted(_option_key(o) for o in v.options) != seen for v in question.value_sets)
+        want = [normalise(o, numbers=None) for o in question.options]
+        alike = sum(1 for o in shown if max(fuzz.ratio(normalise(o, numbers=None), w) for w in want) >= 70)
+        return alike < 3
 
     def best(self, stem: str):
         """(bank question, score from 0 to 100) for the closest stem. Unrelated text scores under 40."""
@@ -189,6 +222,11 @@ class Matcher:
 
     def find(self, read: ReadQuestion) -> Finding:
         question, score = self.best(read.stem_for_matching)
+        if (question is not None and CLEARLY_DIFFERENT <= score < MATCH_THRESHOLD
+                and self.cleanly_written(read.stem_for_matching) and self.options_clearly_differ(question, read)):
+            # Wording that resembles a bank stem, cleanly written, with someone else's options: a different
+            # question on the same subject, not a damaged copy of ours.
+            score = CLEARLY_DIFFERENT - 1.0
         finding = Finding(read, score=round(score, 1))
         if question is None or score < MATCH_THRESHOLD:
             return finding
@@ -242,6 +280,21 @@ class Matcher:
                 return None
             order.append(scores.index(top))
         return tuple(order) if len(set(order)) == 4 else None
+
+
+# Everyday words, so a cleanly written question is recognised as clean even when its subject is not in the bank.
+_COMMON = frozenset("""
+about above after again all also among and any are around because been before being below between both but can
+could does down during each every few find first for from given has have how into its just known large largest
+least less long made make many may more most much must name near not number off once one only other out over own
+same shows small smallest some such take taken than that the their then there these they this those through time
+two under until upon used using very was what when where which while who whose why will with within without would
+you your called commonly following found mainly marked known example
+""".split())
+
+
+def _words(text: str) -> list[str]:
+    return re.findall(r"[a-z]{3,}", unicodedata.normalize("NFKC", text).lower())
 
 
 _matchers: dict = {}

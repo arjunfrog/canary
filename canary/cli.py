@@ -242,6 +242,18 @@ def cmd_export_case(args) -> int:
     return 0
 
 
+def cmd_score(args) -> int:
+    from . import score
+    if args.show is not None:
+        try:
+            print(score.show(args.show))
+        except (LookupError, PermissionError) as exc:
+            sys.exit(str(exc))
+        return 0
+    outcomes, digest = score.run()
+    return 0 if score.report(outcomes, digest) else 1
+
+
 def cmd_verify_audit(args) -> int:
     conn = db.connect()
     ok, bad = audit.verify(conn)
@@ -391,6 +403,10 @@ def build_parser() -> argparse.ArgumentParser:
     export = sub.add_parser("export-case", help="Save a case as a replay file")
     export.add_argument("case_id", type=int, metavar="ID")
     export.set_defaults(fn=cmd_export_case)
+
+    score = sub.add_parser("score", help="Score the tool on the fixed set of leaks with known answers")
+    score.add_argument("--show", type=int, metavar="ID", help="print one leak's text. Set-aside leaks are refused")
+    score.set_defaults(fn=cmd_score)
 
     add = sub.add_parser("add-leak", help="Queue a leak by hand")
     source = add.add_mutually_exclusive_group(required=True)
