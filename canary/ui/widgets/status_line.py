@@ -42,4 +42,5 @@ class StatusLine(QLabel):
             parts.append(f"{waiting} leak{'s' if waiting != 1 else ''} waiting to be read.")
         if not status.seeded:
             parts.append("No copies yet. Run: python -m canary seed")
-        self.setText("Text is analyzed on this laptop. Images use the configured photo reader.")
+        parts.insert(0, "Text is analyzed on this laptop. Images use the configured photo reader.")
+        self.setText("  ".join(parts))
