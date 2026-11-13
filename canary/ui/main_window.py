@@ -252,8 +252,9 @@ class MainWindow(QMainWindow):
     def refresh_status(self) -> None:
         if not self._unlocked or self.replay is not None:
             return
-        self.status.show_status(queries.status(self.conn), self.background.telegram if self.background else None,
-                                self.vault)
+        background = self.background
+        self.status.show_status(queries.status(self.conn), background.telegram if background else None, self.vault,
+                                background.reader_reachable if background else None)
 
     def closeEvent(self, event) -> None:
         self._idle.stop()

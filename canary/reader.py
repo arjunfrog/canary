@@ -60,6 +60,20 @@ class ReaderError(Exception):
     """A problem reading a photo, worded for the person using the app."""
 
 
+READER_HOST = "generativelanguage.googleapis.com"
+
+
+async def reachable(timeout: float = 4.0) -> bool:
+    """Can this laptop open a connection to the photo reader? Nothing is sent: the connection is closed at once."""
+    import asyncio
+    try:
+        _, writer = await asyncio.wait_for(asyncio.open_connection(READER_HOST, 443), timeout)
+    except (OSError, asyncio.TimeoutError):
+        return False
+    writer.close()
+    return True
+
+
 def model_name() -> str:
     """The Gemini Flash vision model to ask. CANARY_READER_MODEL overrides the default."""
     return os.environ.get("CANARY_READER_MODEL", "gemini-flash-latest")
