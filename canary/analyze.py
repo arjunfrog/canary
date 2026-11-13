@@ -178,6 +178,18 @@ class Matcher:
                 self.templates.append(template)
                 self.owner.append(q)
         self.set_numbers = {q.id: [numbers_in(v.stem) for v in q.value_sets] for q in self.pool if q.kind == "numeric"}
+        # Each value set's numbers, as a signature that does not depend on the wording: the numbers in the stem
+        # (in any order) plus the four options. A signature shared by two questions identifies neither.
+        self.signatures: dict = {}
+        for q in self.pool:
+            if q.kind != "numeric":
+                continue
+            for set_no, value_set in enumerate(q.value_sets):
+                options = tuple(sorted(_option_key(o) for o in value_set.options))
+                if not all(k[1] for k in options):
+                    continue
+                signature = (tuple(sorted(numbers_in(value_set.stem))), options)
+                self.signatures[signature] = None if signature in self.signatures else (q, set_no)
         vocabulary = set(_COMMON)
         for q in bank.questions:
             for text in (q.stem, *q.options, *(o for v in q.value_sets for o in v.options)):
@@ -220,6 +232,25 @@ class Matcher:
         _, raw, index = process.extractOne(query, self.templates, scorer=fuzz.ratio)
         return self.owner[index], max(0.0, (raw - 50.0) * 2.0)
 
+    def by_numbers(self, read: ReadQuestion):
+        """(bank question, set number) if the numbers alone identify this question, else None.
+
+        The numbers in the stem and all four options must equal exactly one value set of exactly one question.
+        This is how a paper typed in a language nothing here can read is still recognised: its numbers are
+        printed as they were.
+        """
+        if len(read.options) != 4:
+            return None
+        options = tuple(sorted(_option_key(o) for o in read.options))
+        if not all(k[1] for k in options):
+            return None
+        for stem in (read.stem, read.stem_en):
+            if stem:
+                found = self.signatures.get((tuple(sorted(numbers_in(stem))), options))
+                if found:
+                    return found
+        return None
+
     def find(self, read: ReadQuestion) -> Finding:
         question, score = self.best(read.stem_for_matching)
         if (question is not None and CLEARLY_DIFFERENT <= score < MATCH_THRESHOLD
@@ -227,6 +258,12 @@ class Matcher:
             # Wording that resembles a bank stem, cleanly written, with someone else's options: a different
             # question on the same subject, not a damaged copy of ours.
             score = CLEARLY_DIFFERENT - 1.0
+        known_set = None
+        if question is None or score < MATCH_THRESHOLD:
+            numbered = self.by_numbers(read)
+            if numbered is not None:                           # the words did not match, but the numbers do
+                question, known_set = numbered
+                score = max(score, 90.0)
         finding = Finding(read, score=round(score, 1))
         if question is None or score < MATCH_THRESHOLD:
             return finding
@@ -234,7 +271,7 @@ class Matcher:
         if question.kind == "trap":
             finding.clues.append(Clue(question.id, "trap"))
         if question.kind == "numeric":
-            finding.set_no = self.value_set(question, read)
+            finding.set_no = known_set if known_set is not None else self.value_set(question, read)
             if finding.set_no is not None:
                 finding.clues.append(Clue(question.id, "value", finding.set_no))
         if question.kind != "numeric" or finding.set_no is not None:

@@ -17,6 +17,7 @@ from .bank import load_bank
 
 SCORE_KEY = bytes.fromhex("c0a1" * 16)          # public, and used only to make and score this set
 SCORE_SET = config.PACKAGE_DIR / "data" / "score_set.json"
+SCORE_SET_2 = config.PACKAGE_DIR / "data" / "score_set_2.json"      # harder leaks, added once the first set was saturated
 
 
 @dataclass
@@ -29,12 +30,18 @@ class Outcome:
     right: bool
     wrong_copy: bool         # a copy was named that the leak did not come from
     note: str = ""
+    set: int = 1
 
 
 def load_set(path: Path | None = None) -> tuple[list[dict], str]:
-    body = (path or SCORE_SET).read_text(encoding="utf-8")
-    data = json.loads(body)
-    return data["leaks"], hashlib.sha256(body.encode("utf-8")).hexdigest()
+    """Every leak and one digest for the files they came from. With no path: both frozen sets, in order."""
+    leaks, digests = [], []
+    for part, source in enumerate([path] if path else [SCORE_SET, SCORE_SET_2], start=1):
+        body = source.read_text(encoding="utf-8")
+        digests.append(hashlib.sha256(body.encode("utf-8")).hexdigest())
+        for leak in json.loads(body)["leaks"]:
+            leaks.append({**leak, "set": part})
+    return leaks, digests[0] if len(digests) == 1 else hashlib.sha256("".join(digests).encode()).hexdigest()
 
 
 def answer(leak: dict, bank=None) -> tuple:
@@ -58,14 +65,22 @@ def run(path: Path | None = None) -> tuple[list[Outcome], str]:
         got = answer(leak, bank)
         source = tuple(leak["source"]) if leak["source"] else None
         outcomes.append(Outcome(leak["id"], leak["kind"], bool(leak["held"]), expected, got, got == expected,
-                                got[1] is not None and got[1] != source, leak.get("note", "")))
+                                got[1] is not None and got[1] != source, leak.get("note", ""), leak.get("set", 1)))
     return outcomes, digest
 
 
 def summarise(outcomes: list[Outcome]) -> dict:
     def part(rows):
         return {"right": sum(o.right for o in rows), "total": len(rows), "wrong_copy": sum(o.wrong_copy for o in rows)}
-    return {"read": part([o for o in outcomes if not o.held]), "held": part([o for o in outcomes if o.held])}
+    out = {"read": part([o for o in outcomes if not o.held]), "held": part([o for o in outcomes if o.held])}
+    for number in sorted({o.set for o in outcomes}):
+        out[f"set{number}"] = {"read": part([o for o in outcomes if o.set == number and not o.held]),
+                               "held": part([o for o in outcomes if o.set == number and o.held])}
+    return out
+
+
+def _share(part: dict) -> str:
+    return f"{part['right']}/{part['total']} = {part['right'] / max(1, part['total']):.1%}"
 
 
 def report(outcomes: list[Outcome], digest: str, say=print, show_failures: bool = True) -> bool:
@@ -82,8 +97,12 @@ def report(outcomes: list[Outcome], digest: str, say=print, show_failures: bool 
             if not o.held and not o.right:
                 flag = "  WRONG COPY NAMED" if o.wrong_copy else ""
                 say(f"  leak {o.id:>2} ({o.kind}; {o.note}): expected {o.expected}, got {o.got}{flag}")
-    say(f"leaks I may read:  {read['right']}/{read['total']} = {read['right'] / max(1, read['total']):.1%}")
-    say(f"set-aside leaks:   {held['right']}/{held['total']} = {held['right'] / max(1, held['total']):.1%}")
+    sets = sorted(k for k in summary if k.startswith("set"))
+    if len(sets) > 1:
+        for name in sets:
+            say(f"{name[:3]} {name[3:]}:  readable {_share(summary[name]['read'])},  set aside {_share(summary[name]['held'])}")
+    say(f"leaks I may read:  {_share(read)}")
+    say(f"set-aside leaks:   {_share(held)}")
     wrong = read["wrong_copy"] + held["wrong_copy"]
     if wrong:
         say(f"RUN FAILED: a wrong copy was named {wrong} time(s) ({read['wrong_copy']} read, {held['wrong_copy']} set aside).")

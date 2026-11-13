@@ -5,20 +5,27 @@ import pytest
 from canary import cli, score
 
 FROZEN = "a4ffe1b1f7bb5af6c3d75091600f83f7b9f367def67f0426f135e13d324ea618"
+FROZEN_2 = "ce089a056ce6ff3fd99594f02dcb38d61ef900635f4c00690bfcd3e446b3e073"
+KINDS_2 = {"fake_same_frame", "translated_loose", "regional_typed", "mixed_post", "garbled_heavy", "unnumbered"}
 KINDS = {"translator_typed", "translator_values_only", "print_typed", "print_no_order", "translated", "retold_typed",
          "numbers_removed", "fake", "garbled", "typos", "photo_mock"}
 
 
-def test_the_score_set_is_the_frozen_one():
-    leaks, digest = score.load_set()
+def test_both_score_sets_are_the_frozen_ones():
+    leaks, digest = score.load_set(score.SCORE_SET)
     assert digest == FROZEN, "the score set changed. Leaks and expected answers must never be edited"
     assert len(leaks) == 90 and {x["kind"] for x in leaks} == KINDS
+    leaks, digest = score.load_set(score.SCORE_SET_2)
+    assert digest == FROZEN_2, "the second score set changed. Leaks and expected answers must never be edited"
+    assert len(leaks) == 36 and {x["kind"] for x in leaks} == KINDS_2
+    both, _ = score.load_set()
+    assert len(both) == 126 and len({x["id"] for x in both}) == 126
 
 
 def test_a_third_of_every_kind_is_set_aside():
     leaks, _ = score.load_set()
-    assert sum(x["held"] for x in leaks) == 30
-    for kind in KINDS:
+    assert sum(x["held"] for x in leaks) == 42
+    for kind in KINDS | KINDS_2:
         rows = [x for x in leaks if x["kind"] == kind]
         assert sum(x["held"] for x in rows) * 3 == len(rows)
 
@@ -29,7 +36,7 @@ def test_every_leak_has_a_known_answer_made_from_a_known_copy():
         verdict, copy = leak["expect"]["verdict"], leak["expect"]["copy"]
         assert verdict in ("traced", "strong_lead", "inconclusive", "not_our_paper", "unreadable")
         assert (copy is not None) == (verdict in ("traced", "strong_lead"))
-        assert (leak["source"] is None) == (leak["kind"] == "fake")
+        assert (leak["source"] is None) == leak["kind"].startswith("fake")
         if copy is not None:
             assert copy == leak["source"]
         assert (leak["text"] is None) != (leak["reader"] is None)
@@ -50,7 +57,7 @@ def test_set_aside_leaks_are_never_printed(capsys):
     for leak in leaks:
         if leak["held"]:
             assert f"leak {leak['id']:>2} " not in printed
-    assert "set-aside leaks:   0/30" in printed and "leaks I may read:  0/60" in printed
+    assert "set-aside leaks:   0/42" in printed and "leaks I may read:  0/84" in printed
 
 
 def test_naming_a_wrong_copy_fails_the_whole_run():

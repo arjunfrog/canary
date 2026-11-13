@@ -36,3 +36,25 @@ A change is kept only if the score on the readable leaks rises and no wrong copy
 |---|---|---|---|---|---|
 | 0 | Starting point: the tool as built by tasks 1 to 13 and the security review | 56 = 93.3% | 28 = 93.3% | none | |
 | 1 | A cleanly written question whose four options are plainly not the bank question's options counts as "clearly different", even when its wording resembles a bank stem. Before, one such question in a fake paper ("Litmus solution is obtained from" beside the bank's "Morphine is obtained from") was taken for a damaged real question, and the whole fake was called unreadable | 60 = 100% | 30 = 100% | none | yes |
+
+## Stage 2: a second, harder set
+
+After round 1 the first set had nothing left to fail, so three more rounds on it could only have been empty.
+Instead a second set was frozen: `canary/data/score_set_2.json`, 36 leaks, 12 of them set aside, SHA-256
+`ce089a056ce6ff3fd99594f02dcb38d61ef900635f4c00690bfcd3e446b3e073`, built by `scripts/make_score_set_2.py` under the
+same rules. The first set is unchanged and is still scored in every round. `score` now reports both.
+
+| Kind | Leaks | Right answer |
+|---|---|---|
+| Fake with no options, 3 or 4 stems sharing a sentence frame with a bank stem | 6 | not our paper |
+| Translated leak, loosely retold, numbers sometimes in another order | 6 | traced, that translator |
+| Typed in Hindi with nothing to translate it: only numbers, units and options are readable | 6 | traced, that translator |
+| A real leak inside a longer post, with chatter and questions from elsewhere | 6 | traced, that copy |
+| Garbled text, damage 70% to 90% | 6 | couldn't read it. Never "not our paper" |
+| No question numbers, paragraphs only | 6 | traced, that copy |
+
+Scores below are for both sets together: 84 readable leaks and 42 set aside.
+
+| Round | Change | Readable (84) | Set aside (42) | Wrong copy | Kept |
+|---|---|---|---|---|---|
+| 1 (restated) | Starting point for stage 2: the tool as round 1 left it. Set 2 alone: 12 of 24 readable, 5 of 12 set aside | 72 = 85.7% | 35 = 83.3% | none | |
