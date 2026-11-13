@@ -116,7 +116,7 @@ class AddLeakDialog(QDialog):
         layout.addLayout(buttons)
 
     def set_image(self, path: str) -> None:
-        self.image_path = path
+        self.image_path = str(Path(path))
         self.image_label.setText(f"Image chosen: {Path(path).name}")
         self.message.setText("")
 
