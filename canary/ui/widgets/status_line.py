@@ -24,11 +24,11 @@ class StatusLine(QLabel):
         has_key = bool(vault and vault.get("gemini_api_key"))
         reader_up = has_key and reader_reachable is not False
         if not connected and not reader_up:
-            parts = ["Offline. Typed leaks still work.", watching]
+            parts = ["Manual leak entry is available.", watching]
             if telegram and telegram.message and "not reachable" not in telegram.message:
                 parts.append(telegram.message)
             if not has_key:
-                parts.append("No photo reader key in the vault.")
+                parts.append("Photo analysis isn't configured.")
         else:
             parts = [watching, "Telegram connected." if connected else (telegram.message if telegram else "Telegram is off.")]
             if not has_key:
@@ -36,7 +36,7 @@ class StatusLine(QLabel):
             elif reader_reachable is False:
                 parts.append("Photo reader not reachable.")
             else:
-                parts.append("Photo reader ready.")
+                parts.append("Photo analysis is ready.")
         waiting = status.counts.get("queued", 0) + status.counts.get("reading", 0)
         if waiting:
             parts.append(f"{waiting} leak{'s' if waiting != 1 else ''} waiting to be read.")
