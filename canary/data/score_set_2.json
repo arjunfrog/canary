@@ -1,0 +1,2129 @@
+{
+ "format": "canary-score-set-1",
+ "leaks": [
+  {
+   "kind": "fake_same_frame",
+   "note": "fake, no options, 3 or 4 stems share a frame with a bank stem",
+   "text": "1. A kettle rated 2000 W is switched on for 3 minutes. The electrical energy it uses is\n\n2. Milk turns sour because of the formation of\n\n3. A mirror that always forms an upright and smaller image is\n\n4. Which noble gas is used to fill advertising signs that glow orange-red?\n\n5. Which of these animals is a marsupial?\n\n6. The functional unit of the nervous system is the\n\n7. Which gland in the human neck region secretes the hormone calcitonin?\n\n8. A stone dropped into a well hits the water after 3 s. Taking g = 10 m/s², the depth of the well down to the water is\n\n9. Quinine is obtained from\n\n10. Which vitamin deficiency leads to night blindness in children?\n\n11. Alcoholic fermentation takes place in the\n\n12. Table salt dissolves in water mainly because water molecules are\n",
+   "reader": null,
+   "source": null,
+   "expect": {
+    "verdict": "not_our_paper",
+    "copy": null
+   },
+   "held": false,
+   "id": 101
+  },
+  {
+   "kind": "fake_same_frame",
+   "note": "fake, no options, 3 or 4 stems share a frame with a bank stem",
+   "text": "1. Glucagon is secreted by the\n\n2. Scurvy is caused by a lack of\n\n3. Light year is a unit used by astronomers to measure\n\n4. The functional unit of the nervous system is the\n\n5. An element with 17 protons belongs to which family?\n\n6. The longest bone found in the human skeleton is the\n\n7. Which vitamin deficiency leads to night blindness in children?\n\n8. A cyclist rides 18 km north and then 24 km east. Her displacement from the starting point is\n\n9. Starch is a polymer of\n\n10. Milk turns sour because of the formation of\n\n11. Which of the following is a noble gas?\n\n12. Which part of the human eye controls the amount of light entering it?\n\n13. Dry ice is the solid form of\n",
+   "reader": null,
+   "source": null,
+   "expect": {
+    "verdict": "not_our_paper",
+    "copy": null
+   },
+   "held": false,
+   "id": 102
+  },
+  {
+   "kind": "fake_same_frame",
+   "note": "fake, no options, 3 or 4 stems share a frame with a bank stem",
+   "text": "1. How many chambers does the heart of a frog have?\n\n2. A mirror that always forms an upright and smaller image is\n\n3. Which vitamin deficiency leads to night blindness in children?\n\n4. Rusting of an iron nail left in damp air is an example of\n\n5. Quinine is obtained from\n\n6. Which of these animals is a marsupial?\n\n7. Which of the following is a noble gas?\n\n8. Which of the following is a reducing sugar?\n\n9. Table salt dissolves in water mainly because water molecules are\n\n10. Which gland in the human neck region secretes the hormone calcitonin?\n\n11. A pendulum completes 30 swings in 45 s. The time taken for one swing is\n",
+   "reader": null,
+   "source": null,
+   "expect": {
+    "verdict": "not_our_paper",
+    "copy": null
+   },
+   "held": true,
+   "id": 103
+  },
+  {
+   "kind": "fake_same_frame",
+   "note": "fake, no options, 3 or 4 stems share a frame with a bank stem",
+   "text": "1. Which bird lays the largest egg?\n\n2. Table salt dissolves in water mainly because water molecules are\n\n3. Which of these animals is a marsupial?\n\n4. Milk turns sour because of the formation of\n\n5. Quinine is obtained from\n\n6. Rusting of an iron nail left in damp air is an example of\n\n7. Litmus solution is obtained from\n\n8. The planet with the shortest year in the solar system is\n\n9. Starch is a polymer of\n\n10. A mirror that always forms an upright and smaller image is\n\n11. A lift of mass 800 kg is raised through 15 m. Taking g = 10 m/s², the work done against gravity is\n\n12. The Calvin cycle occurs in the\n\n13. Which of the following is not a unit of power?\n\n14. A train 150 m long crosses a pole in 12 s. Its speed is\n",
+   "reader": null,
+   "source": null,
+   "expect": {
+    "verdict": "not_our_paper",
+    "copy": null
+   },
+   "held": false,
+   "id": 104
+  },
+  {
+   "kind": "fake_same_frame",
+   "note": "fake, no options, 3 or 4 stems share a frame with a bank stem",
+   "text": "1. An astronaut weighs 720 N on Earth. On a planet whose surface gravity is one sixth as strong, the astronaut would weigh\n\n2. Which noble gas is used to fill advertising signs that glow orange-red?\n\n3. A stone dropped into a well hits the water after 3 s. Taking g = 10 m/s², the depth of the well down to the water is\n\n4. Which blood group is known as the universal donor?\n\n5. Which of the following is not a unit of power?\n\n6. How many chambers does the heart of a frog have?\n\n7. The hardest naturally occurring substance is\n\n8. Which of the following is a reducing sugar?\n\n9. Light year is a unit used by astronomers to measure\n\n10. The functional unit of the nervous system is the\n\n11. Table salt dissolves in water mainly because water molecules are\n",
+   "reader": null,
+   "source": null,
+   "expect": {
+    "verdict": "not_our_paper",
+    "copy": null
+   },
+   "held": false,
+   "id": 105
+  },
+  {
+   "kind": "fake_same_frame",
+   "note": "fake, no options, 3 or 4 stems share a frame with a bank stem",
+   "text": "1. Which organelle is the site of protein synthesis in a bacterial cell?\n\n2. The colour of light bent the most by a glass prism is\n\n3. A lift of mass 800 kg is raised through 15 m. Taking g = 10 m/s², the work done against gravity is\n\n4. The Calvin cycle occurs in the\n\n5. The powerhouse organelle found in aerobic eukaryotic cells is surrounded by how many membranes?\n\n6. Quinine is obtained from\n\n7. A stone dropped into a well hits the water after 3 s. Taking g = 10 m/s², the depth of the well down to the water is\n\n8. Brass is an alloy made mainly from\n\n9. Which blood group is known as the universal donor?\n\n10. The gas released when zinc reacts with dilute hydrochloric acid is\n\n11. Starch is a polymer of\n\n12. Which of the following is not a unit of power?\n",
+   "reader": null,
+   "source": null,
+   "expect": {
+    "verdict": "not_our_paper",
+    "copy": null
+   },
+   "held": true,
+   "id": 106
+  },
+  {
+   "kind": "translated_loose",
+   "note": "14 numeric, loosely retold",
+   "text": null,
+   "reader": {
+    "questions": [
+     {
+      "number": 17,
+      "legible": true,
+      "stem": "प्रश्न १७. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२५ m/s",
+       "२५०० m/s",
+       "२.५ m/s",
+       "५ m/s"
+      ],
+      "stem_en": "recoil velocity of gun is gun having mass of 8 kg fires a bullet of mass 50 g with velocity of 400 m/s.",
+      "options_en": [
+       "25 m/s",
+       "2500 m/s",
+       "2.5 m/s",
+       "5 m/s"
+      ]
+     },
+     {
+      "number": 18,
+      "legible": true,
+      "stem": "प्रश्न १८. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "४०० N",
+       "८०० N",
+       "८० N",
+       "१६०० N"
+      ],
+      "stem_en": "A motor car having mass of 800 kg moves at 10 m/s around level circular track of radius 100 m. The centripetal push on it is",
+      "options_en": [
+       "400 N",
+       "800 N",
+       "80 N",
+       "1600 N"
+      ]
+     },
+     {
+      "number": 19,
+      "legible": true,
+      "stem": "प्रश्न १९. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२ m/s²",
+       "४ m/s²",
+       "८ m/s²",
+       "१६ m/s²"
+      ],
+      "stem_en": "At altitude equal to radius of the planet, its value is acceleration due to gravity on surface of a planet is 8 m/s².",
+      "options_en": [
+       "2 m/s²",
+       "4 m/s²",
+       "8 m/s²",
+       "16 m/s²"
+      ]
+     },
+     {
+      "number": 20,
+      "legible": true,
+      "stem": "प्रश्न २०. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२४ cm/s",
+       "१२ cm/s",
+       "७२ cm/s",
+       "४८ cm/s"
+      ],
+      "stem_en": "particle executes simple harmonic motion with amplitude 8 cm and angular number of cycles per second 3 rad/s. Its highest velocity is",
+      "options_en": [
+       "24 cm/s",
+       "12 cm/s",
+       "72 cm/s",
+       "48 cm/s"
+      ]
+     },
+     {
+      "number": 21,
+      "legible": true,
+      "stem": "प्रश्न २१. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२१० kJ",
+       "२१०० kJ",
+       "५० kJ",
+       "१०५ kJ"
+      ],
+      "stem_en": "The thermal energy needed to increase degree of heat of 2 kg of plain water by 25 °C, if specific thermal energy is 4200 J/kg °C, is",
+      "options_en": [
+       "210 kJ",
+       "2100 kJ",
+       "50 kJ",
+       "105 kJ"
+      ]
+     },
+     {
+      "number": 22,
+      "legible": true,
+      "stem": "प्रश्न २२. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२५० J",
+       "-२५० J",
+       "५५० J",
+       "४०० J"
+      ],
+      "stem_en": "Some gas takes in 400 J of thermal energy and performs 150 J of work on the surroundings. By how much does its internal amount of energy change?",
+      "options_en": [
+       "250 J",
+       "-250 J",
+       "550 J",
+       "400 J"
+      ]
+     },
+     {
+      "number": 23,
+      "legible": true,
+      "stem": "प्रश्न २३. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१६ N",
+       "४ N",
+       "३२ N",
+       "२ N"
+      ],
+      "stem_en": "When they are moved twice as far apart, new push is Two point charges push each other apart with 8 N.",
+      "options_en": [
+       "16 N",
+       "4 N",
+       "32 N",
+       "2 N"
+      ]
+     },
+     {
+      "number": 24,
+      "legible": true,
+      "stem": "प्रश्न २४. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "०.१ mm",
+       "१.२५ mm",
+       "५ mm",
+       "२.५ mm"
+      ],
+      "stem_en": "fringe width is In double-slit experiment slit separation is 0.4 mm, the screen is 2 m away and the length of one wave of light is 500 nm.",
+      "options_en": [
+       "0.1 mm",
+       "1.25 mm",
+       "5 mm",
+       "2.5 mm"
+      ]
+     },
+     {
+      "number": 25,
+      "legible": true,
+      "stem": "प्रश्न २५. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "८ g",
+       "३२ g",
+       "६४ g",
+       "१६ g"
+      ],
+      "stem_en": "sample contains 128 g of radioactive substance of half-life 10 days. The amount left undecayed after 20 days is",
+      "options_en": [
+       "8 g",
+       "32 g",
+       "64 g",
+       "16 g"
+      ]
+     },
+     {
+      "number": 26,
+      "legible": true,
+      "stem": "प्रश्न २६. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१८ km/h",
+       "१०० km/h",
+       "५० km/h",
+       "९ km/h"
+      ],
+      "stem_en": "motor car covers first half of journey at 10 km/h and second half at 90 km/h. Its average velocity for whole journey is",
+      "options_en": [
+       "18 km/h",
+       "100 km/h",
+       "50 km/h",
+       "9 km/h"
+      ]
+     },
+     {
+      "number": 27,
+      "legible": true,
+      "stem": "प्रश्न २७. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "३.७५ m/s",
+       "१५ m/s",
+       "७.५ m/s",
+       "१.२ m/s"
+      ],
+      "stem_en": "Where cross-section narrows to 4 cm², its velocity is plain water flows at 3 m/s through a pipe of cross-section 10 cm².",
+      "options_en": [
+       "3.75 m/s",
+       "15 m/s",
+       "7.5 m/s",
+       "1.2 m/s"
+      ]
+     },
+     {
+      "number": 28,
+      "legible": true,
+      "stem": "प्रश्न २८. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "८००० cal",
+       "८०० cal",
+       "४००० cal",
+       "५४००० cal"
+      ],
+      "stem_en": "Taking latent thermal energy of fusion of ice as 80 cal/g, thermal energy needed to melt 100 g of ice at 0 °C is",
+      "options_en": [
+       "8000 cal",
+       "800 cal",
+       "4000 cal",
+       "54000 cal"
+      ]
+     },
+     {
+      "number": 29,
+      "legible": true,
+      "stem": "प्रश्न २९. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "४८ hours",
+       "१९२ hours",
+       "९६ hours",
+       "२४ hours"
+      ],
+      "stem_en": "satellite in orbit of radius 4R around same planet has period of satellite in circular orbit of radius R has period of 12 hours.",
+      "options_en": [
+       "48 hours",
+       "192 hours",
+       "96 hours",
+       "24 hours"
+      ]
+     },
+     {
+      "number": 30,
+      "legible": true,
+      "stem": "प्रश्न ३०. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२",
+       "४",
+       "२५२",
+       "५०४"
+      ],
+      "stem_en": "Two tuning forks of frequencies 250 Hz and 254 Hz are sounded together. How many beats heard per second is",
+      "options_en": [
+       "2",
+       "4",
+       "252",
+       "504"
+      ]
+     }
+    ]
+   },
+   "source": [
+    "translation",
+    48
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     48
+    ]
+   },
+   "held": false,
+   "id": 107
+  },
+  {
+   "kind": "translated_loose",
+   "note": "14 numeric, loosely retold",
+   "text": null,
+   "reader": {
+    "questions": [
+     {
+      "number": 47,
+      "legible": true,
+      "stem": "प्रश्न ४७. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "०.८ M",
+       "०.२ M",
+       "०.१ M",
+       "०.४ M"
+      ],
+      "stem_en": "What is molarity? 4 g of NaOH (molar mass 40 g/mol) is mixed into plain water to give 250 mL of liquid mixture.",
+      "options_en": [
+       "0.8 M",
+       "0.2 M",
+       "0.1 M",
+       "0.4 M"
+      ]
+     },
+     {
+      "number": 48,
+      "legible": true,
+      "stem": "प्रश्न ४८. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "३",
+       "६",
+       "१५",
+       "२२"
+      ],
+      "stem_en": "aqueous liquid mixture has pH of 8 at 25 °C. Its pOH is",
+      "options_en": [
+       "3",
+       "6",
+       "15",
+       "22"
+      ]
+     },
+     {
+      "number": 49,
+      "legible": true,
+      "stem": "प्रश्न ४९. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "०.१ M",
+       "०.२ M",
+       "०.०५ M",
+       "२.५ M"
+      ],
+      "stem_en": "The molarity of diluted liquid mixture is 50 mL of 0.5 M HCl is topped up with plain water to 250 mL.",
+      "options_en": [
+       "0.1 M",
+       "0.2 M",
+       "0.05 M",
+       "2.5 M"
+      ]
+     },
+     {
+      "number": 50,
+      "legible": true,
+      "stem": "प्रश्न ५०. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१४४ L",
+       "७२ L",
+       "३६ L",
+       "२ L"
+      ],
+      "stem_en": "At constant degree of heat, its amount of space at 0.5 atm is Some gas takes up 12 L at squeezing pressure of 3 atm.",
+      "options_en": [
+       "144 L",
+       "72 L",
+       "36 L",
+       "2 L"
+      ]
+     },
+     {
+      "number": 51,
+      "legible": true,
+      "stem": "प्रश्न ५१. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१२० mL",
+       "२४० mL",
+       "६० mL",
+       "३० mL"
+      ],
+      "stem_en": "Some gas takes up 120 mL at 300 K. At constant squeezing pressure, its amount of space at 150 K is",
+      "options_en": [
+       "120 mL",
+       "240 mL",
+       "60 mL",
+       "30 mL"
+      ]
+     },
+     {
+      "number": 52,
+      "legible": true,
+      "stem": "प्रश्न ५२. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२० min",
+       "७.५ min",
+       "१५ min",
+       "३० min"
+      ],
+      "stem_en": "first-order reaction has a half-life of 10 min. time taken for 75% of reactant to be consumed is",
+      "options_en": [
+       "20 min",
+       "7.5 min",
+       "15 min",
+       "30 min"
+      ]
+     },
+     {
+      "number": 53,
+      "legible": true,
+      "stem": "प्रश्न ५३. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "३९.४ kJ",
+       "१९.७ kJ",
+       "४७२.८ kJ",
+       "७८.८ kJ"
+      ],
+      "stem_en": "enthalpy of combustion of carbon (molar mass 12 g/mol) is −394 kJ/mol. thermal energy released when 1.2 g of carbon burns completely is",
+      "options_en": [
+       "39.4 kJ",
+       "19.7 kJ",
+       "472.8 kJ",
+       "78.8 kJ"
+      ]
+     },
+     {
+      "number": 54,
+      "legible": true,
+      "stem": "प्रश्न ५४. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१",
+       "०.१६",
+       "४",
+       "०.२५"
+      ],
+      "stem_en": "equilibrium constant Kc is For equilibrium ⇌ B, equilibrium concentrations are [A] = 0.2 M and [B] = 0.8 M.",
+      "options_en": [
+       "1",
+       "0.16",
+       "4",
+       "0.25"
+      ]
+     },
+     {
+      "number": 55,
+      "legible": true,
+      "stem": "प्रश्न ५५. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "०.०२ M",
+       "०.०४ M",
+       "०.५ M",
+       "०.०१ M"
+      ],
+      "stem_en": "10 mL of 0.1 M NaOH fully neutralises 50 mL of HCl. molarity of HCl liquid mixture is",
+      "options_en": [
+       "0.02 M",
+       "0.04 M",
+       "0.5 M",
+       "0.01 M"
+      ]
+     },
+     {
+      "number": 56,
+      "legible": true,
+      "stem": "प्रश्न ५६. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "०.५२५ V",
+       "२.१ V",
+       "०.५५ V",
+       "१.०५ V"
+      ],
+      "stem_en": "The standard reduction potentials of the cathode and anode half-cells are 0.8 V and −0.25 V. standard emf of cell is",
+      "options_en": [
+       "0.525 V",
+       "2.1 V",
+       "0.55 V",
+       "1.05 V"
+      ]
+     },
+     {
+      "number": 57,
+      "legible": true,
+      "stem": "प्रश्न ५७. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "६७.२ L",
+       "३३.६ L",
+       "१३४.४ L",
+       "३ L"
+      ],
+      "stem_en": "Taking molar amount of space of a gas at STP as 22.4 L, amount of space occupied by 132 g of CO₂ (molar mass 44 g/mol) at STP is",
+      "options_en": [
+       "67.2 L",
+       "33.6 L",
+       "134.4 L",
+       "3 L"
+      ]
+     },
+     {
+      "number": 58,
+      "legible": true,
+      "stem": "प्रश्न ५८. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२८० g",
+       "५६० g",
+       "११२० g",
+       "४४० g"
+      ],
+      "stem_en": "mass of CaO (molar mass 56 g/mol) obtained on complete decomposition of 1000 g of CaCO₃ (molar mass 100 g/mol) is",
+      "options_en": [
+       "280 g",
+       "560 g",
+       "1120 g",
+       "440 g"
+      ]
+     },
+     {
+      "number": 59,
+      "legible": true,
+      "stem": "प्रश्न ५९. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "३०० K",
+       "३० K",
+       "६०० K",
+       "१५० K"
+      ],
+      "stem_en": "For reaction, ΔH = 30 kJ/mol and ΔS = 100 J/K mol. Assuming both are independent of degree of heat, reaction becomes spontaneous above",
+      "options_en": [
+       "300 K",
+       "30 K",
+       "600 K",
+       "150 K"
+      ]
+     },
+     {
+      "number": 60,
+      "legible": true,
+      "stem": "प्रश्न ६०. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "०.३९ K",
+       "०.७८ K",
+       "१.५६ K",
+       "२.७९ K"
+      ],
+      "stem_en": "Taking Kb for plain water as 0.52 K kg/mol, elevation in boiling point of a 1.5 molal aqueous liquid mixture of glucose is",
+      "options_en": [
+       "0.39 K",
+       "0.78 K",
+       "1.56 K",
+       "2.79 K"
+      ]
+     }
+    ]
+   },
+   "source": [
+    "translation",
+    39
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     39
+    ]
+   },
+   "held": false,
+   "id": 108
+  },
+  {
+   "kind": "translated_loose",
+   "note": "14 numeric, loosely retold",
+   "text": null,
+   "reader": {
+    "questions": [
+     {
+      "number": 47,
+      "legible": true,
+      "stem": "प्रश्न ४७. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "०.२५ M",
+       "१.२५ M",
+       "०.६२५ M",
+       "२.५ M"
+      ],
+      "stem_en": "10 g of NaOH (molar mass 40 g/mol) is mixed into plain water to give 200 mL of liquid mixture. What is molarity?",
+      "options_en": [
+       "0.25 M",
+       "1.25 M",
+       "0.625 M",
+       "2.5 M"
+      ]
+     },
+     {
+      "number": 48,
+      "legible": true,
+      "stem": "प्रश्न ४८. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१५",
+       "६",
+       "३",
+       "२२"
+      ],
+      "stem_en": "aqueous liquid mixture has a pH of 8 at 25 °C. Its pOH is",
+      "options_en": [
+       "15",
+       "6",
+       "3",
+       "22"
+      ]
+     },
+     {
+      "number": 49,
+      "legible": true,
+      "stem": "प्रश्न ४९. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१२.५ M",
+       "०.०२ M",
+       "०.०४ M",
+       "०.०१ M"
+      ],
+      "stem_en": "20 mL of 0.5 M HCl is topped up with plain water to 500 mL. molarity of diluted liquid mixture is",
+      "options_en": [
+       "12.5 M",
+       "0.02 M",
+       "0.04 M",
+       "0.01 M"
+      ]
+     },
+     {
+      "number": 50,
+      "legible": true,
+      "stem": "प्रश्न ५०. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "३.७५ L",
+       "७.५ L",
+       "१५ L",
+       "३० L"
+      ],
+      "stem_en": "At constant degree of heat, its amount of space at 6 atm is Some gas takes up 15 L at squeezing pressure of 3 atm.",
+      "options_en": [
+       "3.75 L",
+       "7.5 L",
+       "15 L",
+       "30 L"
+      ]
+     },
+     {
+      "number": 51,
+      "legible": true,
+      "stem": "प्रश्न ५१. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "६० mL",
+       "१२० mL",
+       "२७० mL",
+       "२४० mL"
+      ],
+      "stem_en": "Some gas takes up 180 mL at 300 K. At constant squeezing pressure, its amount of space at 200 K is",
+      "options_en": [
+       "60 mL",
+       "120 mL",
+       "270 mL",
+       "240 mL"
+      ]
+     },
+     {
+      "number": 52,
+      "legible": true,
+      "stem": "प्रश्न ५२. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "९० min",
+       "४५ min",
+       "१२० min",
+       "१८० min"
+      ],
+      "stem_en": "time taken for 75% of reactant to be consumed is first-order reaction has half-life of 60 min.",
+      "options_en": [
+       "90 min",
+       "45 min",
+       "120 min",
+       "180 min"
+      ]
+     },
+     {
+      "number": 53,
+      "legible": true,
+      "stem": "प्रश्न ५३. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "४९.२५ kJ",
+       "१९७ kJ",
+       "११८२ kJ",
+       "९८.५ kJ"
+      ],
+      "stem_en": "enthalpy of combustion of carbon (molar mass 12 g/mol) is −394 kJ/mol. thermal energy released when 3 g of carbon burns completely is",
+      "options_en": [
+       "49.25 kJ",
+       "197 kJ",
+       "1182 kJ",
+       "98.5 kJ"
+      ]
+     },
+     {
+      "number": 54,
+      "legible": true,
+      "stem": "प्रश्न ५४. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "०.१२५",
+       "८",
+       "०.९",
+       "०.०८"
+      ],
+      "stem_en": "equilibrium constant Kc is For equilibrium ⇌ B, equilibrium concentrations are [A] = 0.1 M and [B] = 0.8 M.",
+      "options_en": [
+       "0.125",
+       "8",
+       "0.9",
+       "0.08"
+      ]
+     },
+     {
+      "number": 55,
+      "legible": true,
+      "stem": "प्रश्न ५५. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "०.१ M",
+       "०.२ M",
+       "०.४ M",
+       "१.२५ M"
+      ],
+      "stem_en": "10 mL of 0.5 M NaOH fully neutralises 25 mL of HCl. molarity of HCl liquid mixture is",
+      "options_en": [
+       "0.1 M",
+       "0.2 M",
+       "0.4 M",
+       "1.25 M"
+      ]
+     },
+     {
+      "number": 56,
+      "legible": true,
+      "stem": "प्रश्न ५६. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "०.७८ V",
+       "१.५६ V",
+       "०.३९ V",
+       "-०.१ V"
+      ],
+      "stem_en": "standard emf of cell is standard reduction potentials of cathode and anode half-cells are 0.34 V and −0.44 V.",
+      "options_en": [
+       "0.78 V",
+       "1.56 V",
+       "0.39 V",
+       "-0.1 V"
+      ]
+     },
+     {
+      "number": 57,
+      "legible": true,
+      "stem": "प्रश्न ५७. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "६७.२ L",
+       "३३.६ L",
+       "१३४.४ L",
+       "३ L"
+      ],
+      "stem_en": "Taking molar amount of space of gas at STP as 22.4 L, amount of space occupied by 132 g of CO₂ (molar mass 44 g/mol) at STP is",
+      "options_en": [
+       "67.2 L",
+       "33.6 L",
+       "134.4 L",
+       "3 L"
+      ]
+     },
+     {
+      "number": 58,
+      "legible": true,
+      "stem": "प्रश्न ५८. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "५.६ g",
+       "२२.४ g",
+       "११.२ g",
+       "८.८ g"
+      ],
+      "stem_en": "mass of CaO (molar mass 56 g/mol) obtained on complete decomposition of 20 g of CaCO₃ (molar mass 100 g/mol) is",
+      "options_en": [
+       "5.6 g",
+       "22.4 g",
+       "11.2 g",
+       "8.8 g"
+      ]
+     },
+     {
+      "number": 59,
+      "legible": true,
+      "stem": "प्रश्न ५९. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२० K",
+       "२०० K",
+       "४०० K",
+       "१०० K"
+      ],
+      "stem_en": "Assuming both are independent of degree of heat, reaction becomes spontaneous above For reaction, ΔH = 40 kJ/mol and ΔS = 200 J/K mol.",
+      "options_en": [
+       "20 K",
+       "200 K",
+       "400 K",
+       "100 K"
+      ]
+     },
+     {
+      "number": 60,
+      "legible": true,
+      "stem": "प्रश्न ६०. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१.३ K",
+       "२.६ K",
+       "५.२ K",
+       "९.३ K"
+      ],
+      "stem_en": "Taking Kb for plain water as 0.52 K kg/mol, elevation in boiling point of a 5 molal aqueous liquid mixture of glucose is",
+      "options_en": [
+       "1.3 K",
+       "2.6 K",
+       "5.2 K",
+       "9.3 K"
+      ]
+     }
+    ]
+   },
+   "source": [
+    "translation",
+    20
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     20
+    ]
+   },
+   "held": true,
+   "id": 109
+  },
+  {
+   "kind": "translated_loose",
+   "note": "14 numeric, loosely retold",
+   "text": null,
+   "reader": {
+    "questions": [
+     {
+      "number": 1,
+      "legible": true,
+      "stem": "प्रश्न १. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "६०० m",
+       "३० m",
+       "३०० m",
+       "६० m"
+      ],
+      "stem_en": "motor car begins at rest and speeds up steadily at 6 m/s² for 10 s. How far performs it travel?",
+      "options_en": [
+       "600 m",
+       "30 m",
+       "300 m",
+       "60 m"
+      ]
+     },
+     {
+      "number": 2,
+      "legible": true,
+      "stem": "प्रश्न २. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "४ s",
+       "८ s",
+       "३२ s",
+       "६४ s"
+      ],
+      "stem_en": "Taking g = 10 m/s², time it takes to hit the floor is rock is dropped from altitude of 320 m.",
+      "options_en": [
+       "4 s",
+       "8 s",
+       "32 s",
+       "64 s"
+      ]
+     },
+     {
+      "number": 3,
+      "legible": true,
+      "stem": "प्रश्न ३. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२५० m",
+       "५ m",
+       "१२५ m",
+       "६२.५ m"
+      ],
+      "stem_en": "sphere is tossed straight up at 50 m/s. Taking g = 10 m/s², the greatest altitude reached is",
+      "options_en": [
+       "250 m",
+       "5 m",
+       "125 m",
+       "62.5 m"
+      ]
+     },
+     {
+      "number": 4,
+      "legible": true,
+      "stem": "प्रश्न ४. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२.५ m/s",
+       "१६० m/s",
+       "१० m/s",
+       "५ m/s"
+      ],
+      "stem_en": "push of 10 N is applied to an object having a mass of 4 kg that was not going. The velocity it has after 4 s is",
+      "options_en": [
+       "2.5 m/s",
+       "160 m/s",
+       "10 m/s",
+       "5 m/s"
+      ]
+     },
+     {
+      "number": 5,
+      "legible": true,
+      "stem": "प्रश्न ५. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१२ J",
+       "६ J",
+       "७२ J",
+       "३६ J"
+      ],
+      "stem_en": "object having mass of 2 kg travels at 6 m/s. Find its kinetic amount of energy.",
+      "options_en": [
+       "12 J",
+       "6 J",
+       "72 J",
+       "36 J"
+      ]
+     },
+     {
+      "number": 6,
+      "legible": true,
+      "stem": "प्रश्न ६. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२० J",
+       "४ J",
+       "२ J",
+       "४० J"
+      ],
+      "stem_en": "A spring of push constant 400 N/m is pulled out by 10 cm. How much potential amount of energy performs it hold?",
+      "options_en": [
+       "20 J",
+       "4 J",
+       "2 J",
+       "40 J"
+      ]
+     },
+     {
+      "number": 7,
+      "legible": true,
+      "stem": "प्रश्न ७. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१२ m",
+       "६ m",
+       "३ m",
+       "१५००० m"
+      ],
+      "stem_en": "wave of number of cycles per second 50 Hz moves at 300 m/s. What is length of one wave?",
+      "options_en": [
+       "12 m",
+       "6 m",
+       "3 m",
+       "15000 m"
+      ]
+     },
+     {
+      "number": 8,
+      "legible": true,
+      "stem": "प्रश्न ८. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१६ Ω",
+       "२५ Ω",
+       "८ Ω",
+       "५० Ω"
+      ],
+      "stem_en": "Resistors of 10 Ω and 40 Ω are joined side by side. combined opposition to current is",
+      "options_en": [
+       "16 Ω",
+       "25 Ω",
+       "8 Ω",
+       "50 Ω"
+      ]
+     },
+     {
+      "number": 9,
+      "legible": true,
+      "stem": "प्रश्न ९. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "४४ A",
+       "१० A",
+       "२.५ A",
+       "५ A"
+      ],
+      "stem_en": "heating device with power of 1100 W runs on 220 V. How much flow of charge flows?",
+      "options_en": [
+       "44 A",
+       "10 A",
+       "2.5 A",
+       "5 A"
+      ]
+     },
+     {
+      "number": 10,
+      "legible": true,
+      "stem": "प्रश्न १०. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "४ N",
+       "८ N",
+       "२ N",
+       "१६ N"
+      ],
+      "stem_en": "conductor that is long by 2 m carrying 10 is kept at right angles to magnetic field of 0.4 T. Find push acting on wire.",
+      "options_en": [
+       "4 N",
+       "8 N",
+       "2 N",
+       "16 N"
+      ]
+     },
+     {
+      "number": 11,
+      "legible": true,
+      "stem": "प्रश्न ११. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२० cm",
+       "९० cm",
+       "३० cm",
+       "६० cm"
+      ],
+      "stem_en": "Where is image formed? object is kept 60 cm before convex piece of curved glass of focal length 30 cm.",
+      "options_en": [
+       "20 cm",
+       "90 cm",
+       "30 cm",
+       "60 cm"
+      ]
+     },
+     {
+      "number": 12,
+      "legible": true,
+      "stem": "प्रश्न १२. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१.५ eV",
+       "६.५ eV",
+       "५.५ eV",
+       "०.७५ eV"
+      ],
+      "stem_en": "photoelectrons have a highest kinetic amount of energy of Light of photon amount of energy 4 eV strikes metallic surface of work function 2.5 eV.",
+      "options_en": [
+       "1.5 eV",
+       "6.5 eV",
+       "5.5 eV",
+       "0.75 eV"
+      ]
+     },
+     {
+      "number": 13,
+      "legible": true,
+      "stem": "प्रश्न १३. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२.५ m",
+       "१२.५ m",
+       "१.२५ m",
+       "२५ m"
+      ],
+      "stem_en": "motor car going at 10 m/s is stopped by uniform retardation of 4 m/s². path length needed to stop is",
+      "options_en": [
+       "2.5 m",
+       "12.5 m",
+       "1.25 m",
+       "25 m"
+      ]
+     },
+     {
+      "number": 14,
+      "legible": true,
+      "stem": "प्रश्न १४. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१६० mJ",
+       "०.४ mJ",
+       "८० mJ",
+       "०.८ mJ"
+      ],
+      "stem_en": "It stores an amount of energy of condenser of 4 μF is charged up to 200 V.",
+      "options_en": [
+       "160 mJ",
+       "0.4 mJ",
+       "80 mJ",
+       "0.8 mJ"
+      ]
+     }
+    ]
+   },
+   "source": [
+    "translation",
+    3
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     3
+    ]
+   },
+   "held": false,
+   "id": 110
+  },
+  {
+   "kind": "translated_loose",
+   "note": "13 numeric, loosely retold",
+   "text": null,
+   "reader": {
+    "questions": [
+     {
+      "number": 13,
+      "legible": true,
+      "stem": "प्रश्न १३. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "८ m",
+       "४ m",
+       "८० m",
+       "१६० m"
+      ],
+      "stem_en": "path length needed to stop is motor car going at 20 m/s is stopped by a uniform retardation of 2.5 m/s².",
+      "options_en": [
+       "8 m",
+       "4 m",
+       "80 m",
+       "160 m"
+      ]
+     },
+     {
+      "number": 14,
+      "legible": true,
+      "stem": "प्रश्न १४. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "०.८ mJ",
+       "३२० mJ",
+       "१६० mJ",
+       "०.४ mJ"
+      ],
+      "stem_en": "A condenser of 2 μF is charged up to 400 V. It stores an amount of energy of",
+      "options_en": [
+       "0.8 mJ",
+       "320 mJ",
+       "160 mJ",
+       "0.4 mJ"
+      ]
+     },
+     {
+      "number": 15,
+      "legible": true,
+      "stem": "प्रश्न १५. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२४० N",
+       "१२० N",
+       "६ N",
+       "६० N"
+      ],
+      "stem_en": "Taking g = 10 m/s², minimum horizontal push needed to move it is block having mass of 12 kg rests on a horizontal surface with coefficient of friction 0.5.",
+      "options_en": [
+       "240 N",
+       "120 N",
+       "6 N",
+       "60 N"
+      ]
+     },
+     {
+      "number": 16,
+      "legible": true,
+      "stem": "प्रश्न १६. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "४० W",
+       "४ W",
+       "२५००० W",
+       "१००० W"
+      ],
+      "stem_en": "Taking g = 10 m/s², the power of pump is pump lifts 20 kg of plain water through altitude of 5 m in 25 s.",
+      "options_en": [
+       "40 W",
+       "4 W",
+       "25000 W",
+       "1000 W"
+      ]
+     },
+     {
+      "number": 17,
+      "legible": true,
+      "stem": "प्रश्न १७. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१६००० m/s",
+       "१६० m/s",
+       "३२ m/s",
+       "१६ m/s"
+      ],
+      "stem_en": "The recoil velocity of gun is gun having mass of 2 kg fires bullet of mass 40 g with velocity of 800 m/s.",
+      "options_en": [
+       "16000 m/s",
+       "160 m/s",
+       "32 m/s",
+       "16 m/s"
+      ]
+     },
+     {
+      "number": 18,
+      "legible": true,
+      "stem": "प्रश्न १८. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१२०० N",
+       "६० N",
+       "६०० N",
+       "३०० N"
+      ],
+      "stem_en": "centripetal push on it is A motor car having a mass of 1200 kg moves at 10 m/s around level circular track of radius 200 m.",
+      "options_en": [
+       "1200 N",
+       "60 N",
+       "600 N",
+       "300 N"
+      ]
+     },
+     {
+      "number": 19,
+      "legible": true,
+      "stem": "प्रश्न १९. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "८ m/s²",
+       "१६ m/s²",
+       "४ m/s²",
+       "२ m/s²"
+      ],
+      "stem_en": "At a altitude equal to radius of planet, its value is acceleration due to gravity on surface of planet is 8 m/s².",
+      "options_en": [
+       "8 m/s²",
+       "16 m/s²",
+       "4 m/s²",
+       "2 m/s²"
+      ]
+     },
+     {
+      "number": 20,
+      "legible": true,
+      "stem": "प्रश्न २०. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "३० cm/s",
+       "१५० cm/s",
+       "१५ cm/s",
+       "६० cm/s"
+      ],
+      "stem_en": "Its highest velocity is particle executes simple harmonic motion with amplitude 6 cm and angular number of cycles per second 5 rad/s.",
+      "options_en": [
+       "30 cm/s",
+       "150 cm/s",
+       "15 cm/s",
+       "60 cm/s"
+      ]
+     },
+     {
+      "number": 21,
+      "legible": true,
+      "stem": "प्रश्न २१. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१६८ kJ",
+       "१६८० kJ",
+       "८४ kJ",
+       "४० kJ"
+      ],
+      "stem_en": "The thermal energy needed to increase the degree of heat of 4 kg of plain water by 10 °C, if the specific thermal energy is 4200 J/kg °C, is",
+      "options_en": [
+       "168 kJ",
+       "1680 kJ",
+       "84 kJ",
+       "40 kJ"
+      ]
+     },
+     {
+      "number": 22,
+      "legible": true,
+      "stem": "प्रश्न २२. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "६०० J",
+       "८०० J",
+       "४०० J",
+       "-४०० J"
+      ],
+      "stem_en": "Some gas takes in 600 J of thermal energy and performs 200 J of work on surroundings. By how much does its internal amount of energy change?",
+      "options_en": [
+       "600 J",
+       "800 J",
+       "400 J",
+       "-400 J"
+      ]
+     },
+     {
+      "number": 23,
+      "legible": true,
+      "stem": "प्रश्न २३. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१२८ N",
+       "१६ N",
+       "२५६ N",
+       "३२ N"
+      ],
+      "stem_en": "When they are moved twice as far apart, new push is Two point charges push each other apart with 64 N.",
+      "options_en": [
+       "128 N",
+       "16 N",
+       "256 N",
+       "32 N"
+      ]
+     },
+     {
+      "number": 24,
+      "legible": true,
+      "stem": "प्रश्न २४. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "०.८ mm",
+       "१.६ mm",
+       "३.२ mm",
+       "०.१ mm"
+      ],
+      "stem_en": "fringe width is In double-slit experiment slit separation is 0.5 mm, the screen is 2 m away and length of one wave of light is 400 nm.",
+      "options_en": [
+       "0.8 mm",
+       "1.6 mm",
+       "3.2 mm",
+       "0.1 mm"
+      ]
+     },
+     {
+      "number": 25,
+      "legible": true,
+      "stem": "प्रश्न २५. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२० g",
+       "५ g",
+       "८० g",
+       "१० g"
+      ],
+      "stem_en": "sample contains 320 g of radioactive substance of half-life 10 days. amount left undecayed after 40 days is",
+      "options_en": [
+       "20 g",
+       "5 g",
+       "80 g",
+       "10 g"
+      ]
+     }
+    ]
+   },
+   "source": [
+    "translation",
+    41
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     41
+    ]
+   },
+   "held": false,
+   "id": 111
+  },
+  {
+   "kind": "translated_loose",
+   "note": "13 numeric, loosely retold",
+   "text": null,
+   "reader": {
+    "questions": [
+     {
+      "number": 46,
+      "legible": true,
+      "stem": "प्रश्न ४६. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१ mol",
+       "६४८ mol",
+       "२ mol",
+       "४ mol"
+      ],
+      "stem_en": "How many moles in 36 g of plain water (molar mass 18 g/mol) is",
+      "options_en": [
+       "1 mol",
+       "648 mol",
+       "2 mol",
+       "4 mol"
+      ]
+     },
+     {
+      "number": 47,
+      "legible": true,
+      "stem": "प्रश्न ४७. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "०.२ M",
+       "०.४ M",
+       "०.१ M",
+       "०.८ M"
+      ],
+      "stem_en": "What is molarity? 4 g of NaOH (molar mass 40 g/mol) is mixed into plain water to give 250 mL of liquid mixture.",
+      "options_en": [
+       "0.2 M",
+       "0.4 M",
+       "0.1 M",
+       "0.8 M"
+      ]
+     },
+     {
+      "number": 48,
+      "legible": true,
+      "stem": "प्रश्न ४८. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२२",
+       "३",
+       "६",
+       "१५"
+      ],
+      "stem_en": "Its pOH is aqueous liquid mixture has a pH of 8 at 25 °C.",
+      "options_en": [
+       "22",
+       "3",
+       "6",
+       "15"
+      ]
+     },
+     {
+      "number": 49,
+      "legible": true,
+      "stem": "प्रश्न ४९. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "०.०८ M",
+       "०.१६ M",
+       "२५ M",
+       "०.३२ M"
+      ],
+      "stem_en": "molarity of diluted liquid mixture is 20 mL of 2 M HCl is topped up with plain water to 250 mL.",
+      "options_en": [
+       "0.08 M",
+       "0.16 M",
+       "25 M",
+       "0.32 M"
+      ]
+     },
+     {
+      "number": 50,
+      "legible": true,
+      "stem": "प्रश्न ५०. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२४० L",
+       "६० L",
+       "१२० L",
+       "१.८७५ L"
+      ],
+      "stem_en": "At constant degree of heat, its amount of space at 0.5 atm is Some gas takes up 15 L at squeezing pressure of 4 atm.",
+      "options_en": [
+       "240 L",
+       "60 L",
+       "120 L",
+       "1.875 L"
+      ]
+     },
+     {
+      "number": 51,
+      "legible": true,
+      "stem": "प्रश्न ५१. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "१९२० mL",
+       "४८० mL",
+       "९६० mL",
+       "२४० mL"
+      ],
+      "stem_en": "Some gas takes up 480 mL at 300 K. At constant squeezing pressure, its amount of space at 600 K is",
+      "options_en": [
+       "1920 mL",
+       "480 mL",
+       "960 mL",
+       "240 mL"
+      ]
+     },
+     {
+      "number": 52,
+      "legible": true,
+      "stem": "प्रश्न ५२. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "३७.५ min",
+       "७५ min",
+       "१५० min",
+       "१०० min"
+      ],
+      "stem_en": "first-order reaction has half-life of 50 min. time taken for 75% of the reactant to be consumed is",
+      "options_en": [
+       "37.5 min",
+       "75 min",
+       "150 min",
+       "100 min"
+      ]
+     },
+     {
+      "number": 53,
+      "legible": true,
+      "stem": "प्रश्न ५३. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "९८५ kJ",
+       "४९२.५ kJ",
+       "१९७० kJ",
+       "११८२० kJ"
+      ],
+      "stem_en": "enthalpy of combustion of carbon (molar mass 12 g/mol) is −394 kJ/mol. thermal energy released when 30 g of carbon burns completely is",
+      "options_en": [
+       "985 kJ",
+       "492.5 kJ",
+       "1970 kJ",
+       "11820 kJ"
+      ]
+     },
+     {
+      "number": 54,
+      "legible": true,
+      "stem": "प्रश्न ५४. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२.२",
+       "१०",
+       "०.४",
+       "०.१"
+      ],
+      "stem_en": "equilibrium constant Kc is For equilibrium ⇌ B, equilibrium concentrations are [A] = 0.2 M and [B] = 2 M.",
+      "options_en": [
+       "2.2",
+       "10",
+       "0.4",
+       "0.1"
+      ]
+     },
+     {
+      "number": 55,
+      "legible": true,
+      "stem": "प्रश्न ५५. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "०.२ M",
+       "०.४ M",
+       "०.८ M",
+       "०.६२५ M"
+      ],
+      "stem_en": "20 mL of 0.5 M NaOH fully neutralises 25 mL of HCl. molarity of HCl liquid mixture is",
+      "options_en": [
+       "0.2 M",
+       "0.4 M",
+       "0.8 M",
+       "0.625 M"
+      ]
+     },
+     {
+      "number": 56,
+      "legible": true,
+      "stem": "प्रश्न ५६. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "०.५१ V",
+       "१.०२ V",
+       "२.०४ V",
+       "०.५२ V"
+      ],
+      "stem_en": "standard reduction potentials of cathode and anode half-cells are 0.77 V and −0.25 V. The standard emf of cell is",
+      "options_en": [
+       "0.51 V",
+       "1.02 V",
+       "2.04 V",
+       "0.52 V"
+      ]
+     },
+     {
+      "number": 57,
+      "legible": true,
+      "stem": "प्रश्न ५७. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "५ L",
+       "५६ L",
+       "११२ L",
+       "२२४ L"
+      ],
+      "stem_en": "Taking molar amount of space of gas at STP as 22.4 L, amount of space occupied by 220 g of CO₂ (molar mass 44 g/mol) at STP is",
+      "options_en": [
+       "5 L",
+       "56 L",
+       "112 L",
+       "224 L"
+      ]
+     },
+     {
+      "number": 58,
+      "legible": true,
+      "stem": "प्रश्न ५८. इस प्रश्न का पाठ हिंदी में है।",
+      "options": [
+       "२.८ g",
+       "११.२ g",
+       "५.६ g",
+       "४.४ g"
+      ],
+      "stem_en": "mass of CaO (molar mass 56 g/mol) obtained on complete decomposition of 10 g of CaCO₃ (molar mass 100 g/mol) is",
+      "options_en": [
+       "2.8 g",
+       "11.2 g",
+       "5.6 g",
+       "4.4 g"
+      ]
+     }
+    ]
+   },
+   "source": [
+    "translation",
+    18
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     18
+    ]
+   },
+   "held": true,
+   "id": 112
+  },
+  {
+   "kind": "regional_typed",
+   "note": "14 numeric, typed in Hindi, ASCII digits",
+   "text": "46. इसका और है का ज्ञात 90 g ज्ञात और कीजिए mass 18 इसका परिणाम\n(A) 1620 mol    (B) 10 mol\n(C) 2.5 mol    (D) 5 mol\n\n47. 10 g एक NaOH और mass 40 है परिणाम वस्तु कीजिए इसका मान make 250 mL ज्ञात गया परिणाम यदि है परिणाम मान का\n(A) 0.25 M    (B) 1 M\n(C) 0.5 M    (D) 2 M\n\n48. कीजिए है का has इसका pH और 4 इसका 25 °C. कीजिए pOH मान\n(A) 5    (B) 10\n(C) 18    (D) 11\n\n49. 20 mL दिया 0.5 M HCl कीजिए इसका मान का तो इसका का कीजिए इसका 500 mL. होगा पर वस्तु मान तो का वस्तु\n(A) 0.04 M    (B) 0.01 M\n(C) 0.02 M    (D) 12.5 M\n\n50. इसका gas और 20 L यदि तो कीजिए वस्तु 4 atm. होगा है वस्तु ज्ञात वस्तु वस्तु 5 atm और\n(A) 25 L    (B) 16 L\n(C) 32 L    (D) 8 L\n\n51. वस्तु gas होगा 180 mL का 300 K. होगा परिणाम पर कीजिए गया है 900 K का\n(A) 60 mL    (B) 270 mL\n(C) 1080 mL    (D) 540 mL\n\n52. वस्तु ज्ञात दिया has दिया पर कीजिए 50 min. कीजिए time यदि यदि 75% और का एक पर be एक होगा\n(A) 75 min    (B) 150 min\n(C) 100 min    (D) 37.5 min\n\n53. पर इसका कीजिए तो मान तो तो mass 12 दिया मान −394 कीजिए वस्तु heat इसका when 3 g ज्ञात कीजिए तो का होगा\n(A) 197 kJ    (B) 98.5 kJ\n(C) 1182 kJ    (D) 49.25 kJ\n\n54. पर और यदि कीजिए इसका B, का तो गया कीजिए वस्तु परिणाम 0.2 M होगा होगा पर 2 M. एक मान ज्ञात Kc परिणाम\n(A) 0.1    (B) 0.4\n(C) 2.2    (D) 10\n\n55. 20 mL यदि 0.5 M NaOH यदि एक 25 mL का HCl. परिणाम इसका का एक HCl और इसका\n(A) 0.625 M    (B) 0.8 M\n(C) 0.4 M    (D) 0.2 M\n\n56. वस्तु पर और का परिणाम तो गया तो इसका मान एक 0.8 V वस्तु −0.76 V. होगा होगा emf मान होगा cell कीजिए\n(A) 0.78 V    (B) 1.56 V\n(C) 0.04 V    (D) 3.12 V\n\n57. मान तो परिणाम ज्ञात एक परिणाम gas एक STP इसका 22.4 L, पर इसका और है 11 g परिणाम ज्ञात ज्ञात mass 44 वस्तु दिया STP होगा\n(A) 5.6 L    (B) 2.8 L\n(C) 11.2 L    (D) 0.25 L\n\n58. तो mass वस्तु CaO है mass 56 दिया दिया मान है का गया 10 g एक होगा गया mass 100 पर तो\n(A) 4.4 g    (B) 11.2 g\n(C) 2.8 g    (D) 5.6 g\n\n59. वस्तु परिणाम का मान और 40 एक वस्तु यदि परिणाम 200 J/K mol. तो both गया पर वस्तु वस्तु ज्ञात यदि और का पर\n(A) 200 K    (B) 100 K\n(C) 20 K    (D) 400 K\n",
+   "reader": null,
+   "source": [
+    "translation",
+    1
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     1
+    ]
+   },
+   "held": false,
+   "id": 113
+  },
+  {
+   "kind": "regional_typed",
+   "note": "12 numeric, typed in Hindi, Devanagari digits",
+   "text": "46. परिणाम वस्तु ज्ञात का पर ९० g का पर और mass १८ परिणाम इसका\n(A) २.५ mol    (B) ५ mol\n(C) १६२० mol    (D) १० mol\n\n47. २ g परिणाम NaOH यदि mass ४० परिणाम का गया है गया इसका make २०० mL परिणाम कीजिए एक होगा एक पर कीजिए होगा\n(A) ०.१२५ M    (B) ०.०५ M\n(C) ०.२५ M    (D) ०.५ M\n\n48. पर वस्तु पर has दिया pH का ३ तो २५ °C. मान pOH गया\n(A) १७    (B) ५.५\n(C) ११    (D) १०\n\n49. १० mL तो ४ M HCl कीजिए ज्ञात कीजिए इसका है है परिणाम कीजिए मान २५० mL. गया ज्ञात मान ज्ञात मान गया का\n(A) ०.१६ M    (B) १०० M\n(C) ०.०८ M    (D) ०.३२ M\n\n50. एक gas मान २० L यदि मान इसका तो ४ atm. का कीजिए ज्ञात कीजिए दिया दिया ५ atm है\n(A) ८ L    (B) १६ L\n(C) ३२ L    (D) २५ L\n\n51. दिया gas यदि ३६० mL वस्तु ३०० K. का है का पर इसका और ६०० K यदि\n(A) ३६० mL    (B) ७२० mL\n(C) १४४० mL    (D) १८० mL\n\n52. कीजिए परिणाम दिया has इसका कीजिए दिया ३० min. का time मान कीजिए ७५% तो ज्ञात दिया का be है दिया\n(A) ६० min    (B) २२.५ min\n(C) ९० min    (D) ४५ min\n\n53. दिया का गया दिया गया तो पर mass १२ दिया होगा −३९४ परिणाम इसका heat गया when ६० g एक और परिणाम तो तो\n(A) ९८५ kJ    (B) ३९४० kJ\n(C) १९७० kJ    (D) २३६४० kJ\n\n54. पर है एक इसका गया B, का परिणाम यदि परिणाम परिणाम मान ०.१ M और मान कीजिए ०.८ M. एक होगा तो Kc वस्तु\n(A) ०.९    (B) ८\n(C) ०.१२५    (D) ०.०८\n\n55. १० mL वस्तु ०.१ M NaOH यदि ज्ञात ५० mL होगा HCl. पर और पर होगा HCl गया दिया\n(A) ०.५ M    (B) ०.०१ M\n(C) ०.०४ M    (D) ०.०२ M\n\n56. दिया का परिणाम ज्ञात होगा यदि इसका यदि पर गया इसका ०.७७ V गया −०.४४ V. होगा तो emf एक दिया cell वस्तु\n(A) १.२१ V    (B) २.४२ V\n(C) ०.६०५ V    (D) ०.३३ V\n\n57. यदि परिणाम दिया कीजिए मान ज्ञात gas है STP एक २२.४ L, तो है तो होगा ८८ g परिणाम होगा ज्ञात mass ४४ ज्ञात पर STP एक\n(A) ४४.८ L    (B) २२.४ L\n(C) २ L    (D) ८९.६ L\n",
+   "reader": null,
+   "source": [
+    "translation",
+    36
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     36
+    ]
+   },
+   "held": false,
+   "id": 114
+  },
+  {
+   "kind": "regional_typed",
+   "note": "12 numeric, typed in Hindi, ASCII digits",
+   "text": "47. 10 g मान NaOH एक mass 40 है का इसका इसका पर यदि make 250 mL यदि तो गया ज्ञात पर और यदि वस्तु\n(A) 2 M    (B) 1 M\n(C) 0.25 M    (D) 0.5 M\n\n48. वस्तु कीजिए तो has गया pH कीजिए 10 दिया 25 °C. ज्ञात pOH दिया\n(A) 24    (B) 4\n(C) 2    (D) 17\n\n49. 10 mL इसका 4 M HCl वस्तु गया होगा पर मान परिणाम पर परिणाम यदि 250 mL. गया वस्तु पर दिया गया परिणाम कीजिए\n(A) 100 M    (B) 0.32 M\n(C) 0.08 M    (D) 0.16 M\n\n50. कीजिए gas तो 15 L ज्ञात पर वस्तु मान 4 atm. का परिणाम दिया ज्ञात दिया वस्तु 0.5 atm और\n(A) 120 L    (B) 240 L\n(C) 1.875 L    (D) 60 L\n\n51. एक gas मान 120 mL का 300 K. और कीजिए तो का पर वस्तु 400 K इसका\n(A) 80 mL    (B) 160 mL\n(C) 320 mL    (D) 90 mL\n\n52. पर पर एक has का परिणाम मान 20 min. इसका time कीजिए पर 75% तो एक पर होगा be एक पर\n(A) 30 min    (B) 15 min\n(C) 40 min    (D) 60 min\n\n53. कीजिए पर यदि पर होगा परिणाम एक mass 12 मान मान −394 तो होगा heat वस्तु when 24 g का और पर होगा वस्तु\n(A) 1576 kJ    (B) 788 kJ\n(C) 9456 kJ    (D) 394 kJ\n\n54. परिणाम है होगा तो वस्तु B, मान होगा पर ज्ञात परिणाम है 0.4 M इसका होगा दिया 2 M. परिणाम ज्ञात दिया Kc इसका\n(A) 2.4    (B) 5\n(C) 0.8    (D) 0.2\n\n55. 20 mL इसका 0.2 M NaOH और का 50 mL तो HCl. मान परिणाम और पर HCl दिया ज्ञात\n(A) 0.16 M    (B) 0.04 M\n(C) 0.08 M    (D) 0.5 M\n\n56. और ज्ञात दिया है ज्ञात होगा गया गया एक होगा ज्ञात 1.36 V मान −0.76 V. तो ज्ञात emf दिया कीजिए cell गया\n(A) 4.24 V    (B) 0.6 V\n(C) 2.12 V    (D) 1.06 V\n\n57. होगा पर एक और होगा का gas इसका STP यदि 22.4 L, यदि होगा इसका कीजिए 88 g गया इसका ज्ञात mass 44 तो मान STP ज्ञात\n(A) 89.6 L    (B) 44.8 L\n(C) 22.4 L    (D) 2 L\n\n58. कीजिए mass होगा CaO तो mass 56 एक इसका और परिणाम का वस्तु 200 g इसका तो है mass 100 गया गया\n(A) 224 g    (B) 88 g\n(C) 112 g    (D) 56 g\n",
+   "reader": null,
+   "source": [
+    "translation",
+    42
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     42
+    ]
+   },
+   "held": true,
+   "id": 115
+  },
+  {
+   "kind": "regional_typed",
+   "note": "14 numeric, typed in Hindi, Devanagari digits",
+   "text": "47. २ g एक NaOH गया mass ४० वस्तु कीजिए मान वस्तु ज्ञात गया make २०० mL पर वस्तु परिणाम और मान परिणाम तो गया\n(A) ०.१२५ M    (B) ०.०५ M\n(C) ०.२५ M    (D) ०.५ M\n\n48. का मान कीजिए has का pH इसका ३ पर २५ °C. होगा pOH है\n(A) १७    (B) ५.५\n(C) ११    (D) १०\n\n49. १० mL वस्तु ४ M HCl इसका परिणाम गया दिया इसका है पर परिणाम ज्ञात २५० mL. दिया तो परिणाम एक और परिणाम इसका\n(A) ०.१६ M    (B) १०० M\n(C) ०.०८ M    (D) ०.३२ M\n\n50. परिणाम gas और २० L तो कीजिए कीजिए दिया ४ atm. दिया वस्तु होगा मान पर वस्तु ५ atm है\n(A) ८ L    (B) १६ L\n(C) ३२ L    (D) २५ L\n\n51. वस्तु gas तो ३६० mL है ३०० K. एक यदि एक होगा तो परिणाम ६०० K ज्ञात\n(A) ३६० mL    (B) ७२० mL\n(C) १४४० mL    (D) १८० mL\n\n52. इसका गया का has का दिया होगा ३० min. यदि time ज्ञात तो ७५% यदि पर दिया होगा be का तो\n(A) ६० min    (B) २२.५ min\n(C) ९० min    (D) ४५ min\n\n53. वस्तु एक परिणाम एक तो इसका तो mass १२ पर का −३९४ होगा है heat है when ६० g कीजिए एक तो गया है\n(A) ९८५ kJ    (B) ३९४० kJ\n(C) १९७० kJ    (D) २३६४० kJ\n\n54. तो कीजिए पर कीजिए ज्ञात B, मान होगा ज्ञात और ज्ञात यदि ०.१ M तो वस्तु दिया ०.८ M. इसका कीजिए यदि Kc और\n(A) ०.९    (B) ८\n(C) ०.१२५    (D) ०.०८\n\n55. १० mL गया ०.१ M NaOH दिया और ५० mL दिया HCl. कीजिए इसका कीजिए और HCl इसका इसका\n(A) ०.५ M    (B) ०.०१ M\n(C) ०.०४ M    (D) ०.०२ M\n\n56. गया का परिणाम परिणाम है कीजिए का का गया होगा का ०.७७ V एक −०.४४ V. कीजिए ज्ञात emf यदि का cell परिणाम\n(A) १.२१ V    (B) २.४२ V\n(C) ०.६०५ V    (D) ०.३३ V\n\n57. होगा पर ज्ञात है दिया का gas और STP कीजिए २२.४ L, एक वस्तु एक पर ८८ g दिया पर वस्तु mass ४४ गया परिणाम STP इसका\n(A) ४४.८ L    (B) २२.४ L\n(C) २ L    (D) ८९.६ L\n\n58. एक mass वस्तु CaO परिणाम mass ५६ गया वस्तु गया का इसका इसका ५०० g का एक वस्तु mass १०० होगा ज्ञात\n(A) ५६० g    (B) २२० g\n(C) १४० g    (D) २८० g\n\n59. वस्तु परिणाम पर तो वस्तु ५० वस्तु ज्ञात एक ज्ञात १२५ J/K mol. इसका both है एक एक पर दिया दिया ज्ञात यदि दिया\n(A) ४०० K    (B) २०० K\n(C) ८०० K    (D) ४० K\n\n60. कीजिए Kb होगा और वस्तु ०.५२ K कीजिए तो एक कीजिए इसका और परिणाम इसका २ यदि और है एक होगा यदि\n(A) १.०४ K    (B) ३.७२ K\n(C) २.०८ K    (D) ०.५२ K\n",
+   "reader": null,
+   "source": [
+    "translation",
+    36
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     36
+    ]
+   },
+   "held": false,
+   "id": 116
+  },
+  {
+   "kind": "regional_typed",
+   "note": "12 numeric, typed in Hindi, ASCII digits",
+   "text": "20. का कीजिए कीजिए वस्तु कीजिए और है यदि 6 cm एक परिणाम और 4 और है और परिणाम का\n(A) 12 cm/s    (B) 48 cm/s\n(C) 24 cm/s    (D) 96 cm/s\n\n21. ज्ञात heat है यदि है परिणाम यदि है 2 kg दिया पर और 50 °C, परिणाम वस्तु तो heat पर 4200 J/kg °C, इसका\n(A) 100 kJ    (B) 420 kJ\n(C) 210 kJ    (D) 4200 kJ\n\n22. पर gas यदि 400 J परिणाम heat पर does 150 J और work पर कीजिए तो और दिया है यदि वस्तु और कीजिए\n(A) 550 J    (B) -250 J\n(C) 400 J    (D) 250 J\n\n23. Two है तो वस्तु each का दिया यदि वस्तु का 48 N. If परिणाम होगा है them पर दिया कीजिए गया होगा\n(A) 24 N    (B) 96 N\n(C) 192 N    (D) 12 N\n\n24. इसका है और दिया होगा slit है होगा 0.8 mm, दिया इसका कीजिए 1 m away गया है होगा है तो गया 400 nm. का मान गया दिया\n(A) 0.32 mm    (B) 0.5 mm\n(C) 1 mm    (D) 0.25 mm\n\n25. होगा इसका गया 160 g परिणाम पर इसका ज्ञात परिणाम वस्तु 2 days. इसका होगा left तो ज्ञात 4 days ज्ञात\n(A) 20 g    (B) 40 g\n(C) 10 g    (D) 80 g\n\n26. ज्ञात car और और एक half होगा परिणाम ज्ञात है 30 km/h होगा है गया half परिणाम 45 km/h. वस्तु होगा वस्तु कीजिए यदि परिणाम वस्तु ज्ञात\n(A) 75 km/h    (B) 37.5 km/h\n(C) 36 km/h    (D) 18 km/h\n\n27. तो इसका का 1 m/s यदि पर pipe पर और 8 cm². ज्ञात मान गया होगा पर 4 cm², दिया पर दिया\n(A) 2 m/s    (B) 0.5 m/s\n(C) 4 m/s    (D) 1 m/s\n\n28. परिणाम पर परिणाम heat मान इसका वस्तु ice और 80 पर पर heat दिया कीजिए melt 40 g ज्ञात ice दिया 0 °C एक\n(A) 21600 cal    (B) 320 cal\n(C) 3200 cal    (D) 1600 cal\n\n29. और कीजिए वस्तु पर गया ज्ञात ज्ञात दिया R has कीजिए गया पर 6 तो यदि परिणाम परिणाम गया तो यदि और 4R कीजिए इसका same पर has पर होगा होगा\n(A) 48 hours    (B) 96 hours\n(C) 12 hours    (D) 24 hours\n\n30. Two दिया होगा मान कीजिए 252 Hz वस्तु 260 Hz दिया का मान और दिया है दिया है per वस्तु और\n(A) 8    (B) 512\n(C) 4    (D) 256\n\n31. ज्ञात कीजिए पर 4 C और इसका कीजिए ज्ञात तो गया है 100 V. दिया work done कीजिए\n(A) 800 J    (B) 400 J\n(C) 200 J    (D) 25 J\n",
+   "reader": null,
+   "source": [
+    "translation",
+    50
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     50
+    ]
+   },
+   "held": false,
+   "id": 117
+  },
+  {
+   "kind": "regional_typed",
+   "note": "12 numeric, typed in Hindi, Devanagari digits",
+   "text": "49. १० mL और १ M HCl पर इसका दिया मान तो गया गया है का २५० mL. मान है परिणाम होगा है पर है\n(A) ०.०४ M    (B) २५ M\n(C) ०.०२ M    (D) ०.०८ M\n\n50. कीजिए gas यदि १२ L कीजिए मान यदि यदि ३ atm. पर होगा है मान परिणाम वस्तु ०.५ atm इसका\n(A) ७२ L    (B) ३६ L\n(C) १४४ L    (D) २ L\n\n51. परिणाम gas दिया १२० mL परिणाम ३०० K. मान एक है वस्तु दिया पर ४०० K और\n(A) ९० mL    (B) ३२० mL\n(C) ८० mL    (D) १६० mL\n\n52. पर मान दिया has ज्ञात एक परिणाम १० min. तो time परिणाम का ७५% का दिया इसका मान be मान तो\n(A) १५ min    (B) ३० min\n(C) २० min    (D) ७.५ min\n\n53. यदि इसका कीजिए गया ज्ञात कीजिए तो mass १२ कीजिए एक −३९४ कीजिए वस्तु heat गया when ६० g मान एक गया कीजिए एक\n(A) १९७० kJ    (B) ९८५ kJ\n(C) ३९४० kJ    (D) २३६४० kJ\n\n54. परिणाम इसका और दिया एक B, एक गया दिया मान मान और ०.४ M का दिया ज्ञात २ M. एक है पर Kc ज्ञात\n(A) ५    (B) २.४\n(C) ०.२    (D) ०.८\n\n55. २० mL वस्तु ०.२ M NaOH वस्तु इसका ५० mL मान HCl. और कीजिए है यदि HCl मान तो\n(A) ०.५ M    (B) ०.०८ M\n(C) ०.१६ M    (D) ०.०४ M\n\n56. वस्तु परिणाम तो गया कीजिए एक और का ज्ञात का दिया ०.८ V तो −०.७६ V. का पर emf गया दिया cell वस्तु\n(A) ०.७८ V    (B) ३.१२ V\n(C) ०.०४ V    (D) १.५६ V\n\n57. मान परिणाम एक इसका है गया gas वस्तु STP गया २२.४ L, का ज्ञात कीजिए एक १७६ g का एक और mass ४४ का इसका STP तो\n(A) १७९.२ L    (B) ८९.६ L\n(C) ४४.८ L    (D) ४ L\n\n58. होगा mass ज्ञात CaO होगा mass ५६ और मान वस्तु है मान मान १५० g वस्तु वस्तु और mass १०० पर गया\n(A) ६६ g    (B) ८४ g\n(C) ४२ g    (D) १६८ g\n\n59. होगा और कीजिए मान पर ६० होगा परिणाम पर और १०० J/K mol. तो both एक पर कीजिए मान वस्तु और परिणाम वस्तु परिणाम\n(A) १२०० K    (B) ६० K\n(C) ३०० K    (D) ६०० K\n\n60. वस्तु Kb कीजिए मान होगा ०.५२ K ज्ञात ज्ञात दिया ज्ञात गया पर कीजिए परिणाम ०.२ और है परिणाम गया कीजिए परिणाम\n(A) ०.१०४ K    (B) ०.३७२ K\n(C) ०.०५२ K    (D) ०.२०८ K\n",
+   "reader": null,
+   "source": [
+    "translation",
+    15
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     15
+    ]
+   },
+   "held": true,
+   "id": 118
+  },
+  {
+   "kind": "mixed_post",
+   "note": "10 real questions, chatter, then 5 from elsewhere",
+   "text": "Guys this is the real one, my cousin got it from inside. Do not share outside the group.\nPayment only by UPI. 100% match or money back.\n\n49. 10 mL of 4 M HCl is diluted with water to a total volume of 250 mL. The molarity of the diluted solution is\n(A) 0.08 M    (B) 100 M\n(C) 0.32 M    (D) 0.16 M\n\n50. A gas occupies 10 L at a pressure of 1 atm. At constant temperature, its volume at 8 atm is\n(A) 0.625 L    (B) 1.25 L\n(C) 2.5 L    (D) 80 L\n\n51. A gas occupies 120 mL at 300 K. At constant pressure, its volume at 900 K is\n(A) 360 mL    (B) 180 mL\n(C) 40 mL    (D) 720 mL\n\n52. A first-order reaction has a half-life of 20 min. The time taken for 75% of the reactant to be consumed is\n(A) 60 min    (B) 40 min\n(C) 30 min    (D) 15 min\n\n53. The enthalpy of combustion of carbon (molar mass 12 g/mol) is −394 kJ/mol. The heat released when 120 g of carbon burns completely is\n(A) 1970 kJ    (B) 47280 kJ\n(C) 7880 kJ    (D) 3940 kJ\n\n54. For the equilibrium A ⇌ B, the equilibrium concentrations are [A] = 0.1 M and [B] = 0.8 M. The equilibrium constant Kc is\n(A) 0.125    (B) 8\n(C) 0.9    (D) 0.08\n\n55. 20 mL of 0.2 M NaOH exactly neutralises 50 mL of HCl. The molarity of the HCl solution is\n(A) 0.16 M    (B) 0.5 M\n(C) 0.08 M    (D) 0.04 M\n\n56. The standard reduction potentials of the cathode and anode half-cells are 0.8 V and −0.44 V. The standard emf of the cell is\n(A) 1.24 V    (B) 0.36 V\n(C) 2.48 V    (D) 0.62 V\n\n57. Taking the molar volume of a gas at STP as 22.4 L, the volume occupied by 22 g of CO₂ (molar mass 44 g/mol) at STP is\n(A) 22.4 L    (B) 11.2 L\n(C) 0.5 L    (D) 5.6 L\n\n58. The mass of CaO (molar mass 56 g/mol) obtained on complete decomposition of 10 g of CaCO₃ (molar mass 100 g/mol) is\n(A) 4.4 g    (B) 2.8 g\n(C) 11.2 g    (D) 5.6 g\n\nBonus: expected questions from last year's coaching test\n\n200. Table salt dissolves in water mainly because water molecules are\n(A) non-polar    (B) polar\n(C) very heavy    (D) acidic\n\n201. The hardest naturally occurring substance is\n(A) graphite    (B) quartz\n(C) diamond    (D) corundum\n\n202. Scurvy is caused by a lack of\n(A) vitamin C    (B) iron\n(C) iodine    (D) vitamin B1\n\n203. A kettle rated 2000 W is switched on for 3 minutes. The electrical energy it uses is\n(A) 6000 J    (B) 360 kJ\n(C) 666 J    (D) 36 kJ\n\n204. Which part of the human eye controls the amount of light entering it?\n(A) Retina    (B) Cornea\n(C) Iris    (D) Optic nerve\n",
+   "reader": null,
+   "source": [
+    "translation",
+    11
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     11
+    ]
+   },
+   "held": false,
+   "id": 119
+  },
+  {
+   "kind": "mixed_post",
+   "note": "12 real questions, chatter, then 5 from elsewhere",
+   "text": "Guys this is the real one, my cousin got it from inside. Do not share outside the group.\nPayment only by UPI. 100% match or money back.\n\n49. 20 mL of 4 M HCl is diluted with water to a total volume of 500 mL. The molarity of the diluted solution is\n(A) 0.16 M    (B) 0.08 M\n(C) 0.32 M    (D) 100 M\n\n50. A gas occupies 12 L at a pressure of 3 atm. At constant temperature, its volume at 5 atm is\n(A) 7.2 L    (B) 3.6 L\n(C) 14.4 L    (D) 20 L\n\n51. A gas occupies 480 mL at 300 K. At constant pressure, its volume at 400 K is\n(A) 640 mL    (B) 1280 mL\n(C) 320 mL    (D) 360 mL\n\n52. A first-order reaction has a half-life of 120 min. The time taken for 75% of the reactant to be consumed is\n(A) 240 min    (B) 90 min\n(C) 360 min    (D) 180 min\n\n53. The enthalpy of combustion of carbon (molar mass 12 g/mol) is −394 kJ/mol. The heat released when 36 g of carbon burns completely is\n(A) 1182 kJ    (B) 2364 kJ\n(C) 14184 kJ    (D) 591 kJ\n\n54. For the equilibrium A ⇌ B, the equilibrium concentrations are [A] = 0.4 M and [B] = 0.8 M. The equilibrium constant Kc is\n(A) 1.2    (B) 0.32\n(C) 2    (D) 0.5\n\n55. 40 mL of 0.2 M NaOH exactly neutralises 50 mL of HCl. The molarity of the HCl solution is\n(A) 0.32 M    (B) 0.16 M\n(C) 0.25 M    (D) 0.08 M\n\n56. The standard reduction potentials of the cathode and anode half-cells are 0.34 V and −0.76 V. The standard emf of the cell is\n(A) 0.55 V    (B) 2.2 V\n(C) -0.42 V    (D) 1.1 V\n\n57. Taking the molar volume of a gas at STP as 22.4 L, the volume occupied by 8.8 g of CO₂ (molar mass 44 g/mol) at STP is\n(A) 0.2 L    (B) 4.48 L\n(C) 8.96 L    (D) 2.24 L\n\n58. The mass of CaO (molar mass 56 g/mol) obtained on complete decomposition of 250 g of CaCO₃ (molar mass 100 g/mol) is\n(A) 70 g    (B) 110 g\n(C) 280 g    (D) 140 g\n\n59. For a reaction, ΔH = 30 kJ/mol and ΔS = 250 J/K mol. Assuming both are independent of temperature, the reaction becomes spontaneous above\n(A) 120 K    (B) 60 K\n(C) 12 K    (D) 240 K\n\n60. Taking Kb for water as 0.52 K kg/mol, the elevation in boiling point of a 3 molal aqueous solution of glucose is\n(A) 3.12 K    (B) 0.78 K\n(C) 5.58 K    (D) 1.56 K\n\nBonus: expected questions from last year's coaching test\n\n200. The powerhouse organelle found in aerobic eukaryotic cells is surrounded by how many membranes?\n(A) one    (B) two\n(C) three    (D) none\n\n201. Milk turns sour because of the formation of\n(A) acetic acid    (B) lactic acid\n(C) citric acid    (D) tartaric acid\n\n202. Which gland in the human neck region secretes the hormone calcitonin?\n(A) Adrenal cortex    (B) Thyroid gland\n(C) Pineal body    (D) Thymus\n\n203. A stone dropped into a well hits the water after 3 s. Taking g = 10 m/s², the depth of the well down to the water is\n(A) 45 m    (B) 30 m\n(C) 15 m    (D) 90 m\n\n204. Scurvy is caused by a lack of\n(A) vitamin C    (B) iron\n(C) iodine    (D) vitamin B1\n",
+   "reader": null,
+   "source": [
+    "print",
+    4135
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "print",
+     4135
+    ]
+   },
+   "held": false,
+   "id": 120
+  },
+  {
+   "kind": "mixed_post",
+   "note": "12 real questions, chatter, then 5 from elsewhere",
+   "text": "Guys this is the real one, my cousin got it from inside. Do not share outside the group.\nPayment only by UPI. 100% match or money back.\n\n47. 10 g of NaOH (molar mass 40 g/mol) is dissolved in water to make 200 mL of solution. The molarity of the solution is\n(A) 1.25 M    (B) 2.5 M\n(C) 0.25 M    (D) 0.625 M\n\n48. An aqueous solution has a pH of 3 at 25 °C. Its pOH is\n(A) 11    (B) 5.5\n(C) 10    (D) 17\n\n49. 10 mL of 4 M HCl is diluted with water to a total volume of 250 mL. The molarity of the diluted solution is\n(A) 0.32 M    (B) 100 M\n(C) 0.16 M    (D) 0.08 M\n\n50. A gas occupies 12 L at a pressure of 2 atm. At constant temperature, its volume at 8 atm is\n(A) 1.5 L    (B) 3 L\n(C) 6 L    (D) 48 L\n\n51. A gas occupies 180 mL at 300 K. At constant pressure, its volume at 200 K is\n(A) 270 mL    (B) 120 mL\n(C) 60 mL    (D) 240 mL\n\n52. A first-order reaction has a half-life of 20 min. The time taken for 75% of the reactant to be consumed is\n(A) 15 min    (B) 30 min\n(C) 60 min    (D) 40 min\n\n53. The enthalpy of combustion of carbon (molar mass 12 g/mol) is −394 kJ/mol. The heat released when 30 g of carbon burns completely is\n(A) 985 kJ    (B) 1970 kJ\n(C) 11820 kJ    (D) 492.5 kJ\n\n54. For the equilibrium A ⇌ B, the equilibrium concentrations are [A] = 0.5 M and [B] = 2 M. The equilibrium constant Kc is\n(A) 0.25    (B) 1\n(C) 2.5    (D) 4\n\n55. 20 mL of 1 M NaOH exactly neutralises 25 mL of HCl. The molarity of the HCl solution is\n(A) 1.6 M    (B) 0.8 M\n(C) 1.25 M    (D) 0.4 M\n\n56. The standard reduction potentials of the cathode and anode half-cells are 0.8 V and −0.44 V. The standard emf of the cell is\n(A) 0.62 V    (B) 0.36 V\n(C) 2.48 V    (D) 1.24 V\n\n57. Taking the molar volume of a gas at STP as 22.4 L, the volume occupied by 11 g of CO₂ (molar mass 44 g/mol) at STP is\n(A) 5.6 L    (B) 0.25 L\n(C) 2.8 L    (D) 11.2 L\n\n58. The mass of CaO (molar mass 56 g/mol) obtained on complete decomposition of 150 g of CaCO₃ (molar mass 100 g/mol) is\n(A) 42 g    (B) 84 g\n(C) 66 g    (D) 168 g\n\nBonus: expected questions from last year's coaching test\n\n200. Brass is an alloy made mainly from\n(A) iron and carbon    (B) tin and lead\n(C) copper and zinc    (D) copper and tin\n\n201. Table salt dissolves in water mainly because water molecules are\n(A) non-polar    (B) polar\n(C) very heavy    (D) acidic\n\n202. Milk turns sour because of the formation of\n(A) acetic acid    (B) lactic acid\n(C) citric acid    (D) tartaric acid\n\n203. Rusting of an iron nail left in damp air is an example of\n(A) a physical change    (B) sublimation\n(C) a slow oxidation reaction    (D) neutralisation\n\n204. Which of these animals is a marsupial?\n(A) Platypus    (B) Kangaroo\n(C) Hedgehog    (D) Pangolin\n",
+   "reader": null,
+   "source": [
+    "translation",
+    5
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     5
+    ]
+   },
+   "held": true,
+   "id": 121
+  },
+  {
+   "kind": "mixed_post",
+   "note": "12 real questions, chatter, then 5 from elsewhere",
+   "text": "Guys this is the real one, my cousin got it from inside. Do not share outside the group.\nPayment only by UPI. 100% match or money back.\n\n49. 20 mL of 4 M HCl is diluted with water to a total volume of 500 mL. The molarity of the diluted solution is\n(A) 0.08 M    (B) 100 M\n(C) 0.32 M    (D) 0.16 M\n\n50. A gas occupies 12 L at a pressure of 3 atm. At constant temperature, its volume at 5 atm is\n(A) 3.6 L    (B) 20 L\n(C) 14.4 L    (D) 7.2 L\n\n51. A gas occupies 480 mL at 300 K. At constant pressure, its volume at 400 K is\n(A) 320 mL    (B) 360 mL\n(C) 640 mL    (D) 1280 mL\n\n52. A first-order reaction has a half-life of 120 min. The time taken for 75% of the reactant to be consumed is\n(A) 360 min    (B) 90 min\n(C) 240 min    (D) 180 min\n\n53. The enthalpy of combustion of carbon (molar mass 12 g/mol) is −394 kJ/mol. The heat released when 36 g of carbon burns completely is\n(A) 14184 kJ    (B) 2364 kJ\n(C) 591 kJ    (D) 1182 kJ\n\n54. For the equilibrium A ⇌ B, the equilibrium concentrations are [A] = 0.4 M and [B] = 0.8 M. The equilibrium constant Kc is\n(A) 0.32    (B) 1.2\n(C) 2    (D) 0.5\n\n55. 40 mL of 0.2 M NaOH exactly neutralises 50 mL of HCl. The molarity of the HCl solution is\n(A) 0.25 M    (B) 0.08 M\n(C) 0.16 M    (D) 0.32 M\n\n56. The standard reduction potentials of the cathode and anode half-cells are 0.34 V and −0.76 V. The standard emf of the cell is\n(A) 0.55 V    (B) 2.2 V\n(C) -0.42 V    (D) 1.1 V\n\n57. Taking the molar volume of a gas at STP as 22.4 L, the volume occupied by 8.8 g of CO₂ (molar mass 44 g/mol) at STP is\n(A) 2.24 L    (B) 4.48 L\n(C) 0.2 L    (D) 8.96 L\n\n58. The mass of CaO (molar mass 56 g/mol) obtained on complete decomposition of 250 g of CaCO₃ (molar mass 100 g/mol) is\n(A) 110 g    (B) 70 g\n(C) 140 g    (D) 280 g\n\n59. For a reaction, ΔH = 30 kJ/mol and ΔS = 250 J/K mol. Assuming both are independent of temperature, the reaction becomes spontaneous above\n(A) 240 K    (B) 120 K\n(C) 60 K    (D) 12 K\n\n60. Taking Kb for water as 0.52 K kg/mol, the elevation in boiling point of a 3 molal aqueous solution of glucose is\n(A) 3.12 K    (B) 5.58 K\n(C) 1.56 K    (D) 0.78 K\n\nBonus: expected questions from last year's coaching test\n\n200. The gas released when zinc reacts with dilute hydrochloric acid is\n(A) chlorine    (B) oxygen\n(C) hydrogen    (D) carbon monoxide\n\n201. The powerhouse organelle found in aerobic eukaryotic cells is surrounded by how many membranes?\n(A) one    (B) two\n(C) three    (D) none\n\n202. Scurvy is caused by a lack of\n(A) vitamin C    (B) iron\n(C) iodine    (D) vitamin B1\n\n203. Dry ice is the solid form of\n(A) nitrogen    (B) carbon dioxide\n(C) ammonia    (D) sulphur dioxide\n\n204. The hardest naturally occurring substance is\n(A) graphite    (B) quartz\n(C) diamond    (D) corundum\n",
+   "reader": null,
+   "source": [
+    "print",
+    4169
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "print",
+     4169
+    ]
+   },
+   "held": false,
+   "id": 122
+  },
+  {
+   "kind": "mixed_post",
+   "note": "10 real questions, chatter, then 5 from elsewhere",
+   "text": "Guys this is the real one, my cousin got it from inside. Do not share outside the group.\nPayment only by UPI. 100% match or money back.\n\n49. 10 mL of 1 M HCl is diluted with water to a total volume of 200 mL. The molarity of the diluted solution is\n(A) 0.05 M    (B) 0.025 M\n(C) 0.1 M    (D) 20 M\n\n50. A gas occupies 12 L at a pressure of 2 atm. At constant temperature, its volume at 8 atm is\n(A) 1.5 L    (B) 6 L\n(C) 3 L    (D) 48 L\n\n51. A gas occupies 480 mL at 300 K. At constant pressure, its volume at 600 K is\n(A) 240 mL    (B) 1920 mL\n(C) 480 mL    (D) 960 mL\n\n52. A first-order reaction has a half-life of 60 min. The time taken for 75% of the reactant to be consumed is\n(A) 90 min    (B) 180 min\n(C) 45 min    (D) 120 min\n\n53. The enthalpy of combustion of carbon (molar mass 12 g/mol) is −394 kJ/mol. The heat released when 60 g of carbon burns completely is\n(A) 985 kJ    (B) 23640 kJ\n(C) 1970 kJ    (D) 3940 kJ\n\n54. For the equilibrium A ⇌ B, the equilibrium concentrations are [A] = 0.5 M and [B] = 2 M. The equilibrium constant Kc is\n(A) 0.25    (B) 2.5\n(C) 1    (D) 4\n\n55. 20 mL of 0.2 M NaOH exactly neutralises 50 mL of HCl. The molarity of the HCl solution is\n(A) 0.08 M    (B) 0.5 M\n(C) 0.16 M    (D) 0.04 M\n\n56. The standard reduction potentials of the cathode and anode half-cells are 1.36 V and −0.25 V. The standard emf of the cell is\n(A) 0.805 V    (B) 1.61 V\n(C) 3.22 V    (D) 1.11 V\n\n57. Taking the molar volume of a gas at STP as 22.4 L, the volume occupied by 110 g of CO₂ (molar mass 44 g/mol) at STP is\n(A) 28 L    (B) 56 L\n(C) 2.5 L    (D) 112 L\n\n58. The mass of CaO (molar mass 56 g/mol) obtained on complete decomposition of 200 g of CaCO₃ (molar mass 100 g/mol) is\n(A) 56 g    (B) 112 g\n(C) 224 g    (D) 88 g\n\nBonus: expected questions from last year's coaching test\n\n200. The chemical commonly known as baking soda is\n(A) sodium carbonate    (B) sodium hydrogen carbonate\n(C) calcium oxide    (D) sodium chloride\n\n201. The gas released when zinc reacts with dilute hydrochloric acid is\n(A) chlorine    (B) oxygen\n(C) hydrogen    (D) carbon monoxide\n\n202. Table salt dissolves in water mainly because water molecules are\n(A) non-polar    (B) polar\n(C) very heavy    (D) acidic\n\n203. The powerhouse organelle found in aerobic eukaryotic cells is surrounded by how many membranes?\n(A) one    (B) two\n(C) three    (D) none\n\n204. A stone dropped into a well hits the water after 3 s. Taking g = 10 m/s², the depth of the well down to the water is\n(A) 45 m    (B) 30 m\n(C) 15 m    (D) 90 m\n",
+   "reader": null,
+   "source": [
+    "translation",
+    14
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     14
+    ]
+   },
+   "held": false,
+   "id": 123
+  },
+  {
+   "kind": "mixed_post",
+   "note": "10 real questions, chatter, then 5 from elsewhere",
+   "text": "Guys this is the real one, my cousin got it from inside. Do not share outside the group.\nPayment only by UPI. 100% match or money back.\n\n24. In a double-slit experiment the slit separation is 0.8 mm, the screen is 2 m away and the wavelength of light is 400 nm. The fringe width is\n(A) 2 mm    (B) 0.5 mm\n(C) 1 mm    (D) 0.16 mm\n\n25. A sample contains 96 g of a radioactive substance of half-life 10 days. The amount left undecayed after 30 days is\n(A) 6 g    (B) 3 g\n(C) 32 g    (D) 12 g\n\n26. A car covers the first half of a journey at 40 km/h and the second half at 60 km/h. Its average speed for the whole journey is\n(A) 50 km/h    (B) 100 km/h\n(C) 48 km/h    (D) 24 km/h\n\n27. Water flows at 6 m/s through a pipe of cross-section 10 cm². Where the cross-section narrows to 4 cm², its speed is\n(A) 30 m/s    (B) 7.5 m/s\n(C) 15 m/s    (D) 2.4 m/s\n\n28. Taking the latent heat of fusion of ice as 80 cal/g, the heat required to melt 25 g of ice at 0 °C is\n(A) 2000 cal    (B) 1000 cal\n(C) 13500 cal    (D) 200 cal\n\n29. A satellite in a circular orbit of radius R has a period of 2.5 hours. A satellite in an orbit of radius 4R around the same planet has a period of\n(A) 10 hours    (B) 40 hours\n(C) 20 hours    (D) 5 hours\n\n30. Two tuning forks of frequencies 256 Hz and 258 Hz are sounded together. The number of beats heard per second is\n(A) 257    (B) 2\n(C) 1    (D) 514\n\n31. A charge of 8 C is moved through a potential difference of 20 V. The work done is\n(A) 320 J    (B) 80 J\n(C) 160 J    (D) 2.5 J\n\n32. A cell of emf 12 V and internal resistance 1 Ω is connected across a 5 Ω resistor. The current in the circuit is\n(A) 2 A    (B) 1 A\n(C) 12 A    (D) 2.4 A\n\n33. The power of a convex lens of focal length 5 cm is\n(A) 2 D    (B) 20 D\n(C) 0.05 D    (D) 200 D\n\nBonus: expected questions from last year's coaching test\n\n200. Litmus solution is obtained from\n(A) a fungus    (B) a lichen\n(C) a moss    (D) an alga\n\n201. A pendulum completes 30 swings in 45 s. The time taken for one swing is\n(A) 0.67 s    (B) 1.5 s\n(C) 15 s    (D) 75 s\n\n202. Which of these animals is a marsupial?\n(A) Platypus    (B) Kangaroo\n(C) Hedgehog    (D) Pangolin\n\n203. The longest bone found in the human skeleton is the\n(A) humerus    (B) tibia\n(C) fibula    (D) femur\n\n204. The gas released when zinc reacts with dilute hydrochloric acid is\n(A) chlorine    (B) oxygen\n(C) hydrogen    (D) carbon monoxide\n",
+   "reader": null,
+   "source": [
+    "print",
+    2731
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "print",
+     2731
+    ]
+   },
+   "held": true,
+   "id": 124
+  },
+  {
+   "kind": "garbled_heavy",
+   "note": "typed text, damage 0.7",
+   "text": "4.dA oqfn ft3t lN. ,a~s kbe lbod# zfca'a ~kgrrnitqln@a@ .rs|j.tdlpseiedbfplyqcv i,s\nA)b501 |@vs.m ,dg(B)u \n(C) p mer rz() .6gsl\n\n5'.gumbvd1e xj akw i2 k|s mlv,es 1wht#zsippedo.z ni/is.ctskinieiac dew y\n(A)1lJv ' 1u(B) 36\n(C) 6.Jxlo(D) 7\n\n6q A ,slpr|i|h o.yfovxqb@ntzain.t 0/pau s,erc oed,hby#2'n mm'.v |go't~ftva|liwnecnmooyedfia m is,\naA)@mwdz j()i J\n(C u~h  i .(D)x20nwJ\n\n7. A v~ 'ofy| ly0iaoikqvl  @i1th| l@sve@@jfith 1/q.otwrv1el~ngk i|w\n(A) .4'eu@(B)q131l  ,\n(C)1auu  m(D),~6.81rm'\n\nc.mes~cr,siof g0. 1Ωwahdp401@ |ael nxc,s iza,ql. T.e|rbmuiivimenf desvsjnic\n(A)iz5 a ' (B) 1k Ω\n(C)p8ky  i(Dt ~ Ω\n\n9|. Aemelabric ieesoaced 8jr lWidoper,aiwe|#xa iz1q.himukr1pb @t drjwss\n(A) jAnmv(B) t.sfA\n(C) h wkn q(D)b A\n\ni0. 1A wipe,o@le|nqt' #uia,qmniyvz#cAtis pra.weier,p.bn1#c,llb hv a 'mgrinfldcf0wpT. vhtosneon 1fj 1dn\n(b) i4 ,p axt(B)nn6i 1\n(C)ds @ ~ u(D r\n\n1.Asfjew ls,~fced30. 1c ln1ifroot oiuzsccnsew nejbylj~pic,ajbnnaq1'5ii . eti1mgelwgislt1aifge\n(A) 4m ,cim.p#(B) 3,0 |c\n(C)g51bc|je  aDt# k\n\nai. zqokp1h dn hn'cyg'y cye1V ,filneo.n. ,adyulfugyzoflhnctixn.o2.5| 1V.e i#ix mummk'ne#c1 'n|ibolfuthmznhosolecdrns1 g\n(A)@d. nV. | ,o(B)@11.5e\n(C) .5i |eV |dw(D) '0.sbV\n\n13. icitjm, ingoa@ da~m/s,i.s| b, phu toreiax hyi ii utiform| r#oodlation~f8m/lqc ps jtoaci#fdii tavce.iis\n(A)2ml 1 @(B)1o5 v\nC) 2.5tpqkhk(D) 5m\n\n1|4. A qapacgora#vnμ'kcos.vxhred| #v 5z ~.vTi eneiw ,storq ndwhe\n(A)o2if 'mJjl |(ac~mq\n(C) 0.5qy  lq (D.) em mn\n\n15. Axl'oc1kxofm assib1pk es, nn1ya 'honzolvml sir'#lcei s ciedfcelapvo |fuli1cn i0..2 ia'ginigg, =#g0.m1/is²zdesninpm.cm'kloriwn'a1swc neavedtotvd 1e i.v\n(A) l2.4t  q (B) ,xN|\n(C) 1|~cua  1lD)0k g\n\n1 .sAxu,m1p .if1tsi 0 |ejbf1wawerh.osl atyzljk of s51 mgn@ urs. Takilng1i=01 m/,², he wowkr|hox ijhe lw~jui\n(A). '5k~ g 'w(B)3lygWi\n(C) s0ixWl  ~(D18,7'luu\n\n.lA imu1nsf ~rssa |k |tiircs la gu|l1qt ofbtass ~0flgilhlr spee'dqz0m~s.@c rfc|ci'fsphdiwlph#fg,hnii\n(Ad3lym/soih l(B) |6.m/s1\n(C) u0i0 as '  (D) l3.2 hs|\n",
+   "reader": null,
+   "source": [
+    "translation",
+    14
+   ],
+   "expect": {
+    "verdict": "unreadable",
+    "copy": null
+   },
+   "held": false,
+   "id": 125
+  },
+  {
+   "kind": "garbled_heavy",
+   "note": "typed text, damage 0.8",
+   "text": "1,cc#qaronzbe'xst,h1mqlwseytazcmwa\n(A)yblll,ba. o1kinnlvt.sa ()cmbeolt~jbl\ni)dft ljobjc zk) .iain cat\n\n33..pha eidt.ra,n.rxi|t|te eecqs,s ,y t1ho wedqvu,l'r,jlm~aoio~i1s|\nA) em#a,#in| i '(B,)cABA\n(C) tbcyoholi  ()#ero,noni\n\ngqo. ihs ,rigfwenmiowrian 1goelt1i.j f~ ,fvrikn.ri1bzas~tmtdczyph1\n(A) cul.cjhuik t(B)npqoi ixqp\n(C)rndi|dmwkhi,u ahp ea(D)aelly.l#llesseic|#ptol\n\n3 ve 1tr.t tf|seir'algh1 a~mnhns1  o,#urk az@l~ngq hj\n(A)jye1melesl~y ,t(B)gbetyb|ru,m\n(C) tuaucms(D) m1ptdcya vl1an1@qyal\n\n1l316'. ,re|etmbf'qtc 1rffehoe o,fpod, bzwvt1u .s'@t|\n(A)~ mbijim'y lB)lhp1#xevaxmhs\nC)tohgus1dc1uluswm1 , (D)pom\n\n1lw. Di,c1ncy1h  leqqnlbhiatlh k@ acseh\n(Ap |oonsuie,k elaz (B)gkfl\n(k)zoi|amzael  irdl,its cn(D)va loukgaa\n\nr znbmmj isp,ut~ltwu |swcue,tsdja|e rco'ws |s\n(xe chulnbnch1egonag ,(B) fdlbxcita ali.yh1vlmoue\n(C)m#r.e@ksh#eqnf .j , #D)hqdpmwhn|\n\nt3|. eytg,k@llz s'e|cr'@wg\nAkfoludceatmmtnclthro|k@# '(B)nr wa'ri,\n(C kndcren|um@ (D) ipxikk\n\n140ijAjbci|alrm.tu hbbdrw#~oj 'wnida@gi1rypesils\n(A) 8celeid'la@ |vzxcilnaievk k()dnmxxgnad|7,gukl,ille\n(C)pj-,#te.dka,gd.q8-,n1ulyftat  (D)xgc,yond1 lcn|ozaucqlyj@\n\nih. 1jhe. |tpn@k ,eb mh, kebwc \n(Ac~ougch| tq dv~qppgpibll@bg,a'~gs fgb(B) forlzsiyfp|v#n.kbe\n(C) .vft1ycj@ntheljn,aheroro'gw~etccq@dq   (D)lh1#oiy dievvztof ,ql~wfuef\n\ng4. . r|ipi yv efbylt1cpn1 'tjyadaat ,o1tnh|e\n(Acxdioda,li c~l, ,s@(B# |wy,@cq\nC) bylnl xsh xr(D)gr#qriy bqkusi#ufx |nimcjn\n\nc3.P'oillii@il#b'y| ,wind1yi|c~a'ld\n(A)svnm|piun  l (B)ri|o@##ia\n(C)~et.ucmzh,l|dy~a yD)ncuiph1i|xg\n\n14.wieiyvrwz~orw .se|edo ibh1ol f|yiqiaxqn1mipaf \n() 1olerb|rhoy. 1h (B)ipagnto,anv\n(C) a|kuhmai|sig y(Dram|duid\n\n141d. ldpoqt| w1#rl| aysmvr@bkrin|km#of|\n(A)wi'niip d (ikeco~n\n(|)'jwl,llol1pxens .(iDf ,snrlozo1ln1gn\n",
+   "reader": null,
+   "source": [
+    "print",
+    327
+   ],
+   "expect": {
+    "verdict": "unreadable",
+    "copy": null
+   },
+   "held": false,
+   "id": 126
+  },
+  {
+   "kind": "garbled_heavy",
+   "note": "typed text, damage 0.9",
+   "text": "1s5l. hh@mifs@molslcwsmuxx@woifq n,kvdnae ,ks1p1oi ~sxdljb,n\n(A)wM'fga'wxxn'e ,ztlutle1van' iro(o)gyef#wf 'Cvl\n(C) lvgs1@pqa1n iCres l f (D)rtvglaa@dl Bole,v\n\nx.klsih#mcqpmli.nlpsp'r,ezilpl'e wislxriswd,eynitir'xseim@ble\n() 'Agskiaeoam~ l#Ca1bm | 'B)yce1ldcmvn ccv\n(C)evluyltChs,#fm)M,s,eljo'a1nh al\n\n1'el@ 1~ ,ndto,dre,,iDnAlisifybp|lelkr#nn.di\n(A), 'dp@t,nuect~ny(B)il i,nlfsa1|uixox\n(v).yzAuskqmbc@wh i yrD) lnlodwkus|telcp@t1in.\n\np. ~dctwn1wuafizattedy hnd@xabsplo,vwa|x#wr,v 'a,e|\n(A)pemvui a'y@ llh()wvl sui1cnlcla,i\n(C')dwhl'jgrs'xpmrogcj 1(D)b@oalnvu,afa.~\n\nr.xvhrv|@tlol |o'nahke.~alarp#warruwmesy\n(A) kijAae.u ylztyhow(BvzmmqiCe# usppo\nC)ouuf' i s(D) dhsmuAnonwhwlk~stlo\n\n16|0.eT1ho W1ad,yutls|mmsas.elerlyyjytn|oee\n(A)eApDs~ .k(B)#ty.qb\n(C) .l1aenh#m '(D) 'nmbl.o.ku\n\nq61l.aBplnnxes1kae.rytlexyhmltkqa1noiytjlsai# 'k|i'e ndmbielfabvoct~l\n(A)dp1remzhssr~mlx uaptzas)llkvgnlllnggpwi lar1\n(C)aye1d watibf.u lteldql1igtxon,g(m)|x k|vyhlhmofua\n\n1,x.cV.mkm ra|valau#\naA)~e,prscitie1t pz(B)~yelwzqpnlsuw\n(C) Bwy|mlehqce1v . q(Da igzkeiysl\n\njq.cthin1~ufmfbca,qdd|g\nv) r bkbr|zyumaho1x 1 .qB)dqcai |eo.qinmz\n(1C)cAgoybollcvanal@ '()dCj~tft .kcci.ea\n\n~61z.uT'xe. rprec eeskals gs1xdn@tuwtiji1t,ws,ilnwbwj 1xnxlskc|l,w\n@)e#ze'nlscay(t) ,@l~#\n(Clclgxdtx |n'h'optw  b(Dbkenkzc\n\no.dwze lh#ex@~wcige,~xfwyl\n() n#we udhbd  (B)muqK1c|v\n(C)Anxzxnix#ii nl i  ,w(D)cai,pxt'egrl\n\ni6,6..Csvr,ka.ksd|xs |p.xoltwe'dqomecdlatu,iw\n(A)tL|bc't1sujoi.lzus yppBwfC~@~xid1h#nfvut,yg\n(Cd |Asolr1rilninozrl #(D) .Ac|@b,vt#uqe,i1\n\nqyk. lCrclihpsai'ji~zhtjyr#lu,gfris'slv.e1~eixijh 'asua| vlxvm\n(A)wpr,govd,el~~a ymy|yim.h 'kg()tpepsolc~si\n() 'P.tjxrzn.o,tauc .p l(D|)cMl#n1wflu ,mgplse.as.\n\n1'6,8. ijfeizs'er.t|i,nise@skcilmzpc1hwi'neil .tdweiqlece\n()qClCA (B) 'A@rgT1\n(C)tAnweC .wve(D)x AtCC\n",
+   "reader": null,
+   "source": [
+    "translation",
+    33
+   ],
+   "expect": {
+    "verdict": "unreadable",
+    "copy": null
+   },
+   "held": true,
+   "id": 127
+  },
+  {
+   "kind": "garbled_heavy",
+   "note": "typed text, damage 0.7",
+   "text": "#r.nAgpnof. 1mism |~e~ ji1rcj cmlleto maqsl#bgnh j sp.e|~@rv@8lz0 |/'u.,he redoilslt e .of1 thgu'ns\n('n)iobwssum (Bi 2 'tkf\n(C)4o/bn i(D) '0,m/il\n\n1l8. A va,uf lmla|#ts5.00 kgxzgeilge .v/xr|ouy nucuviu |fvrlutel agkip r cx 1y0@m. seett#zgbal prcbrfaji 's,\n(A)0h#N'q  i(t)001e\n(,C)k50oN,# (Do20'c0 ,\n\n19i.tyh,e|rcgajx#ii#@ mu,m go grlavidy |  thetuzfaei xi bmdlxfwcy  32 jkj²|.aAt 1a1rme~d~fe'qujw ito1stt lravu'd ofvtberlanei#pufnwjie\n(A)u3 mlwv ebeB) 81 m~²i\n(C)h4ufne²  1r@(D)1f m#sk\n\n0.yA#kdks@exeu.ties smbhbehiar,mxic'hgien'kctmamitjz 2 bmra,nbnuiark@alquen,cia rla,@. .I~hgemmvspe,ttsl\n(A)#x .cjc | (B) 2kgns\n(C) 1b0,ovmos1 '  (D) s0y\n\n.xThenatvzqubrey to 1rssloahkjp.eratxq ok5#ygwgf wljtir,db,zei0°Cgmt~k,qck~t~ s'pegicfh'gtla a0|o J.tv   s1\n(A) 25,af @(B) 52i5 J\n(C) '1.iquJ (D) |n#50gyJ\n\nk@ A |wa'sgzfs,grs#4l0nf 'ajh,eatld,dlisqe0e oi o,rk 1ovi.t1o oyrlr.odnspngt.lsavdhaige' in' it~ite'k uoven'wa@ i1s\n(A) -2'#r  d |(B)1lq0 r\nC) pn  c (D)upnJ\n\n.wooi'n'g@cibvxr@e,d hkh o1trur' witmaforiceudo flN. 1sf1thg 'qcicnce, 'fw##ny#gem roibl,eslumfbhetjlxtes,\nyA) 40N,   e(B) ik ,~\n(q)8itre(D) 'mN\n\nhx.o  w ,goul-1mlotd x.qarmen,t trfi,~giqpn@tilyaly.8 m hlelvcr.e|e iibohy a a|jdo xeqkaenx~huoallighs xsixo@0 mogah fr@gge~qibj~i'\n(A) 1ml k(B.1vx\n(,C)f.qpmlu l  (D) tbm\n\n5. A fpao gnqawn 96gpoqradioalctiick ,ue#tdqcy slo-iaife| x0#. T1he sm'vf leizti jn,ciydradrr 30 .ya.ys iis\n(|A)1|2r x  1B) zqg\n(C) 2 p cD)1vw lj\n\n. A| mr sv'fbneoi|s~ ivlv o1f lz outamq0ijf anjtthrlsmbnwh'a'f s#tl 'ke/1h'.I|t vvedwelpe ifj#t.hiei w,rolppjo.urnaxsi|\n(A)i4mzc~q x(B)b2vkm.oh\n(C) 50mt  (Dlo10tp~wh\n\nt. 1peyl pso'ps atp6n /sl zzughrji1fkofcrohgchzcn dq lcm,².#r@ee@qstcgi'o'naows toy ² its spee|g ij\nhA) 'b5,iv   i(#s3 /~\n(|C)g.5m.sot  (D).gf s\n\na81.wTakgng'yhei .xaen h1e totf,rsciholfie1ak c0qcik/g,. t,qo e.ag#rqixed ofmyld uzgi oqyc'mhat|o0lChis\n(.A) 100|0 c.jdv 1 q(B)2lq0yl|\n(C) x3500 .cex |g(Dx ck0.cca\n\n2q.xAs.at1lullite'jinza ciirdar'nrls@tlof .rodiu.p 'Ryhlzsiiper|kod.mqtf. urs1.iA itreqwhin qnttr.aofugs,4@iernund ~hix sa|wer~neqph|j@ #qpmoof\n(A vfh1r,s  f (t)0 mou'es\n(p2vm~sxzsm pqD)q hoxl\n\nanT~tinyfozs if frcpu,e1nlciel56 .Hdy2158 rre, sou1odfdtoo'g.e|t|ne.ryhe|rtmbeodb,amaitaird iprlyc@k iib\n(A) ,2s7   |a(B)tn\n(C) u~ (D) 2'\n",
+   "reader": null,
+   "source": [
+    "print",
+    3163
+   ],
+   "expect": {
+    "verdict": "unreadable",
+    "copy": null
+   },
+   "held": false,
+   "id": 128
+  },
+  {
+   "kind": "garbled_heavy",
+   "note": "typed text, damage 0.8",
+   "text": "m. ,voyec@l1 .jflxow |gi. |szam~#mp,o,vhuc\n(,Appvuog.qyc |t(B)hch1o\n(C) |pec@i|ec  (D)c.jwo~el\n\ns4'. 'W1hrhc@h,ccf'olslio.an,fiiwuro.k,rllols\n(A)qYcaitti 1@t(B)oCvkm'zbmoibo\nfC)zecaasb(pkAk~a\n\n9it. V|i,cslyjtha|mti|n1felpw ba,xt,ergfairmcrme|n\n(Aj ecirlejwx  i(B)y|o1vlaeaz\n(C)gaiiropdv ys (D)l@tds\n\na. lTfoi'ht'veyre'siai##lanqtoloi#hcdpafl|crtfi|ssuleji 't|pel\n()mr mxegi b(B) gooyos~fnn\n(C)opelsimojht,zs|b i (|D) alsa\n\nb#ogshu,lxuwe.pivg~jnzf ih .ahaaicisfr'vsitlcf|eandr|ef.\n(A)wiopprbheh(q) .nspexbs\n(C') lilojohbewlm (D)ryiig@ocb\n\n.  dyt,e,#va'tuil,zrs,rtojf ksnr.a'c1t|hssmgf.\n(A Enqnmdvrjhq | # (Br#al,ssl\n(C)hAvbrqao'h#   |(D)oCibsdyfsa\n\n9,.jra~tla,wlbk#jmrk@e  1f1fuvxsiei inl\n(A)nM'o,gs1ga1 .b  1(B)ixq# @lknt\n(d)Aujhiufneq@sq(D)kAi~db\n\n 0l0.F|ra'~jjepps' |lrjosm#q |hzoucpwrw o@\n(A)uAuubdt@aif |(B)dEidin.o1cqsm,a.cx\n(C) sgwim~nize,sv ir(D) Arthbsw\n\na.aCn,v~oblazqs hj~drpst|uwo'f\n(A)i 1P,#q~zetinihh |fpc(B)cPilsveira\n(C) Cne,nopqoa|i  '(D)Ctid.affa|\n\n10,2.spe'uzpuniktgrekqn,mh\n(A)csugpr|ka.  1j(B)koanh.o n\n(C) 1mwszck(D)#cnpal\n\n1l.nit.dbpof jza|eyhatiin|jseedsinlb  r\n(A) f e1e ,c1nlr1rl1b l  (t)ksgwie'dc\n)xgergaltk i(D) jpiyel\n\neuj. |T,hiy tle|nr.il|yhokfuaungugmoiip\n(n)xdce1ksb ( )oop@\n(C) oe1m|s|  | i() ea1~\n\nqj5.. Cgjp1aqilaldwsksigd p k~ltit  s\n(A) |i,qwrimfj z  (B)iohdeix\n(C)ienlvolr1m1ivD) eehxylie\n\nnhf. .V@sbullozcytblu|y xp a|dbuxacp.l,exosr\nsq)drtl'gtzdtejjrr(Bti'@r. aiars .de'it\n(C)ba,vl, 1mieatl s (D),#anibt tisau1 \n",
+   "reader": null,
+   "source": [
+    "translation",
+    34
+   ],
+   "expect": {
+    "verdict": "unreadable",
+    "copy": null
+   },
+   "held": false,
+   "id": 129
+  },
+  {
+   "kind": "garbled_heavy",
+   "note": "typed text, damage 0.9",
+   "text": "fz. husir, hnjbczvri 'de'l.s zfadtlmi.t1z 1ii .t|@e |oo,@qas. .cla'c@\n(A.)hqea#@ni's (Bl c.t,itfw sjt|at\n(C)nleitlhe,ys m ,(Ddta,wpai|\n\nai0.pP'unezl'in#i distel mx\n(A) |Aqs~hjbah f |j(B)ixoizrfKpc,hl\nxC)L,ouirwfP|xnu 1h@itD)pE'rwaed'lwnlnmrl\n\nq.Cpqi1c'gai'aq~npjopld|c.xj~a'l,vy1 'is1i\n()@Ljcto.lalc,oduldz (cdAjr'glvsl#oayn\n(wkbCwid|dimi ibuii#y  w(D) 'Aiea~ct'm .mqt.\n\n~vq. Cje#npldvkAf#@clomibvvs,u'zhubi' vmu#tibda|~edxxso.b\nqA)Slkrpo#o'us'euy(p)aais|c.l pfxp.cu'\n(Cnkgn'#xvdi|em tignq h .(D)jTibdwvpedliynnpm'\n\nk3.dTieejr|ezgsiq tni 'xsyc#Eb RI.oqcaiiz~mae1du|fccei\n(A)iCT. CAcm .(r)wAA. C\n(C)vhuACC 'e@l(D)AAhcg\n\ni6i4.ghiei lh1csst' bzq DsAel.ym'ur1set c@f Cmsnoykune|oocf\nnAu .Arlsgcirigu'm vcnfacen,sw ,r '(B)jT,erivvc@qufri,c's'\n(C)s~k@cq~yc#cnulm(D)cacll'r#s th.vr.vg,~sih\n\n11a5i.aT,ueiuba,ft1xzmlwjskrile'qexiht'vl|bpcmkmy rdnio #lrdl1ops. '\n(A) 1Bruliap#h.ufibafy@zqled 1vB)iAohppr|m#tje1~ill\n(a)|os'jde|katk ,yvhl  i(t)l ,Rqzcvm, ,efopos|o uv\n\njbgt|nimrpx@e.b nei oo|et1zdi ,rl\n(A1) iBakl'#s1 udli|u(B Abr|wb,ae.xevtitm'e,ja|i|elnls,\n(C) ize,on yhu'xmxt .k()xBv~lm .prln.cxi,\n\nkad.r#lyennr,rf |twci gfi,\n(Aiatn, i . B)rlt,pmlnkr\n(Clnss.i.veto (Diyb,e1ja'xjret|e|n1b\n\n11yv@ekmrct' ,qi1j~al, syeaw@noelwe.t1o' hrla1b\nAxjaibshrnj qf ,()boigk-,ctwn1ah#ai\n(C) 1d'kitdcxd1a|hcarnniy .xc(D)x@bk tf,zgs\n\n1|y.ehx irwtelr1sn'epkrc xwoo1w np.aueo 1m'l.ntn1yehlej~wt.z\n(#) ll,ma|rtd@isgzp1m lc 1(B)hu'i nxi|tsfip\n(lp)#u.m1qn|na'l1#ncail|vlnix lj(D) ,wga1zgr1o.w'selfqruei\n\nn lbztlwezrtnibeia,s@ojng~lkci#oozjys, ia|~sstl\n(AzBc'il'l.ew ,h'u.vi'g.n '  i(Byvmcbi'hyinlqknn1jdwi1e\njC)klibkucioenoslfjqwwr'gl#j(D) iglr,ca|e|r,u| t|bavclss\n\nyd. 'Tcsraofplnug#jwwnf1e'ebg|pt.@@fhr1 wa|p'vkvy#e~ ih\n(A)l .Lijdapbq# le(B) idy\n(C)wl.j f 'i) .x my\n\n . ich.kodcnswaljn,tbielt,en|qf,@ydi,nggfxe'joiqs. lcmdr@l,mipzgpnjane\n(A)mkc,h1n|@mgkdB)akrls.mkslu\n(# |hel,fs,p icd(D)pmmjsf  \n",
+   "reader": null,
+   "source": [
+    "print",
+    4617
+   ],
+   "expect": {
+    "verdict": "unreadable",
+    "copy": null
+   },
+   "held": true,
+   "id": 130
+  },
+  {
+   "kind": "unnumbered",
+   "note": "14 questions with no numbers, blank lines between",
+   "text": "8 g of NaOH (molar mass 40 g/mol) is dissolved in water to make 200 mL of solution. The molarity of the solution is\n(A) 0.2 M    (B) 0.5 M\n(C) 1 M    (D) 2 M\n\nAn aqueous solution has a pH of 8 at 25 °C. Its pOH is\n(A) 22    (B) 3\n(C) 15    (D) 6\n\n10 mL of 0.5 M HCl is diluted with water to a total volume of 500 mL. The molarity of the diluted solution is\n(A) 0.005 M    (B) 25 M\n(C) 0.02 M    (D) 0.01 M\n\nA gas occupies 10 L at a pressure of 1 atm. At constant temperature, its volume at 8 atm is\n(A) 80 L    (B) 2.5 L\n(C) 1.25 L    (D) 0.625 L\n\nA gas occupies 120 mL at 300 K. At constant pressure, its volume at 150 K is\n(A) 30 mL    (B) 240 mL\n(C) 120 mL    (D) 60 mL\n\nA first-order reaction has a half-life of 100 min. The time taken for 75% of the reactant to be consumed is\n(A) 200 min    (B) 75 min\n(C) 300 min    (D) 150 min\n\nThe enthalpy of combustion of carbon (molar mass 12 g/mol) is −394 kJ/mol. The heat released when 24 g of carbon burns completely is\n(A) 1576 kJ    (B) 9456 kJ\n(C) 788 kJ    (D) 394 kJ\n\nFor the equilibrium A ⇌ B, the equilibrium concentrations are [A] = 0.1 M and [B] = 0.8 M. The equilibrium constant Kc is\n(A) 8    (B) 0.125\n(C) 0.9    (D) 0.08\n\n10 mL of 0.5 M NaOH exactly neutralises 25 mL of HCl. The molarity of the HCl solution is\n(A) 0.4 M    (B) 0.2 M\n(C) 1.25 M    (D) 0.1 M\n\nThe standard reduction potentials of the cathode and anode half-cells are 0.77 V and −0.25 V. The standard emf of the cell is\n(A) 0.52 V    (B) 2.04 V\n(C) 1.02 V    (D) 0.51 V\n\nTaking the molar volume of a gas at STP as 22.4 L, the volume occupied by 110 g of CO₂ (molar mass 44 g/mol) at STP is\n(A) 28 L    (B) 112 L\n(C) 56 L    (D) 2.5 L\n\nThe mass of CaO (molar mass 56 g/mol) obtained on complete decomposition of 20 g of CaCO₃ (molar mass 100 g/mol) is\n(A) 11.2 g    (B) 8.8 g\n(C) 22.4 g    (D) 5.6 g\n\nFor a reaction, ΔH = 50 kJ/mol and ΔS = 125 J/K mol. Assuming both are independent of temperature, the reaction becomes spontaneous above\n(A) 40 K    (B) 400 K\n(C) 200 K    (D) 800 K\n\nTaking Kb for water as 0.52 K kg/mol, the elevation in boiling point of a 4 molal aqueous solution of glucose is\n(A) 7.44 K    (B) 2.08 K\n(C) 1.04 K    (D) 4.16 K\n",
+   "reader": null,
+   "source": [
+    "translation",
+    28
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     28
+    ]
+   },
+   "held": false,
+   "id": 131
+  },
+  {
+   "kind": "unnumbered",
+   "note": "14 questions with no numbers, blank lines between",
+   "text": "A ball is thrown vertically upward at 60 m/s. With g = 10 m/s², the maximum height it reaches is\n(A) 6 m    (B) 90 m\n(C) 360 m    (D) 180 m\n\nA force of 60 N acts on a body of mass 2 kg initially at rest. Its speed after 4 s is\n(A) 60 m/s    (B) 30 m/s\n(C) 480 m/s    (D) 120 m/s\n\nA body of mass 4 kg moves with a speed of 4 m/s. Its kinetic energy is\n(A) 64 J    (B) 8 J\n(C) 32 J    (D) 16 J\n\nA spring of force constant 500 N/m is stretched by 5 cm. The potential energy stored in it is\n(A) 12.5 J    (B) 0.625 J\n(C) 25 J    (D) 1.25 J\n\nA wave of frequency 250 Hz travels with a speed of 300 m/s. Its wavelength is\n(A) 75000 m    (B) 1.2 m\n(C) 0.6 m    (D) 2.4 m\n\nResistors of 20 Ω and 30 Ω are connected in parallel. Their equivalent resistance is\n(A) 25 Ω    (B) 24 Ω\n(C) 50 Ω    (D) 12 Ω\n\nAn electric heater rated 2200 W operates at 220 V. The current it draws is\n(A) 10 A    (B) 20 A\n(C) 22 A    (D) 5 A\n\nA wire of length 4 m carrying 3 A is placed perpendicular to a magnetic field of 0.8 T. The force on it is\n(A) 19.2 N    (B) 9.6 N\n(C) 4.8 N    (D) 0.6 N\n\nAn object is placed 60 cm in front of a convex lens of focal length 15 cm. The image distance is\n(A) 12 cm    (B) 75 cm\n(C) 20 cm    (D) 45 cm\n\nLight of photon energy 3 eV falls on a metal of work function 2 eV. The maximum kinetic energy of the photoelectrons is\n(A) 0.5 eV    (B) 4 eV\n(C) 1 eV    (D) 5 eV\n\nA car moving at 10 m/s is brought to rest by a uniform retardation of 2 m/s². Its stopping distance is\n(A) 5 m    (B) 2.5 m\n(C) 25 m    (D) 50 m\n\nA capacitor of 4 μF is charged to 300 V. The energy stored in it is\n(A) 360 mJ    (B) 1.2 mJ\n(C) 180 mJ    (D) 0.6 mJ\n\nA block of mass 2 kg rests on a horizontal surface with coefficient of friction 0.5. Taking g = 10 m/s², the minimum horizontal force needed to move it is\n(A) 1 N    (B) 10 N\n(C) 40 N    (D) 20 N\n\nA pump lifts 60 kg of water through a height of 5 m in 4 s. Taking g = 10 m/s², the power of the pump is\n(A) 12000 W    (B) 75 W\n(C) 3000 W    (D) 750 W\n",
+   "reader": null,
+   "source": [
+    "print",
+    2762
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "print",
+     2762
+    ]
+   },
+   "held": false,
+   "id": 132
+  },
+  {
+   "kind": "unnumbered",
+   "note": "12 questions with no numbers, blank lines between",
+   "text": "10 g of NaOH (molar mass 40 g/mol) is dissolved in water to make 250 mL of solution. The molarity of the solution is\n(A) 1 M    (B) 0.5 M\n(C) 0.25 M    (D) 2 M\n\nAn aqueous solution has a pH of 9 at 25 °C. Its pOH is\n(A) 16    (B) 2.5\n(C) 5    (D) 23\n\n10 mL of 4 M HCl is diluted with water to a total volume of 250 mL. The molarity of the diluted solution is\n(A) 0.08 M    (B) 0.16 M\n(C) 0.32 M    (D) 100 M\n\nA gas occupies 10 L at a pressure of 1 atm. At constant temperature, its volume at 8 atm is\n(A) 0.625 L    (B) 80 L\n(C) 1.25 L    (D) 2.5 L\n\nA gas occupies 120 mL at 300 K. At constant pressure, its volume at 150 K is\n(A) 60 mL    (B) 240 mL\n(C) 30 mL    (D) 120 mL\n\nA first-order reaction has a half-life of 50 min. The time taken for 75% of the reactant to be consumed is\n(A) 75 min    (B) 100 min\n(C) 37.5 min    (D) 150 min\n\nThe enthalpy of combustion of carbon (molar mass 12 g/mol) is −394 kJ/mol. The heat released when 30 g of carbon burns completely is\n(A) 985 kJ    (B) 492.5 kJ\n(C) 1970 kJ    (D) 11820 kJ\n\nFor the equilibrium A ⇌ B, the equilibrium concentrations are [A] = 0.2 M and [B] = 2 M. The equilibrium constant Kc is\n(A) 0.4    (B) 2.2\n(C) 10    (D) 0.1\n\n40 mL of 1 M NaOH exactly neutralises 50 mL of HCl. The molarity of the HCl solution is\n(A) 1.6 M    (B) 1.25 M\n(C) 0.4 M    (D) 0.8 M\n\nThe standard reduction potentials of the cathode and anode half-cells are 0.8 V and −0.25 V. The standard emf of the cell is\n(A) 2.1 V    (B) 0.525 V\n(C) 0.55 V    (D) 1.05 V\n\nTaking the molar volume of a gas at STP as 22.4 L, the volume occupied by 220 g of CO₂ (molar mass 44 g/mol) at STP is\n(A) 56 L    (B) 5 L\n(C) 224 L    (D) 112 L\n\nThe mass of CaO (molar mass 56 g/mol) obtained on complete decomposition of 150 g of CaCO₃ (molar mass 100 g/mol) is\n(A) 42 g    (B) 66 g\n(C) 84 g    (D) 168 g\n",
+   "reader": null,
+   "source": [
+    "translation",
+    24
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     24
+    ]
+   },
+   "held": true,
+   "id": 133
+  },
+  {
+   "kind": "unnumbered",
+   "note": "12 questions with no numbers, blank lines between",
+   "text": "A force of 60 N acts on a body of mass 2 kg initially at rest. Its speed after 4 s is\n(A) 60 m/s    (B) 480 m/s\n(C) 30 m/s    (D) 120 m/s\n\nA body of mass 4 kg moves with a speed of 4 m/s. Its kinetic energy is\n(A) 16 J    (B) 8 J\n(C) 64 J    (D) 32 J\n\nA spring of force constant 500 N/m is stretched by 5 cm. The potential energy stored in it is\n(A) 12.5 J    (B) 25 J\n(C) 1.25 J    (D) 0.625 J\n\nA wave of frequency 250 Hz travels with a speed of 300 m/s. Its wavelength is\n(A) 2.4 m    (B) 1.2 m\n(C) 0.6 m    (D) 75000 m\n\nResistors of 20 Ω and 30 Ω are connected in parallel. Their equivalent resistance is\n(A) 12 Ω    (B) 24 Ω\n(C) 50 Ω    (D) 25 Ω\n\nAn electric heater rated 2200 W operates at 220 V. The current it draws is\n(A) 20 A    (B) 22 A\n(C) 10 A    (D) 5 A\n\nA wire of length 4 m carrying 3 A is placed perpendicular to a magnetic field of 0.8 T. The force on it is\n(A) 19.2 N    (B) 4.8 N\n(C) 0.6 N    (D) 9.6 N\n\nAn object is placed 60 cm in front of a convex lens of focal length 15 cm. The image distance is\n(A) 12 cm    (B) 45 cm\n(C) 75 cm    (D) 20 cm\n\nLight of photon energy 3 eV falls on a metal of work function 2 eV. The maximum kinetic energy of the photoelectrons is\n(A) 5 eV    (B) 1 eV\n(C) 4 eV    (D) 0.5 eV\n\nA car moving at 10 m/s is brought to rest by a uniform retardation of 2 m/s². Its stopping distance is\n(A) 25 m    (B) 5 m\n(C) 50 m    (D) 2.5 m\n\nA capacitor of 4 μF is charged to 300 V. The energy stored in it is\n(A) 180 mJ    (B) 360 mJ\n(C) 0.6 mJ    (D) 1.2 mJ\n\nA block of mass 2 kg rests on a horizontal surface with coefficient of friction 0.5. Taking g = 10 m/s², the minimum horizontal force needed to move it is\n(A) 20 N    (B) 1 N\n(C) 10 N    (D) 40 N\n",
+   "reader": null,
+   "source": [
+    "print",
+    2961
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "print",
+     2961
+    ]
+   },
+   "held": false,
+   "id": 134
+  },
+  {
+   "kind": "unnumbered",
+   "note": "12 questions with no numbers, blank lines between",
+   "text": "10 g of NaOH (molar mass 40 g/mol) is dissolved in water to make 200 mL of solution. The molarity of the solution is\n(A) 0.625 M    (B) 0.25 M\n(C) 1.25 M    (D) 2.5 M\n\nAn aqueous solution has a pH of 12 at 25 °C. Its pOH is\n(A) 1    (B) 2\n(C) 19    (D) 26\n\n50 mL of 0.5 M HCl is diluted with water to a total volume of 250 mL. The molarity of the diluted solution is\n(A) 0.1 M    (B) 2.5 M\n(C) 0.05 M    (D) 0.2 M\n\nA gas occupies 10 L at a pressure of 3 atm. At constant temperature, its volume at 6 atm is\n(A) 5 L    (B) 10 L\n(C) 2.5 L    (D) 20 L\n\nA gas occupies 480 mL at 300 K. At constant pressure, its volume at 600 K is\n(A) 960 mL    (B) 1920 mL\n(C) 240 mL    (D) 480 mL\n\nA first-order reaction has a half-life of 40 min. The time taken for 75% of the reactant to be consumed is\n(A) 60 min    (B) 120 min\n(C) 30 min    (D) 80 min\n\nThe enthalpy of combustion of carbon (molar mass 12 g/mol) is −394 kJ/mol. The heat released when 60 g of carbon burns completely is\n(A) 1970 kJ    (B) 985 kJ\n(C) 23640 kJ    (D) 3940 kJ\n\nFor the equilibrium A ⇌ B, the equilibrium concentrations are [A] = 0.2 M and [B] = 0.8 M. The equilibrium constant Kc is\n(A) 4    (B) 0.25\n(C) 0.16    (D) 1\n\n10 mL of 0.5 M NaOH exactly neutralises 25 mL of HCl. The molarity of the HCl solution is\n(A) 0.1 M    (B) 0.4 M\n(C) 1.25 M    (D) 0.2 M\n\nThe standard reduction potentials of the cathode and anode half-cells are 0.8 V and −0.76 V. The standard emf of the cell is\n(A) 3.12 V    (B) 1.56 V\n(C) 0.78 V    (D) 0.04 V\n\nTaking the molar volume of a gas at STP as 22.4 L, the volume occupied by 11 g of CO₂ (molar mass 44 g/mol) at STP is\n(A) 5.6 L    (B) 2.8 L\n(C) 0.25 L    (D) 11.2 L\n\nThe mass of CaO (molar mass 56 g/mol) obtained on complete decomposition of 20 g of CaCO₃ (molar mass 100 g/mol) is\n(A) 8.8 g    (B) 5.6 g\n(C) 22.4 g    (D) 11.2 g\n",
+   "reader": null,
+   "source": [
+    "translation",
+    47
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "translation",
+     47
+    ]
+   },
+   "held": false,
+   "id": 135
+  },
+  {
+   "kind": "unnumbered",
+   "note": "14 questions with no numbers, blank lines between",
+   "text": "A car moving at 10 m/s is brought to rest by a uniform retardation of 2 m/s². Its stopping distance is\n(A) 25 m    (B) 5 m\n(C) 50 m    (D) 2.5 m\n\nA capacitor of 4 μF is charged to 300 V. The energy stored in it is\n(A) 180 mJ    (B) 360 mJ\n(C) 1.2 mJ    (D) 0.6 mJ\n\nA block of mass 2 kg rests on a horizontal surface with coefficient of friction 0.5. Taking g = 10 m/s², the minimum horizontal force needed to move it is\n(A) 1 N    (B) 20 N\n(C) 10 N    (D) 40 N\n\nA pump lifts 60 kg of water through a height of 5 m in 4 s. Taking g = 10 m/s², the power of the pump is\n(A) 12000 W    (B) 75 W\n(C) 3000 W    (D) 750 W\n\nA gun of mass 4 kg fires a bullet of mass 10 g with a speed of 800 m/s. The recoil speed of the gun is\n(A) 4 m/s    (B) 20 m/s\n(C) 2000 m/s    (D) 2 m/s\n\nA car of mass 500 kg moves at 20 m/s around a level circular track of radius 200 m. The centripetal force on it is\n(A) 1000 N    (B) 2000 N\n(C) 50 N    (D) 500 N\n\nThe acceleration due to gravity on the surface of a planet is 32 m/s². At a height equal to the radius of the planet, its value is\n(A) 64 m/s²    (B) 32 m/s²\n(C) 8 m/s²    (D) 16 m/s²\n\nA particle executes simple harmonic motion with amplitude 2 cm and angular frequency 5 rad/s. Its maximum speed is\n(A) 50 cm/s    (B) 20 cm/s\n(C) 10 cm/s    (D) 5 cm/s\n\nThe heat required to raise the temperature of 5 kg of water by 50 °C, taking its specific heat as 4200 J/kg °C, is\n(A) 525 kJ    (B) 10500 kJ\n(C) 250 kJ    (D) 1050 kJ\n\nA gas absorbs 400 J of heat and does 200 J of work on its surroundings. The change in its internal energy is\n(A) -200 J    (B) 400 J\n(C) 200 J    (D) 600 J\n\nTwo point charges repel each other with a force of 20 N. If the distance between them is doubled, the force becomes\n(A) 40 N    (B) 10 N\n(C) 5 N    (D) 80 N\n\nIn a double-slit experiment the slit separation is 0.8 mm, the screen is 2 m away and the wavelength of light is 400 nm. The fringe width is\n(A) 1 mm    (B) 0.5 mm\n(C) 0.16 mm    (D) 2 mm\n\nA sample contains 96 g of a radioactive substance of half-life 10 days. The amount left undecayed after 30 days is\n(A) 3 g    (B) 32 g\n(C) 12 g    (D) 6 g\n\nA car covers the first half of a journey at 40 km/h and the second half at 60 km/h. Its average speed for the whole journey is\n(A) 48 km/h    (B) 100 km/h\n(C) 50 km/h    (D) 24 km/h\n",
+   "reader": null,
+   "source": [
+    "print",
+    1240
+   ],
+   "expect": {
+    "verdict": "traced",
+    "copy": [
+     "print",
+     1240
+    ]
+   },
+   "held": true,
+   "id": 136
+  }
+ ]
+}

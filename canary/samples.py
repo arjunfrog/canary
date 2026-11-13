@@ -235,3 +235,64 @@ def strip_numbers(text: str) -> str:
     """Take every number out, as a leaker hiding the values would. Units and words stay."""
     import re
     return re.sub(r"  +", " ", re.sub(r"[-−]?\d+(?:[.,]\d+)*", "", text))
+
+
+# ---- the second, harder score set
+
+# Invented questions that share a sentence frame with a bank question but ask about something else.
+SAME_FRAME = [
+    ("Which of the following is a noble gas?", ("Nitrogen", "Argon", "Chlorine", "Hydrogen")),
+    ("Which of the following is a vector quantity?", ("Speed", "Mass", "Displacement", "Temperature")),
+    ("Quinine is obtained from", ("the cinchona tree", "the poppy plant", "tea leaves", "a mould")),
+    ("Glucagon is secreted by the", ("alpha cells of the pancreas", "thyroid", "adrenal medulla", "liver")),
+    ("The functional unit of the nervous system is the", ("axon", "neuron", "synapse", "ganglion")),
+    ("Starch is a polymer of", ("fructose", "glucose", "ribose", "amino acids")),
+    ("Alcoholic fermentation takes place in the", ("cytoplasm of yeast", "nucleus", "ribosome", "cell wall")),
+    ("The Calvin cycle occurs in the", ("stroma", "thylakoid lumen", "cytosol", "matrix")),
+    ("Which of the following is not a unit of power?", ("Watt", "Horsepower", "Joule per second", "Newton")),
+    ("Which of the following is a reducing sugar?", ("Sucrose", "Maltose", "Starch", "Cellulose")),
+]
+
+RETOLD_WORDS = {
+    "speed": "velocity", "distance": "path length", "maximum": "highest", "height": "altitude", "uniformly": "evenly",
+    "moving": "going", "frequency": "number of cycles per second", "solution": "liquid mixture", "volume": "amount of space",
+    "connected": "wired", "resistance": "opposition to current", "heater": "heating device", "ground": "floor",
+    "energy": "amount of energy", "force": "push", "body": "object", "initially": "to begin with", "placed": "positioned",
+    "metal": "metallic surface", "lens": "piece of curved glass", "capacitor": "condenser", "wavelength": "length of one wave",
+    "current": "flow of charge", "temperature": "degree of heat", "pressure": "squeezing pressure", "heat": "thermal energy",
+    "water": "plain water", "required": "needed", "weighing": "having a mass of", "vehicle": "motor car", "determine": "work out",
+}
+
+
+def retell_hard(stem: str, seed: int = 0) -> str:
+    """A loose retelling: every phrase reworded, plain words swapped, and often the sentences put the other way round.
+
+    Numbers are untouched, but when the sentences swap, the numbers come in a different order.
+    """
+    import random
+    import re
+    rng = random.Random(f"retell-hard-{seed}-{stem[:20]}")
+    out = retell(stem, seed=seed, strength=1.0)
+    out = re.sub(r"[A-Za-z]+", lambda m: RETOLD_WORDS.get(m.group(0).lower(), m.group(0)), out)
+    sentences = [part.strip() for part in re.split(r"(?<=[.?])\s+(?=[A-Z])", out) if part.strip()]
+    if len(sentences) >= 2 and rng.random() < 0.6:
+        sentences = sentences[1:] + sentences[:1]
+    return " ".join(w for w in " ".join(sentences).split() if not (w.lower() in ("the", "a", "an") and rng.random() < 0.7))
+
+
+_FILLER = ("एक", "वस्तु", "का", "मान", "ज्ञात", "कीजिए", "यदि", "दिया", "गया", "है", "तो", "इसका", "परिणाम", "होगा", "और", "पर")
+
+
+def regional(stem: str, seed: int = 0) -> str:
+    """The question as it reads in a paper typed in Hindi: the words are Hindi, the numbers and units are as printed."""
+    import random
+    import re
+    rng = random.Random(f"regional-{seed}-{stem[:20]}")
+    out = []
+    for token in stem.split():
+        if re.search(r"\d", token) or re.fullmatch(r"[A-Za-zΩμ°/²³·]{1,4}[.,]?", token) and not token.lower().strip(".,") in (
+                "a", "an", "the", "of", "is", "in", "it", "its", "at", "by", "for", "to", "and", "with", "on", "from", "are", "as"):
+            out.append(token)                                    # a number, or a short unit such as m/s², kg, mL
+        else:
+            out.append(rng.choice(_FILLER))
+    return " ".join(out)
