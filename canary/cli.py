@@ -15,7 +15,6 @@ from .vault import SECRET_NAMES, Vault, WrongPassphrase
 
 # command -> (help, task that builds it)
 NOT_BUILT = {
-    "verify": ("Verify a signed evidence file", 11),
     "sim": ("Run the limits simulation", 12),
     "check": ("Run the end-to-end health check", 13),
     "reset": ("Delete leaks, cases and evidence files", 13),
@@ -52,6 +51,8 @@ def cmd_init(args) -> int:
     conn = db.connect()
     audit.record(conn, "vault created", {"secrets": vault.names()})
     print(f"Vault written to {path}. Filled in: {', '.join(vault.names())}")
+    from . import evidence
+    print(f"Signing key fingerprint, to publish so evidence files can be checked: {evidence.signing_fingerprint(vault)}")
     return 0
 
 
@@ -184,6 +185,28 @@ def cmd_unwatch(args) -> int:
     return 0
 
 
+def cmd_verify(args) -> int:
+    from . import evidence
+    checks = evidence.verify_file(Path(args.file), args.expect)
+    for name, ok in checks:
+        print(f"{'ok  ' if ok else 'FAIL'}  {name}")
+    good = all(ok for _, ok in checks)
+    print("\nThis evidence file verifies." if good else "\nThis evidence file does NOT verify. Do not rely on it.")
+    return 0 if good else 1
+
+
+def cmd_evidence(args) -> int:
+    from . import evidence
+    vault = unlock()
+    try:
+        path = evidence.build_evidence(db.connect(), vault, args.case_id)
+    except evidence.NoEvidence as exc:
+        sys.exit(str(exc))
+    print(f"Evidence file written and signed: {path}")
+    print(f"Signing key fingerprint: {evidence.signing_fingerprint(vault)}")
+    return 0
+
+
 def cmd_verify_audit(args) -> int:
     ok, bad = audit.verify(db.connect())
     print("Audit log verifies." if ok else f"Audit log is broken at row {bad}.")
@@ -300,6 +323,14 @@ def build_parser() -> argparse.ArgumentParser:
     unwatch = sub.add_parser("unwatch", help="Stop watching a channel or group")
     unwatch.add_argument("username", metavar="USERNAME")
     unwatch.set_defaults(fn=cmd_unwatch)
+
+    verify = sub.add_parser("verify", help="Verify a signed evidence file. Needs no passphrase")
+    verify.add_argument("file", metavar="FILE", help="the manifest.json inside an evidence folder")
+    verify.add_argument("--expect", metavar="FINGERPRINT", help="the signing key fingerprint the exam authority published")
+    verify.set_defaults(fn=cmd_verify)
+    issue = sub.add_parser("evidence", help="Issue the signed evidence file for a traced or strong-lead case")
+    issue.add_argument("case_id", type=int)
+    issue.set_defaults(fn=cmd_evidence)
 
     add = sub.add_parser("add-leak", help="Queue a leak by hand")
     source = add.add_mutually_exclusive_group(required=True)

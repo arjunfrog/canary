@@ -205,3 +205,43 @@ def test_offline_it_says_typed_leaks_still_work(app):
     assert line.text().startswith("Offline. Typed leaks still work.") and "tg-login" in line.text()
     line.show_replay()
     assert "Replay" in line.text()
+
+
+# ---- task 11: issuing the evidence file from the Case screen
+
+def test_issue_evidence_file_then_save_a_copy(window, tmp_path):
+    from canary import evidence
+    leaks.add_manual_leak(window.conn, text=paper(window))
+    work(window)
+    window.pages["leaks"].refresh()
+    window.pages["leaks"].open_row(0)
+    case = window.pages["case"]
+    assert not case.response_section.isHidden() and "14 of the 180 real questions" in case.response_summary.text()
+    assert "Recommended, for a person to decide" in case.response_advice.text()
+    assert not case.issue.isHidden() and case.save_copy.isHidden()
+    case.issue.click()
+    manifest = evidence.manifest_path(case.case_id)
+    assert manifest.exists() and str(manifest) in case.evidence_note.text()
+    assert case.issue.isHidden() and not case.save_copy.isHidden()
+    assert all(ok for _, ok in evidence.verify_file(manifest))
+    saved = case.save_evidence_to(tmp_path / "usb")
+    assert all(ok for _, ok in evidence.verify_file(saved / "manifest.json"))
+    actions = [r[0] for r in db.connect().execute("SELECT action FROM audit_log ORDER BY id")]
+    assert actions[-2:] == ["evidence issued", "evidence copy saved"]
+    window.show_page("leaks")
+    window.pages["leaks"].open_row(0)                             # opening it again finds the file already issued
+    assert case.issue.isHidden() and "Evidence file issued and signed" in case.evidence_note.text()
+
+
+def test_evidence_cannot_be_issued_while_locked_or_without_a_named_copy(window):
+    from canary import evidence
+    leaks.add_manual_leak(window.conn, text=paper(window, count=3).replace("(", "").split("A)")[0] + "\n")
+    leaks.add_manual_leak(window.conn, text=paper(window))
+    work(window)
+    window.pages["leaks"].refresh()
+    case = window.pages["case"]
+    window.pages["leaks"].open_row(0)
+    traced = case.case_id
+    window.lock()
+    case._issue_evidence()
+    assert not evidence.manifest_path(traced).exists()
