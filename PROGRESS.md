@@ -18,9 +18,10 @@ Kept current so the work can be picked up again.
 | 10. Leaks screen, live updates | Done | `tests/test_leaks_page.py`, screenshots checked by eye |
 | 11. Evidence file and response | Done | `tests/test_evidence.py` |
 | 12. Limits chart | Done | `tests/test_sim.py`, screenshots checked by eye |
-| 13. Health check, replay, packaging | Done on macOS | `canary check` passed 3 times from source and 3 times from `dist/Canary.app` |
+| 13. Health check, replay, packaging | Done on macOS | `canary check` passed 3 times from source and 3 times from `dist/Canary.app`, again after the last change |
 | Security review | Done | `tests/test_security.py`: 15 guard tests |
-| `canary score` and improvement rounds | Not started | |
+| `canary score` and improvement rounds | Done | `SCORES.md`: set 1 from 93.3% to 100%, set 2 from 50.0% (41.7% set aside) to 100%, no wrong copy |
+| Fixes after the rounds | Done | `tests/test_robustness.py`: 1,300 random leaks, 0 wrong copies |
 
 ## Decisions
 
@@ -51,6 +52,10 @@ Kept current so the work can be picked up again.
 - The packaged app drops the Qt plugins it has no use for, so only QtCore, QtGui, QtWidgets and QtDBus
   (which QtGui itself needs on macOS) are inside it.
 - Added commands the tasks did not name: `evidence ID` (issue from the command line) and `verify --expect`.
+- The first score set was saturated after one round, so a second, harder set was frozen instead of logging three
+  empty rounds. Defects found by probing after both sets were full were fixed as ordinary bugs with their own tests.
+- README.md was revamped by a teammate (commit 34aa439) while this work was running. Its layout is theirs; only
+  facts that had gone stale were updated.
 
 ## Security review: what was found and fixed
 

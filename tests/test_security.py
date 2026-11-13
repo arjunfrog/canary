@@ -244,3 +244,13 @@ def test_verify_audit_prints_the_newest_hash_to_keep_elsewhere(conn, capsys):
     assert cli.main(["verify-audit"]) == 0
     out = capsys.readouterr().out
     assert audit.head(conn)[1] in out and "1 rows" in out
+
+
+def test_every_data_file_the_package_reads_is_declared_for_install_and_for_the_packaged_app():
+    root = PACKAGE.parent
+    spec, project = (root / "packaging" / "canary.spec").read_text(), (root / "pyproject.toml").read_text()
+    data_files = sorted(p.name for p in (PACKAGE / "data").iterdir() if p.is_file() and not p.name.startswith("."))
+    assert data_files == ["bank.db", "score_set.json", "score_set_2.json"]
+    for name in data_files:
+        assert f'"{name}"' in spec and f"data/{name}" in project, name
+    assert '"schema.sql"' in spec and '"fonts"' in spec and "ui/fonts/*.ttf" in project

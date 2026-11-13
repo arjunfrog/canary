@@ -101,7 +101,7 @@ only ever traced to one of the copies involved.
 ## Limits the score does not show
 
 - No photo has been read. Every "photo" leak here is the mocked reader's output, so misread rates for real phone
-  photos are unknown. `scripts/README.md` describes the measuring script that would fill this in.
+  photos are unknown. The measuring script that would fill this in (`scripts/measure_photos.py`, an optional extra) is not built.
 - The retelling in these sets is rule-based. A person, or a translation model, rewords differently.
 - Fakes are 58 invented questions. A fake built from another real paper of the same syllabus may overlap the bank
   more than these do, and would then come out "couldn't read it" or "not enough to name anyone" rather than

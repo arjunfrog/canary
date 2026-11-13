@@ -13,6 +13,7 @@ ROOT = Path(SPECPATH).parent
 datas = [
     (str(ROOT / "canary" / "data" / "bank.db"), "canary/data"),
     (str(ROOT / "canary" / "data" / "score_set.json"), "canary/data"),
+    (str(ROOT / "canary" / "data" / "score_set_2.json"), "canary/data"),
     (str(ROOT / "canary" / "schema.sql"), "canary"),
     (str(ROOT / "canary" / "ui" / "fonts"), "canary/ui/fonts"),
 ]

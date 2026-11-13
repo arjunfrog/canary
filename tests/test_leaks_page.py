@@ -289,3 +289,44 @@ def test_run_the_simulation_button_fills_the_screen(window):
     sim.limits_path().write_text("{broken")
     page.refresh()
     assert "cannot be read" in page.message.text() and not page.run_button.isHidden()
+
+
+# ---- the whole chain, with the real background thread
+
+def test_a_leak_that_arrives_while_the_app_is_open_shows_up_and_plays_without_a_touch(app, canary_home, monkeypatch):
+    """What a post in a watched chat sets off: a queued row appears from another connection, the background
+    thread analyses it, the list updates, and with "Follow new leaks" on the case opens and its funnel plays."""
+    import time
+    monkeypatch.delenv("CANARY_REDUCE_MOTION", raising=False)
+    config.ensure_home()
+    Vault.create(config.vault_path(), PASSPHRASE)
+    win = MainWindow()
+    try:
+        win.try_unlock(PASSPHRASE)                               # the background thread starts here and keeps running
+        seed.seed(win.conn)
+        key = bytes.fromhex(win.vault.get("fingerprint_key"))
+        win.pages["leaks"].follow_toggle.setChecked(True)
+        assert win.pages["leaks"].model.rowCount() == 0
+
+        listener = db.connect()                                  # stands in for the Telegram listener's insert
+        row = lurker.leak_row(type("Message", (), {"id": 77, "raw_text": leak_text(fp.render_print_copy(key, 1, 4821, load_bank())[:14]),
+                                                   "message": None, "date": None, "sender_id": 5, "sender": None, "post_author": "Admin"})(),
+                              lurker.Chat(-100555, "examleaks_demo", "Exam leaks demo"), None, None)
+        listener.execute(f"INSERT INTO leaks ({', '.join(row)}) VALUES ({', '.join('?' for _ in row)})", list(row.values()))
+        listener.commit()
+        listener.close()
+
+        case = win.pages["case"]
+        deadline = time.monotonic() + 15
+        while time.monotonic() < deadline and win.stack.currentWidget() is not case:
+            app.processEvents()
+            time.sleep(0.02)
+        assert win.stack.currentWidget() is case, "the case did not open by itself"
+        assert (case.view.verdict, case.view.stage, case.view.copy_no) == ("traced", "print", 4821)
+        assert case.view.chat == "Exam leaks demo" and case.view.message_url == "https://t.me/examleaks_demo/77"
+        assert case.funnel.steps() == 14 and (case.funnel.is_playing() or case.funnel.position() == 14.0)
+        win.show_page("leaks")
+        assert win.pages["leaks"].model.rowCount() == 1
+        assert win.pages["leaks"].model.data(win.pages["leaks"].model.index(0, 4)) == "Traced: printed copy 4821"
+    finally:
+        win.close()

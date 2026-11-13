@@ -3,7 +3,7 @@
   <img src="https://img.shields.io/badge/Qt-PySide6-41CD52?logo=qt&logoColor=white" alt="PySide6"/>
   <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey" alt="Platform"/>
   <img src="https://img.shields.io/badge/license-proprietary-red" alt="License"/>
-  <img src="https://img.shields.io/badge/tests-54%20passed-brightgreen" alt="Tests"/>
+  <img src="https://img.shields.io/badge/tests-230%20passed-brightgreen" alt="Tests"/>
 </p>
 
 #  Canary
@@ -64,7 +64,7 @@ Canary computes the **exact probability** of a match occurring by chance (Poisso
 
 ## 📊 Simulation Results
 
-From 4,000 trials across scenarios (full data in [`docs/research/sim_results.txt`](file:///c:/Users/Adarsh/OneDrive/Desktop/Canary/canary/docs/research/sim_results.txt)):
+From 4,000 trials across scenarios (full data in [`docs/research/sim_results.txt`](docs/research/sim_results.txt)). `python -m canary sim` reruns it with the tool's own thresholds for the Limits screen. Misread rates are assumed, not measured:
 
 | Scenario | Questions | Traced | Strong Lead |
 |---|---|---|---|
@@ -129,8 +129,10 @@ canary/                    the app — one Python package
   chain.py                   hash chain primitives
   lock.py                    wrong-passphrase rate limiting
   bank.py                    question bank loader
-  fingerprint.py             keyed choices, probability math, verdict bars
+  fingerprint.py             makes every copy from the key, decodes a leak, exact probability math
   worker.py                  processes queued leaks one by one
+  leaks.py                   adding a leak by hand
+  queries.py                 the one place the app reads the database
   pdf.py                     exam papers as PDF (ReportLab)
   seed.py                    creates copies, people, custody chains
   reader.py                  photo → questions (Gemini Vision)
@@ -138,20 +140,27 @@ canary/                    the app — one Python package
   lurker.py                  Telegram channel listener (Telethon)
   evidence.py                signed evidence files (Ed25519)
   sim.py                     limits simulation
-  check.py                   end-to-end health check
+  check.py                   health check, reset, replay
+  score.py                   the scored test sets (see SCORES.md)
+  samples.py                 sample leaks with known answers
   data/bank.db               question bank (250 questions)
+  data/score_set*.json       frozen test leaks with known answers
   ui/                        desktop window (PySide6)
     app.py                     app entry point
     main_window.py             window, navigation, locking
     theme.py                   palette and fonts
-    background.py              worker thread
+    background.py              worker and Telegram listener beside the window
     screenshot.py              renders every screen to PNG
-    widgets/                   Bubble, OMRNumber, TimingMarks, VerdictBanner…
+    widgets/                   Bubble, OMRNumber, Funnel, CustodyTimeline, ClueTable, LeakView, LimitsChart…
     pages/                     Lock, Leaks, Case, Limits
     fonts/                     Khand & Mukta (bundled)
-tests/                     pytest suite (55 tests)
+tests/                     pytest suite (230 tests)
 bank/                      question sources & build_bank.py
-docs/                      PITCH.md, PROMPTS.md, research/, round1/
+scripts/                   the scripts that built the frozen test leaks
+packaging/                 canary.spec for PyInstaller
+docs/                      PITCH.md, PROMPTS.md, BUILD.md, research/, round1/
+PROGRESS.md                what is done, decisions made, what is faked
+SCORES.md                  every scored round
 video/                     explainer animation & render script
 ```
 
@@ -180,11 +189,18 @@ uv pip install --python .venv/bin/python -e ".[dev]"
 ### Run
 
 ```bash
-# Run the test suite (55 tests)
+# Run the test suite (230 tests)
 python -m pytest
 
-# Initialize the encrypted vault (first time only)
+# Initialize the encrypted vault (first time only). Prints the signing key fingerprint
 python -m canary init
+
+# Create the exam, copies, synthetic people and handover logs, then the Limits numbers
+python -m canary seed
+python -m canary sim
+
+# End-to-end health check: prints PASS
+python -m canary check
 
 # Launch the app
 python -m canary run
@@ -199,13 +215,44 @@ python -m canary screenshot screenshots/
 |---|---|
 | `canary init` | Create the encrypted vault |
 | `canary run` | Open the desktop app |
-| `canary run --headless` | Run the worker with no window |
+| `canary run --headless` | Run the worker and listener with no window |
+| `canary run --replay NAME` | Replay one saved case, with no database or network |
+| `canary seed` | Create the exam, copies, synthetic people and handover logs |
+| `canary print-copies --translator 7,23 --print 12,4821 --out DIR` | Papers as PDF, each with a sealed slip |
 | `canary vault set NAME` | Update a secret in the vault |
 | `canary add-leak --text FILE` | Queue a typed leak |
 | `canary add-leak --image FILE` | Queue a photo leak |
 | `canary cases` | List recent leaks and their verdicts |
+| `canary decode --text FILE` | Decode a typed leak and print the funnel |
+| `canary read PHOTO` | Read one photo with the photo reader |
+| `canary tg-login`, `canary watch USERNAME`, `canary unwatch USERNAME` | Log the Telegram account in, and choose the chats to watch |
+| `canary evidence ID` | Issue the signed evidence file for a case |
+| `canary verify FILE [--expect FINGERPRINT]` | Check an evidence file. Needs no passphrase |
+| `canary export-case ID` | Save a case as a replay file |
+| `canary sim` | Run the limits simulation |
+| `canary check` | End-to-end health check |
+| `canary score` | Score the tool on the frozen test leaks |
+| `canary reset` | Delete all leaks, cases and evidence files |
 | `canary verify-audit` | Verify the audit log hash chain |
+| `canary verify-chain --stage S --copy N` | Verify one copy's handover log |
 | `canary screenshot DIR` | Save a PNG of every screen |
+
+### Connecting the real services
+
+Typed leaks need no network. To read photos and watch Telegram, put the three things only you have into the vault:
+
+```bash
+python -m canary vault set gemini_api_key     # the key from Google AI Studio
+python -m canary read PHOTO.jpg               # sends that one image to Gemini and prints what it read
+
+python -m canary vault set tg_api_id          # from my.telegram.org, "API development tools"
+python -m canary vault set tg_api_hash
+python -m canary tg-login                     # phone, code, two-step password. Saved in the vault only
+python -m canary watch YOUR_DEMO_CHANNEL      # joins it if needed and starts watching
+python -m canary run                          # the listener starts when the window unlocks
+```
+
+The photo reader asks for `gemini-flash-latest`. Set `CANARY_READER_MODEL` to use another Gemini Flash model.
 
 ---
 
@@ -220,6 +267,31 @@ python -m canary screenshot screenshots/
 | **Data** | Directories are `0700`, files are `0600` (macOS). On Windows, protection is the user profile + vault encryption. |
 | **External calls** | Telegram (read-only, public channels only) and Gemini (leak images only, never the question bank). |
 | **Supply chain** | No GPL dependencies. PySide6 Essentials only (LGPL). Fonts bundled. |
+| **Telegram** | The client is wrapped so it can only read. Sending, replying, reacting, marking as read and private chats do not exist in it. |
+| **Untrusted text** | Whatever is read from an image or a chat is checked against a schema, stored, and shown as plain text. It is never followed. |
+| **Naming nobody** | An inconclusive case names no copy anywhere: not on screen, not in the database, not in the funnel picture. |
+
+Stated limits:
+
+- The idle lock is a screen lock. The secrets stay in memory so leaks keep being read while it is locked.
+- The database is not encrypted. It is protected by file modes (which Windows ignores) and holds no secret.
+- The question bank, real values included, sits unencrypted in the repo and the packaged app. A real exam's bank would have to live in the vault.
+- Rows cut off the end of the audit log are not detected by the chain alone. `verify-audit` prints the newest hash to keep somewhere else.
+- An evidence file is only as trustworthy as the published signing key fingerprint. Check it with `verify --expect FINGERPRINT`.
+
+---
+
+## 🎯 How well it does
+
+`python -m canary score` runs the tool on 126 frozen leaks with known answers. A third are set aside and never read. Every round is in [`SCORES.md`](SCORES.md).
+
+| | Leaks that may be read | Set-aside leaks | Wrong copy named |
+|---|---|---|---|
+| First set, at the start | 56 of 60 (93.3%) | 28 of 30 (93.3%) | never |
+| Second, harder set, at its start | 12 of 24 (50.0%) | 5 of 12 (41.7%) | never |
+| Both sets now | 84 of 84 | 42 of 42 | never |
+
+A further 1,300 random leaks (damaged, retold, merged from two or three copies, fakes with random numbers) named a wrong copy 0 times. None of this includes a real photo: the photo reader has only been tested against a mock.
 
 ---
 
@@ -246,8 +318,24 @@ python -m canary screenshot screenshots/
 
 ## 📦 Build Status
 
+All 13 tasks in `docs/PROMPTS.md` are built. The optional extras are not. Details are in [`PROGRESS.md`](PROGRESS.md).
+
 | Component | Status |
 |---|---|
+| Storage, vault, audit log, hash chains | ✅ Built & tested |
+| Question bank & loader | ✅ Built & tested |
+| Fingerprint engine: copies, decoding, funnel, exact maths | ✅ Built & tested |
+| Papers as PDF with sealed slips | ✅ Built & tested: page 1 of a PDF decodes back to its copy |
+| Seed data: 300 synthetic people, 5,050 copies, 20,150 handovers | ✅ Built & tested |
+| Leak analysis and the poor-read rules | ✅ Built, tested & scored |
+| App screens: Lock, Leaks, Case with the funnel, Limits | ✅ Built & tested |
+| Evidence files, `verify`, recommended response | ✅ Built & tested |
+| Limits simulation, health check, reset, replay | ✅ Built & tested. `check` passes three times in a row |
+| Photo reader | ⚠️ Built, tested against a mocked Gemini only. No real photo has been read |
+| Telegram listener | ⚠️ Built, tested against fake messages only. Never run against Telegram |
+| Packaging | ⚠️ `Canary.app` builds and passes its own `check` on macOS. The Windows build has not been run |
+
+---|---|
 | Storage, vault, audit log, hash chains | ✅ Built & tested |
 | Question bank & loader | ✅ Built & tested |
 | Fingerprint engine (keyed choice, probability math, verdicts) | ✅ Built & tested |
