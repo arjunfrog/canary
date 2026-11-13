@@ -154,6 +154,9 @@ def _ask(image: bytes, mime: str, api_key: str, client=None):
             raise ReaderError("The photo reader has used up its quota for now. Typed leaks still work.") from None
         if code in (400, 401, 403):
             raise ReaderError("The photo reader refused the request. Check the Gemini key in the vault.") from None
+        if code == 404:
+            raise ReaderError(f"Google has no model called {model_name()!r} for this key. Set CANARY_READER_MODEL to a "
+                              "current Gemini Flash model name, as listed in Google AI Studio.") from None
         raise ReaderError(f"The photo reader is having trouble (error {code}). Try again shortly.") from None
     except Exception as exc:
         raise ReaderError(f"Could not reach the photo reader ({type(exc).__name__}). Check the network. "

@@ -110,3 +110,11 @@ def test_read_command_prints_the_questions(canary_home, tmp_path, monkeypatch, c
     out = capsys.readouterr().out
     assert "2 questions read by gemini-test-flash" in out and "(B) 300 m" in out and "[hard to read]" in out
     assert "g-key" not in out
+
+
+def test_an_unknown_model_name_says_how_to_choose_another(canary_home, monkeypatch):
+    from google.genai import errors
+    monkeypatch.setenv("CANARY_READER_MODEL", "gemini-nonexistent")
+    missing = errors.ClientError(404, {"error": {"message": "models/gemini-nonexistent is not found", "status": "NOT_FOUND"}})
+    with pytest.raises(reader.ReaderError, match="no model called 'gemini-nonexistent'.*CANARY_READER_MODEL"):
+        reader.read_image(PNG, "key", client=FakeClient(error=missing))
