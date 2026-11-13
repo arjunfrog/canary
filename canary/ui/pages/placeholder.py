@@ -1,26 +1,23 @@
-from PySide6.QtWidgets import QLabel, QVBoxLayout, QWidget
-
-from ..widgets import RuledSection
+from PySide6.QtWidgets import QWidget
 
 
-class PlaceholderPage(QWidget):
-    """A screen whose task has not been done yet. It says what will go here and which task builds it."""
+class Page(QWidget):
+    """What every screen shares. The window calls these."""
 
-    title = ""
-    what = ""
-    task = 0
+    def __init__(self, window=None):
+        super().__init__()
+        self.app_window = window
 
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        section = RuledSection(self.title)
-        note = QLabel(f"{self.what} This screen is task {self.task} in docs/PROMPTS.md.")
-        note.setProperty("role", "muted")
-        note.setWordWrap(True)
-        section.body.addWidget(note)
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(section)
-        layout.addStretch(1)
+    @property
+    def conn(self):
+        return self.app_window.conn
 
     def refresh(self) -> None:
-        """Called when the background thread reports new or changed leaks."""
+        """Reread the database. Called when the screen is shown and when the background thread reports a change."""
+
+    def marks(self) -> list[bool]:
+        """The timing marks to show on the left edge while this screen is up."""
+        return [False] * 14
+
+    def on_lock(self) -> None:
+        """The window is locking: close dialogs and stop anything that moves."""

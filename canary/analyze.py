@@ -361,7 +361,10 @@ def _store(conn: sqlite3.Connection, leak_id: int, result: Analysis, reader: str
                                (config.EXAM_ID, result.stage, result.copy_no)).fetchone()
             copy_id = row["id"] if row else None
         d = result.decoded
-        steps = {"copy_no": result.copy_no, "candidates": d.candidates if d else 0, "steps": result.steps}
+        # The stored funnel keeps counts only. Which copies were still in the running is never written down,
+        # so an inconclusive case names nobody, even in the database.
+        steps = {"copy_no": result.copy_no, "candidates": d.candidates if d else 0,
+                 "steps": [{k: v for k, v in step.items() if k != "alive"} for step in result.steps]}
         cur = conn.execute(
             "INSERT INTO cases (leak_id, verdict, stage, copy_id, clues_read, clues_matched, expected_false_matches, "
             "steps, reader, elapsed_ms, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",

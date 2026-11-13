@@ -4,6 +4,7 @@ Both run on one asyncio loop in this thread. Each thread opens its own SQLite co
 is told what changed through two signals and reads the database itself.
 """
 import asyncio
+import threading
 
 from PySide6.QtCore import QThread, Signal
 
@@ -20,6 +21,7 @@ class Background(QThread):
         self._vault = vault
         self._loop: asyncio.AbstractEventLoop | None = None
         self._stop: asyncio.Event | None = None
+        self._stop_requested = threading.Event()       # set even if stop() is called before the loop exists
         self.telegram = lurker.ListenerState()         # read by the status line
 
     def run(self) -> None:
@@ -27,6 +29,8 @@ class Background(QThread):
         self._loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self._loop)
         self._stop = asyncio.Event()
+        if self._stop_requested.is_set():
+            self._stop.set()
 
         def on_case(leak_id: int, case_id: int | None) -> None:
             if case_id is not None:
@@ -46,6 +50,11 @@ class Background(QThread):
             self._loop.close()
 
     def stop(self) -> None:
-        if self._loop and self._stop and self.isRunning():
-            self._loop.call_soon_threadsafe(self._stop.set)
-        self.wait(8000)
+        self._stop_requested.set()
+        loop, stop = self._loop, self._stop
+        if loop is not None and stop is not None and not loop.is_closed():
+            try:
+                loop.call_soon_threadsafe(stop.set)
+            except RuntimeError:                       # the loop closed between the check and the call
+                pass
+        self.wait(10000)

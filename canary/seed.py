@@ -123,7 +123,7 @@ def seed(conn: sqlite3.Connection) -> dict:
                     (None, presser, at(-2.5, jitter), "Printed and sealed at the press"),
                     (presser, hub, at(-2, jitter), "Received at the regional hub"),
                     (hub, locker, at(-1, jitter), f"Placed in the bank locker for centre {centre + 1:03d}"),
-                    (locker, superintendent, at(-0.1, jitter), "Collected by the centre superintendent"),
+                    (locker, superintendent, at(-0.5, jitter), "Collected by the centre superintendent"),
                 ])
         conn.executemany("INSERT INTO copies (id, exam_id, stage, copy_no, holder_id) VALUES (?, ?, ?, ?, ?)", copies)
         conn.executemany("INSERT INTO custody_events (copy_id, from_id, to_id, at, note, prev_hash, event_hash) "

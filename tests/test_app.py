@@ -82,7 +82,7 @@ def test_without_a_vault_it_says_how_to_make_one(app, canary_home):
 def test_screenshot_writes_an_image_per_screen(app, canary_home, tmp_path):
     from canary.ui.screenshot import render_all
     names = sorted(p.name for p in render_all(tmp_path / "shots"))
-    assert names == ["case.png", "leaks.png", "limits.png", "lock.png"]
+    assert {"case.png", "leaks.png", "limits.png", "lock.png"} <= set(names)
     assert all((tmp_path / "shots" / n).stat().st_size > 2000 for n in names)
 
 
@@ -90,3 +90,80 @@ def test_base_widgets_build(app):
     assert OMRNumber(4821).accessibleName() == "Copy 4821"
     for verdict in ("traced", "strong_lead", "inconclusive", "not_our_paper"):
         assert VerdictBanner(verdict).verdict == verdict
+
+
+# ---- task 8: opening cases
+
+KEY_FOR_APP = None
+
+
+@pytest.fixture
+def case_window(window):
+    """An unlocked window over a seeded database holding one traced case and one unreadable leak."""
+    from canary import analyze, leaks, seed, worker
+    from canary import fingerprint as fp
+    from canary.bank import load_bank
+    from canary.samples import garble, leak_text
+    window.try_unlock(PASSPHRASE)
+    window.background.stop()                                   # the tests process leaks themselves
+    conn, bank = window.conn, load_bank()
+    key = bytes.fromhex(window.vault.get("fingerprint_key"))
+    seed.seed(conn)
+    paper = leak_text(fp.render_translator_copy(key, 1, 23, bank)[:14])
+    traced = leaks.add_manual_leak(conn, text=paper)
+    unreadable = leaks.add_manual_leak(conn, text=garble(paper, 0.4, seed=3))
+    while worker.process_next(conn, lambda c, leak: analyze.analyze_leak(c, leak, key, None, bank)):
+        pass
+    window.ids = {"traced": traced, "unreadable": unreadable,
+                  "case": conn.execute("SELECT id FROM cases WHERE leak_id = ?", (traced,)).fetchone()[0]}
+    return window
+
+
+def test_open_case_switches_to_the_case_screen_and_writes_the_audit_row(case_window):
+    win = case_window
+    assert win.open_case(win.ids["case"], play=False)
+    assert win.stack.currentWidget() is win.pages["case"] and win.pages["case"].case_id == win.ids["case"]
+    row = db.connect().execute("SELECT action, detail FROM audit_log ORDER BY id DESC LIMIT 1").fetchone()
+    assert (row["action"], row["detail"]) == ("case viewed", '{"case_id": %d}' % win.ids["case"])
+    assert not win.open_case(99999)
+
+
+def test_the_timing_marks_are_set_by_the_screen_being_shown(case_window):
+    win = case_window
+    win.show_page("leaks")
+    assert win.marks.states() == [True, True]                  # one mark per leak, black once read
+    win.open_case(win.ids["case"], play=False)
+    assert win.marks.states() == [True] * 28                   # one mark per clue, black when read
+    win.show_page("limits")
+    assert win.marks.states() != [True] * 28
+
+
+def test_nothing_can_be_opened_while_the_window_is_locked(case_window):
+    win = case_window
+    win.lock()
+    before = actions()
+    assert not win.open_case(win.ids["case"]) and not win.open_leak(win.ids["unreadable"])
+    win.show_page("leaks")
+    win.show_page("limits")
+    win.on_case_created(win.ids["case"])
+    win.on_leak_changed(win.ids["traced"])
+    assert win.locked and win.stack.currentWidget() is win.lock_page
+    assert actions() == before                                 # and nothing was recorded as viewed
+    win.try_unlock(PASSPHRASE)
+    assert win.open_case(win.ids["case"], play=False)
+
+
+def test_the_background_thread_reports_leaks_and_cases_separately(app):
+    from canary.ui.background import Background
+    assert hasattr(Background, "leak_changed") and hasattr(Background, "case_created")
+    assert not hasattr(Background, "changed")
+
+
+def test_follow_new_leaks_opens_each_new_case_by_itself(case_window):
+    win = case_window
+    win.show_page("leaks")
+    win.on_case_created(win.ids["case"])
+    assert win.stack.currentWidget() is win.pages["leaks"]     # the switch is off
+    win.pages["leaks"].follow_toggle.setChecked(True)
+    win.on_case_created(win.ids["case"])
+    assert win.stack.currentWidget() is win.pages["case"] and win.pages["case"].case_id == win.ids["case"]

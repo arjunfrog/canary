@@ -65,3 +65,12 @@ def test_seed_and_verify_chain_commands(conn, capsys):
     assert "verifies" in capsys.readouterr().out
     with pytest.raises(SystemExit):
         cli.main(["verify-chain", "--stage", "print", "--copy", "5001"])
+
+
+def test_every_handover_is_in_the_past_and_in_order(seeded):
+    from canary import db
+    conn, _ = seeded
+    assert conn.execute("SELECT max(at) FROM custody_events").fetchone()[0] < db.now()
+    for copy_id in (1, 23, 50, 51, 4871, 5050):
+        times = [r["at"] for r in conn.execute("SELECT at FROM custody_events WHERE copy_id = ? ORDER BY id", (copy_id,))]
+        assert times == sorted(times)
