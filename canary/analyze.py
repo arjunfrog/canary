@@ -9,6 +9,7 @@ import sqlite3
 import time
 import unicodedata
 from dataclasses import dataclass, field
+from difflib import SequenceMatcher
 from pathlib import Path
 
 from rapidfuzz import fuzz, process
@@ -200,6 +201,38 @@ class Matcher:
             for text in (q.stem, *q.options, *(o for v in q.value_sets for o in v.options)):
                 vocabulary.update(_words(text))
         self.vocabulary = frozenset(vocabulary)
+        # In how many bank stems each word appears. A word in one or two stems is what that question is about.
+        self.stem_count: dict = {}
+        for q in self.pool:
+            for word in set(_words(q.value_sets[0].stem if q.kind == "numeric" else q.stem)):
+                self.stem_count[word] = self.stem_count.get(word, 0) + 1
+
+    def different_subject(self, question, read: ReadQuestion) -> bool:
+        """Same sentence, different subject: "Quinine is obtained from" beside the bank's "Morphine is obtained from".
+
+        True when a word the bank question is about has been swapped for an unrelated one. Everyday words
+        swapped in a retelling (called/known, find/determine) do not count, and neither does a typing slip.
+        Never true when the numbers fit one of the question's value sets, or its options are this question's.
+        """
+        if question.kind == "numeric":
+            if self.value_set(question, read) is not None:
+                return False
+        elif len(read.options_for_matching) == 4 and not self.options_clearly_differ(question, read):
+            return False
+        ours = normalise(question.value_sets[0].stem if question.kind == "numeric" else question.stem).split()
+        theirs = normalise(read.stem_for_matching).split()
+        for tag, a0, a1, b0, b1 in SequenceMatcher(None, ours, theirs, autojunk=False).get_opcodes():
+            if tag != "replace":
+                continue
+            for mine in ours[a0:a1]:
+                if len(mine) < 4 or mine in _COMMON:
+                    continue
+                for other in theirs[b0:b1]:
+                    if len(other) < 4 or other in _COMMON or fuzz.ratio(mine, other) >= 60:
+                        continue
+                    if self.stem_count.get(mine, 0) <= 2 or other in self.vocabulary:
+                        return True
+        return False
 
     def reads_like_words(self, text: str) -> bool:
         """Is this made of word-like strings in Latin letters? False for a ruined scan or an unreadable script.
@@ -273,6 +306,9 @@ class Matcher:
             # Wording that resembles a bank stem, cleanly written, with someone else's options: a different
             # question on the same subject, not a damaged copy of ours.
             score = CLEARLY_DIFFERENT - 1.0
+        if (question is not None and score >= CLEARLY_DIFFERENT and self.reads_like_words(read.stem_for_matching)
+                and self.different_subject(question, read)):
+            score = CLEARLY_DIFFERENT - 1.0                    # the same sentence about something else
         known_set = None
         if question is None or score < MATCH_THRESHOLD:
             numbered = self.by_numbers(read)
