@@ -130,3 +130,83 @@ def test_a_payment_refusal_says_so_and_passes_on_googles_reason_without_the_key(
     assert "wants payment" in text and "Billing" in text and "Try again shortly" not in text
     assert "Google said: Prepaid credits are depleted for key [key]." in text
     assert "secret-key-1" not in text and "\x1b" not in text
+
+
+# ---- finding a model this key can use
+
+LISTED = [("models/gemini-2.0-flash", ["generateContent"]), ("models/gemini-2.5-flash", ["generateContent", "countTokens"]),
+          ("models/gemini-2.5-flash-lite", ["generateContent"]), ("models/gemini-2.5-flash-image", ["generateContent"]),
+          ("models/gemini-3.0-flash-preview", ["generateContent"]), ("models/gemini-2.5-pro", ["generateContent"]),
+          ("models/gemini-2.5-flash-preview-tts", ["generateContent"]), ("models/text-embedding-004", ["embedContent"]),
+          ("models/gemini-1.5-flash", ["countTokens"])]
+
+
+def test_the_newest_stable_flash_model_that_can_answer_is_picked():
+    assert reader.pick_flash_model(LISTED) == "gemini-2.5-flash"
+    assert reader.pick_flash_model([("models/gemini-3.0-flash-preview", ["generateContent"])]) == "gemini-3.0-flash-preview"
+    assert reader.pick_flash_model([("models/gemini-2.5-pro", ["generateContent"])]) is None
+    assert reader.pick_flash_model([]) is None
+
+
+class ModelAwareClient(FakeClient):
+    """Knows only the models in LISTED, as Google would for one key."""
+
+    def generate_content(self, **kwargs):
+        self.calls.append(kwargs)
+        from google.genai import errors
+        if f"models/{kwargs['model']}" not in dict(LISTED):
+            raise errors.ClientError(404, {"error": {"message": f"models/{kwargs['model']} is not found for API version v1",
+                                                     "status": "NOT_FOUND"}})
+
+        class Response:
+            text, model_version = json.dumps(ANSWER), kwargs["model"]
+        return Response()
+
+    def list(self):
+        from types import SimpleNamespace
+        self.listed = True
+        return [SimpleNamespace(name=n, supported_actions=a) for n, a in LISTED]
+
+
+def test_an_unknown_default_model_is_replaced_by_one_the_key_can_use_and_remembered(canary_home, monkeypatch):
+    import stat
+    import sys
+    monkeypatch.delenv("CANARY_READER_MODEL", raising=False)
+    client = ModelAwareClient()
+    data = reader.read_image(PNG, "key", client=client, use_cache=False)
+    assert data["model"] == "gemini-2.5-flash" and len(data["questions"]) == 2
+    assert [c["model"] for c in client.calls] == ["gemini-flash-latest", "gemini-2.5-flash"]
+    assert reader.model_name() == "gemini-2.5-flash"
+    if sys.platform != "win32":
+        assert stat.S_IMODE((canary_home / "reader_model").stat().st_mode) == 0o600
+    again = ModelAwareClient()
+    reader.read_image(PNG, "key", client=again, use_cache=False)
+    assert [c["model"] for c in again.calls] == ["gemini-2.5-flash"]          # straight to the remembered one
+    assert "key" not in (canary_home / "reader_model").read_text()
+
+
+def test_a_pinned_model_is_never_replaced(canary_home, monkeypatch):
+    monkeypatch.setenv("CANARY_READER_MODEL", "gemini-9-flash")
+    client = ModelAwareClient()
+    with pytest.raises(reader.ReaderError, match="no model called 'gemini-9-flash'"):
+        reader.read_image(PNG, "key", client=client, use_cache=False)
+    assert not getattr(client, "listed", False) and not (canary_home / "reader_model").exists()
+
+
+def test_when_no_listed_model_will_do_it_says_so(canary_home, monkeypatch):
+    monkeypatch.delenv("CANARY_READER_MODEL", raising=False)
+
+    class OnlyPro(ModelAwareClient):
+        def list(self):
+            from types import SimpleNamespace
+            return [SimpleNamespace(name="models/gemini-2.5-pro", supported_actions=["generateContent"])]
+
+    with pytest.raises(reader.ReaderError, match="none of the Gemini Flash models it lists could be used.*CANARY_READER_MODEL"):
+        reader.read_image(PNG, "key", client=OnlyPro(), use_cache=False)
+
+
+def test_nonsense_in_the_remembered_model_file_is_ignored(canary_home, monkeypatch):
+    monkeypatch.delenv("CANARY_READER_MODEL", raising=False)
+    config.ensure_home()
+    (canary_home / "reader_model").write_text("../../etc/passwd\nrm -rf")
+    assert reader.model_name() == reader.DEFAULT_MODEL

@@ -9,6 +9,7 @@ purely as data. Text inside the image is never followed as an instruction.
 import hashlib
 import json
 import os
+import re
 import unicodedata
 
 from . import config
@@ -74,9 +75,61 @@ async def reachable(timeout: float = 4.0) -> bool:
     return True
 
 
+DEFAULT_MODEL = "gemini-flash-latest"
+_SKIP_IN_NAME = ("lite", "image", "tts", "audio", "live", "robotics", "computer", "embedding", "thinking", "exp")
+
+
+def _model_file():
+    return config.home() / "reader_model"
+
+
 def model_name() -> str:
-    """The Gemini Flash vision model to ask. CANARY_READER_MODEL overrides the default."""
-    return os.environ.get("CANARY_READER_MODEL", "gemini-flash-latest")
+    """The Gemini Flash vision model to ask.
+
+    CANARY_READER_MODEL wins. Otherwise the model Canary found for this key last time, otherwise the default.
+    """
+    pinned = os.environ.get("CANARY_READER_MODEL", "").strip()
+    if pinned:
+        return pinned
+    try:
+        found = _model_file().read_text(encoding="utf-8").strip()
+    except OSError:
+        found = ""
+    return found if re.fullmatch(r"[a-z0-9][a-z0-9.\-]{2,80}", found) else DEFAULT_MODEL
+
+
+def pick_flash_model(names_and_actions) -> str | None:
+    """The newest stable Gemini Flash model that can answer a request, from Google's list for this key.
+
+    Takes (name, supported actions) pairs. Leaves out the lite, image, speech, live and experimental kinds,
+    and prefers a stable model to a preview.
+    """
+    best, best_rank = None, None
+    for name, actions in names_and_actions:
+        name = (name or "").removeprefix("models/")
+        match = re.fullmatch(r"gemini-(\d+(?:\.\d+)?)-flash(-[a-z0-9.\-]+)?", name)
+        if not match or "generateContent" not in (actions or ()) or any(w in name for w in _SKIP_IN_NAME):
+            continue
+        rank = ("preview" not in name, float(match.group(1)), -len(name))
+        if best_rank is None or rank > best_rank:
+            best, best_rank = name, rank
+    return best
+
+
+def _remember_model(name: str) -> None:
+    config.ensure_home()
+    fd = os.open(_model_file(), os.O_CREAT | os.O_WRONLY | os.O_TRUNC, 0o600)
+    with os.fdopen(fd, "w", encoding="utf-8") as handle:
+        handle.write(name)
+
+
+def _find_model(client) -> str | None:
+    """Ask Google which models this key may use, and pick a Flash model. Sends nothing but the key."""
+    try:
+        listed = [(m.name, m.supported_actions) for m in client.models.list()]
+    except Exception:
+        return None
+    return pick_flash_model(listed)
 
 
 def image_type(image: bytes) -> str | None:
@@ -143,31 +196,57 @@ def _ask(image: bytes, mime: str, api_key: str, client=None):
     if client is None:
         client = genai.Client(api_key=api_key, http_options=types.HttpOptions(timeout=TIMEOUT_MS))
     try:
-        response = client.models.generate_content(
-            model=model_name(),
-            contents=[types.Part.from_bytes(data=image, mime_type=mime), "Transcribe this exam paper."],
-            config=types.GenerateContentConfig(system_instruction=INSTRUCTION, temperature=0,
-                                               response_mime_type="application/json", response_schema=SCHEMA))
+        return _generate(client, image, mime, model_name(), types)
     except errors.APIError as exc:
-        code = getattr(exc, "code", None)
-        said = _google_says(exc, api_key)
-        if code == 429:
-            raise ReaderError("The photo reader has used up its quota for now. Typed leaks still work." + said) from None
-        if code in (400, 401, 403):
-            raise ReaderError("The photo reader refused the request. Check the Gemini key in the vault." + said) from None
-        if code == 402:
-            raise ReaderError("Google wants payment before this key can be used: check Billing for this key's project "
-                              "in Google AI Studio. Typed leaks still work." + said) from None
-        if code == 404:
-            raise ReaderError(f"Google has no model called {model_name()!r} for this key. Set CANARY_READER_MODEL to a "
-                              "current Gemini Flash model name, as listed in Google AI Studio." + said) from None
-        if code is not None and 400 <= code < 500:
-            raise ReaderError(f"The photo reader refused the request (error {code})." + said) from None
-        raise ReaderError(f"The photo reader is having trouble (error {code}). Try again shortly." + said) from None
+        # The model name is not one this key can use. Unless one was pinned, find one and try once more.
+        if getattr(exc, "code", None) != 404 or os.environ.get("CANARY_READER_MODEL", "").strip():
+            return _explain(exc, api_key)
+        found = _find_model(client)
+        if not found or found == model_name():
+            return _explain(exc, api_key)
+        _remember_model(found)
+        try:
+            return _generate(client, image, mime, found, types)
+        except errors.APIError as again:
+            return _explain(again, api_key)
+        except Exception as again:
+            return _explain(again, api_key)
     except Exception as exc:
+        return _explain(exc, api_key)
+
+
+def _generate(client, image: bytes, mime: str, model: str, types):
+    """One request: the image and the fixed instruction, nothing else. Returns (text, model version)."""
+    response = client.models.generate_content(
+        model=model,
+        contents=[types.Part.from_bytes(data=image, mime_type=mime), "Transcribe this exam paper."],
+        config=types.GenerateContentConfig(system_instruction=INSTRUCTION, temperature=0,
+                                           response_mime_type="application/json", response_schema=SCHEMA))
+    return getattr(response, "text", None), getattr(response, "model_version", None) or model
+
+
+def _explain(exc, api_key: str):
+    """Turn a failed request into a ReaderError worded for the person using the app."""
+    from google.genai import errors
+    if not isinstance(exc, errors.APIError):
         raise ReaderError(f"Could not reach the photo reader ({type(exc).__name__}). Check the network. "
                           "Typed leaks still work.") from None
-    return getattr(response, "text", None), getattr(response, "model_version", None) or model_name()
+    code = getattr(exc, "code", None)
+    said = _google_says(exc, api_key)
+    if code == 429:
+        raise ReaderError("The photo reader has used up its quota for now. Typed leaks still work." + said) from None
+    if code in (400, 401, 403):
+        raise ReaderError("The photo reader refused the request. Check the Gemini key in the vault." + said) from None
+    if code == 402:
+        raise ReaderError("Google wants payment before this key can be used: check Billing for this key's project "
+                          "in Google AI Studio. Typed leaks still work." + said) from None
+    if code == 404:
+        raise ReaderError(f"Google has no model called {model_name()!r} for this key, and none of the Gemini Flash models "
+                          "it lists could be used instead. Set CANARY_READER_MODEL to a model name from Google AI Studio."
+                          + said) from None
+    if code is not None and 400 <= code < 500:
+        raise ReaderError(f"The photo reader refused the request (error {code})." + said) from None
+    raise ReaderError(f"The photo reader is having trouble (error {code}). Try again shortly." + said) from None
 
 
 def _google_says(exc, api_key: str) -> str:
