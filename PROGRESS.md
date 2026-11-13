@@ -43,6 +43,9 @@ Kept current so the work can be picked up again.
 - Telegram is tried on ports 443, then 5222, then 80, and the first that works is kept for every connection,
   including reconnects and moves to another data centre. Some networks (including the one this was built on)
   cut MTProto off on 443 but let 5222 through. `CANARY_TG_PORT` pins one port.
+- A port only counts as working once Telegram answers a request on it (help.getNearestDc, which needs no
+  login and changes nothing). With a saved login the connection opens on a blocked port and only fails at
+  the first request. The port that worked is kept in `CANARY_HOME/telegram_port` and tried first next time.
 - Seed timestamps hang off the exam's creation time. Translator copies come back 3 days before it and printed
   copies reach the superintendent about 12 hours before it, so a leak posted after seeding finds the copy
   with the exam cell (translator copies) or the superintendent (printed copies). The Case screen shows who it

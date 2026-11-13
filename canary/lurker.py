@@ -8,16 +8,20 @@ Everything a message carries (text, captions, names, files) is untrusted data an
 """
 import asyncio
 import logging
+import os
 import re
 import sqlite3
 import time
 from dataclasses import dataclass
 from datetime import timezone
 
-from . import audit, db, leaks
+from . import audit, config, db, leaks
 from .reader import MAX_IMAGE_BYTES
 
 log = logging.getLogger("canary.lurker")
+# Telethon logs every dropped connection and retry as a warning. On a network that blocks a port that is
+# hundreds of lines. Canary says what happened itself, in one line, so only Telethon's errors are kept.
+logging.getLogger("telethon").setLevel(logging.ERROR)
 
 MIN_TEXT_CHARS = 200          # text-only posts shorter than this are not papers
 BACKFILL = 50                 # messages read from each watched chat on start
@@ -25,7 +29,8 @@ MAX_PER_MINUTE = 10           # new leaks accepted per chat per minute
 MAX_FLOOD_WAIT = 3600
 REFRESH_SECONDS = 20          # how often the listener rereads the list of watched chats
 PORTS = (443, 5222, 80)       # Telegram's own ports. Some networks block MTProto on 443 but not on the others
-CONNECT_SECONDS = 25
+CONNECT_SECONDS = 10          # a blocked port can hang rather than refuse, so each try is cut off
+ANSWER_SECONDS = 10           # how long Telegram has to answer one small request before a port counts as blocked
 _USERNAME = re.compile(r"^[A-Za-z][A-Za-z0-9_]{3,31}$")
 
 
@@ -50,6 +55,10 @@ class ReadOnlyTelegram:
     def __setattr__(self, name, value):
         raise AttributeError("ReadOnlyTelegram cannot be changed.")
 
+    async def ping(self) -> None:
+        """Ask Telegram one small question that changes nothing (which data centre is nearest)."""
+        await answers(object.__getattribute__(self, "_client"))
+
     async def join_public(self, entity) -> None:
         """Join a public channel or group, so its posts can be read. Used only by the `watch` command."""
         from telethon.errors import UserAlreadyParticipantError
@@ -68,16 +77,38 @@ def clean_username(text: str) -> str:
     return name
 
 
+def _port_file():
+    return config.home() / "telegram_port"
+
+
+def remembered_port() -> int | None:
+    """The port that last worked on this laptop, so the next start tries it first. Not a secret."""
+    try:
+        port = int(_port_file().read_text().strip())
+    except (OSError, ValueError):
+        return None
+    return port if port in PORTS else None
+
+
+def remember_port(port: int) -> None:
+    if remembered_port() == port:
+        return
+    config.ensure_home()
+    fd = os.open(_port_file(), os.O_CREAT | os.O_WRONLY | os.O_TRUNC, 0o600)
+    with os.fdopen(fd, "w") as handle:
+        handle.write(str(port))
+
+
 def ports() -> tuple[int, ...]:
-    """The ports to try, in order. CANARY_TG_PORT pins one."""
-    import os
+    """The ports to try, in order: the one that last worked, then the rest. CANARY_TG_PORT pins one."""
     pinned = os.environ.get("CANARY_TG_PORT", "").strip()
     if pinned:
         try:
             return (int(pinned),)
         except ValueError:
             raise TelegramNotReady(f"CANARY_TG_PORT must be a port number, not {pinned!r}.") from None
-    return PORTS
+    last = remembered_port()
+    return ((last,) if last else ()) + tuple(p for p in PORTS if p != last)
 
 
 def connection_on(port: int):
@@ -102,13 +133,35 @@ UNREACHABLE = ("Could not reach Telegram from this network on port {ports}. The 
                "Try another network, such as a phone hotspot. Typed leaks still work.")
 
 
-async def connect_any(build):
-    """Connect on the first port that works. build(port) returns an unconnected client. Returns (client, port)."""
+async def answers(client) -> None:
+    """Make Telegram answer one small request that needs no login and changes nothing.
+
+    Opening a connection is not proof that it works: with a saved login, Telethon opens the connection and
+    returns before Telegram has said anything, and a network that blocks the port only cuts it off at the
+    first real request. Any answer from Telegram, even a refusal, shows the connection carries traffic.
+    """
+    from telethon.errors import RPCError
+    from telethon.tl.functions.help import GetNearestDcRequest
+    try:
+        await client(GetNearestDcRequest())
+    except RPCError:
+        pass                                                   # Telegram answered, so the connection works
+
+
+async def connect_any(build, probe=None):
+    """Connect on the first port where Telegram answers. build(port) returns an unconnected client.
+
+    probe(client) checks that Telegram answers; by default the client's own ping(). Returns (client, port).
+    """
     tried = ports()
     for port in tried:
         client = build(port)
+        check = probe or getattr(client, "ping", None)
         try:
             await asyncio.wait_for(client.connect(), CONNECT_SECONDS)
+            if check is not None:
+                await asyncio.wait_for(check(client) if probe else check(), ANSWER_SECONDS)
+            remember_port(port)
             return client, port
         except (OSError, EOFError, ConnectionError, asyncio.TimeoutError) as exc:   # EOFError: the server cut it off
             log.info("Telegram did not answer on port %s (%s)", port, type(exc).__name__)
@@ -131,7 +184,8 @@ def make_client(vault, session: str | None = None, port: int = 443) -> ReadOnlyT
     from telethon.sessions import StringSession
     try:
         return ReadOnlyTelegram(TelegramClient(StringSession(session), int(api_id), api_hash,
-                                               connection=connection_on(port), connection_retries=1))
+                                               connection=connection_on(port), connection_retries=1,
+                                               request_retries=2))
     except ValueError:
         raise TelegramNotReady("tg_api_id must be a number, and tg_session must be a session saved by tg-login.") from None
 
@@ -166,7 +220,9 @@ async def login(vault, ask=input, ask_secret=None) -> str:
     except ValueError:
         raise TelegramNotReady("tg_api_id must be the number shown on my.telegram.org.") from None
     client, port = await connect_any(lambda p: TelegramClient(StringSession(), api_id, api_hash,
-                                                               connection=connection_on(p), connection_retries=1))
+                                                               connection=connection_on(p), connection_retries=1,
+                                                               request_retries=2),
+                                     probe=answers)
     if port != 443:
         print(f"Reached Telegram on port {port}; this network blocks the usual one.")
     try:

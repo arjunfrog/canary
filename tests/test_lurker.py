@@ -285,7 +285,13 @@ def test_connect_falls_back_to_the_next_port_that_works(monkeypatch):
     assert port == 5222 and client.port == 5222
     assert log == [("connect", 443), ("disconnect", 443), ("connect", 5222)]
     log.clear()
-    assert go(lurker.connect_any(lambda p: PortClient(p, {443, 5222}, log)))[1] == 443 and log == [("connect", 443)]
+    # the port that worked is remembered and tried first next time
+    assert go(lurker.connect_any(lambda p: PortClient(p, {443, 5222}, log)))[1] == 5222 and log == [("connect", 5222)]
+    log.clear()
+    # if the remembered port stops working (another network), the others are tried again
+    assert go(lurker.connect_any(lambda p: PortClient(p, {443}, log)))[1] == 443
+    assert log == [("connect", 5222), ("disconnect", 5222), ("connect", 443)]
+    assert lurker.remembered_port() == 443
 
 
 def test_when_every_port_is_blocked_it_says_so_in_plain_words(monkeypatch):
@@ -377,3 +383,63 @@ def test_login_explains_a_blocked_network_instead_of_crashing(monkeypatch):
     monkeypatch.setattr(lurker, "CONNECT_SECONDS", 3)
     with pytest.raises(lurker.TelegramNotReady, match="Could not reach Telegram"):
         go(lurker.login(Vault(), ask=lambda prompt: pytest.fail("must not ask for a phone number"), ask_secret=lambda p: ""))
+
+
+class SavedLoginClient(PortClient):
+    """With a saved login the connection always opens; a blocked port only shows when Telegram is asked something."""
+
+    async def connect(self):
+        self.log.append(("connect", self.port))
+
+    async def ping(self):
+        self.log.append(("ping", self.port))
+        if self.port not in self.open_ports:
+            raise ConnectionError("Cannot send requests while disconnected")
+
+
+def test_a_port_only_counts_once_telegram_answers_on_it(monkeypatch):
+    monkeypatch.delenv("CANARY_TG_PORT", raising=False)
+    log = []
+    client, port = go(lurker.connect_any(lambda p: SavedLoginClient(p, {5222}, log)))
+    assert port == 5222
+    assert log == [("connect", 443), ("ping", 443), ("disconnect", 443), ("connect", 5222), ("ping", 5222)]
+
+
+def test_a_port_where_telegram_never_answers_is_given_up_quickly(monkeypatch):
+    monkeypatch.delenv("CANARY_TG_PORT", raising=False)
+    monkeypatch.setattr(lurker, "ANSWER_SECONDS", 0.2)
+
+    class Silent(SavedLoginClient):
+        async def ping(self):
+            if self.port == 443:
+                await asyncio.sleep(60)                         # Telethon retrying forever on a blocked port
+
+    client, port = go(lurker.connect_any(lambda p: Silent(p, {5222}, [])))
+    assert port == 5222
+
+
+def test_a_refusal_from_telegram_still_proves_the_connection_works():
+    from telethon.errors import RPCError
+
+    class Refuses:
+        async def __call__(self, request):
+            raise RPCError(request, "API_ID_INVALID", 400)
+
+    go(lurker.answers(Refuses()))                              # no exception: Telegram answered
+
+
+def test_telethon_retry_messages_are_kept_out_of_the_terminal():
+    assert logging.getLogger("telethon").getEffectiveLevel() >= logging.ERROR
+
+
+def test_the_remembered_port_is_a_private_file_and_nonsense_in_it_is_ignored(canary_home, monkeypatch):
+    import stat
+    import sys
+    monkeypatch.delenv("CANARY_TG_PORT", raising=False)
+    assert lurker.ports() == (443, 5222, 80)
+    lurker.remember_port(80)
+    assert lurker.ports() == (80, 443, 5222)
+    if sys.platform != "win32":
+        assert stat.S_IMODE((canary_home / "telegram_port").stat().st_mode) == 0o600
+    (canary_home / "telegram_port").write_text("22")              # only Telegram's own ports are ever tried
+    assert lurker.ports() == (443, 5222, 80)
