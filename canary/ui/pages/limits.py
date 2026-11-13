@@ -1,10 +1,12 @@
-from PySide6.QtWidgets import QButtonGroup, QHBoxLayout, QVBoxLayout, QWidget
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QButtonGroup, QHBoxLayout, QPushButton, QSizePolicy, QWidget
 
 from ... import audit, sim
-from ..widgets import BubbleToggle, RuledSection
+from .. import theme
+from ..widgets import Panel
 from ..widgets.limits_chart import LimitsChart
-from ..widgets.text import caption, heading, plain, primary_button, when
-from .placeholder import Page
+from ..widgets.text import plain, primary_button, when
+from .placeholder import GAP, Page, PageHeader
 
 
 class LimitsPage(Page):
@@ -14,59 +16,53 @@ class LimitsPage(Page):
         super().__init__(window)
         self.data: dict | None = None
         self.selected = 0
-        section = RuledSection("Limits")
-        self.message = plain("", 18, role="muted", wrap=True)
+        self.header = PageHeader("Limits", "How often the right copy is named, and a wrong one, by the number of questions leaked.")
+
+        self.missing = Panel()
+        self.message = plain("", 14, role="muted", wrap=True)
         self.run_button = primary_button("Run the simulation")
         self.run_button.clicked.connect(self.run_simulation)
-        missing = QHBoxLayout()
-        missing.addWidget(self.run_button)
-        missing.addStretch(1)
-        self.missing = QWidget()
-        box = QVBoxLayout(self.missing)
-        box.setContentsMargins(0, 0, 0, 0)
-        box.setSpacing(14)
-        box.addWidget(self.message)
-        box.addLayout(missing)
-        box.addStretch(1)
+        row = QHBoxLayout()
+        row.addWidget(self.run_button)
+        row.addStretch(1)
+        self.missing.body.addWidget(self.message)
+        self.missing.body.addLayout(row)
+        self.missing.setSizePolicy(self.missing.sizePolicy().horizontalPolicy(), QSizePolicy.Policy.Maximum)
 
+        self.picker_panel = Panel("What kind of leak")
+        self.picker_panel.setFixedWidth(340)
         self.picker_group = QButtonGroup(self)
         self.picker_group.setExclusive(True)
-        self.picker = QVBoxLayout()
+        self.picker = self.picker_panel.body
         self.picker.setSpacing(2)
-        self.picker.addWidget(caption("What kind of leak"))
-        self.picker_box = QWidget()
-        self.picker_box.setLayout(self.picker)
-        self.picker_box.setFixedWidth(420)
-        self.title = heading("", 28, semibold=True)
-        self.sentence = plain("", 17, wrap=True)
-        self.sentence.setMinimumHeight(74)
+        self.picker.setContentsMargins(6, 6, 6, 8)
+
+        self.chart_panel = Panel("")
+        self.sentence = plain("", 14, wrap=True)
+        self.sentence.setMinimumHeight(40)
         self.chart = LimitsChart()
-        self.note = plain("", 14, role="muted", wrap=True)
-        right = QVBoxLayout()
-        right.setSpacing(8)
-        right.addWidget(self.title)
-        right.addWidget(self.sentence)
-        right.addWidget(self.chart, 1)
-        right.addWidget(self.note)
+        self.note = plain("", 12, role="muted", wrap=True)
+        for widget in (self.sentence, self.chart, self.note):
+            self.chart_panel.body.addWidget(widget, 1 if widget is self.chart else 0)
+
         self.loaded = QWidget()
-        row = QHBoxLayout(self.loaded)
-        row.setContentsMargins(0, 0, 0, 0)
-        row.setSpacing(40)
-        row.addWidget(self.picker_box, 0)
-        row.addLayout(right, 1)
-        section.body.addWidget(self.missing)
-        section.body.addWidget(self.loaded, 1)
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(section, 1)
-        self._buttons: list[BubbleToggle] = []
+        loaded = QHBoxLayout(self.loaded)
+        loaded.setContentsMargins(0, 0, 0, 0)
+        loaded.setSpacing(GAP)
+        loaded.addWidget(self.picker_panel, 0)
+        loaded.addWidget(self.chart_panel, 1)
+
+        layout = self.frame(self)
+        layout.addWidget(self.header)
+        layout.addWidget(self.missing)
+        layout.addWidget(self.loaded, 1)
+        layout.addStretch(0)
+        self._buttons: list[QPushButton] = []
         self._show_missing("Loading the saved simulation.", can_run=False)
 
-    def marks(self) -> list[bool]:
-        """One mark per kind of leak, black for the ones where a copy can be named."""
-        if not self.data:
-            return [False] * 7
-        return [max(p["lead_right"] for p in s["points"]) > 0 for s in self.data["scenarios"]]
+    @property
+    def title(self):
+        return self.chart_panel.title
 
     def _show_missing(self, words: str, can_run: bool = True) -> None:
         self.message.setText(words)
@@ -79,23 +75,28 @@ class LimitsPage(Page):
         self.data = sim.load_limits()
         if self.data is None:
             exists = sim.limits_path().exists()
-            self._show_missing("The saved simulation cannot be read. Run it again to replace it." if exists else
-                               "The simulation has not been run on this laptop yet, so there is no chart to show.")
+            self._show_missing("The saved simulation cannot be read. Run it again to replace it. A run takes a few seconds."
+                               if exists else "The simulation has not been run on this laptop yet, so there is no chart to "
+                               "show. A run takes a few seconds.")
             return
         self.missing.setVisible(False)
         self.loaded.setVisible(True)
         if len(self._buttons) != len(self.data["scenarios"]):
-            for button in self._buttons:
-                self.picker_group.removeButton(button)
-                button.setParent(None)
-                button.deleteLater()
+            for old in self._buttons:
+                self.picker_group.removeButton(old)
+                old.setParent(None)
+                old.deleteLater()
             self._buttons = []
             for index, scenario in enumerate(self.data["scenarios"]):
-                button = BubbleToggle(scenario["title"])
-                button.clicked.connect(lambda _=False, i=index: self.select(i))
-                self.picker_group.addButton(button)
-                self.picker.addWidget(button)
-                self._buttons.append(button)
+                choice = QPushButton(scenario["title"])
+                choice.setProperty("choice", True)
+                choice.setCheckable(True)
+                choice.setFont(theme.body(14))
+                choice.setCursor(Qt.CursorShape.PointingHandCursor)
+                choice.clicked.connect(lambda _=False, i=index: self.select(i))
+                self.picker_group.addButton(choice)
+                self.picker.addWidget(choice)
+                self._buttons.append(choice)
             self.picker.addStretch(1)
         self.select(min(self.selected, len(self._buttons) - 1))
 
@@ -103,11 +104,13 @@ class LimitsPage(Page):
         self.selected = index
         scenario = self.data["scenarios"][index]
         self._buttons[index].setChecked(True)
-        self.title.setText(scenario["title"])
+        self.chart_panel.set_title(scenario["title"])
         self.sentence.setText(scenario["sentence"])
         self.chart.set_points(scenario["points"])
         rates = self.data["rates"]
+        flat = all(p["traced_right"] == p["lead_right"] == p["lead_wrong"] == 0 for p in scenario["points"])
         self.note.setText(
+            ("All three lines sit at 0%: no copy is ever named, right or wrong. " if flat else "") +
             f"Simulation, not field results: {self.data['trials']:,} runs per point among {scenario['candidates']:,} "
             f"candidate copies, run {when(self.data['generated_at'])}. Misread rates are {self.data['rates_source']}: "
             f"typed values {rates['typed_value']:.0%}, retold values {rates['retold_value']:.0%}, "
@@ -125,5 +128,3 @@ class LimitsPage(Page):
         if self.app_window is not None:
             audit.record(self.app_window.conn, "simulation run", {"from": "limits screen"})
         self.refresh()
-        if self.app_window is not None:
-            self.app_window.marks.set_states(self.marks())

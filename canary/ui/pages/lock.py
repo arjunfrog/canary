@@ -1,8 +1,11 @@
 from PySide6.QtCore import Qt, QTimer, Signal
-from PySide6.QtWidgets import QHBoxLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget
+from PySide6.QtGui import QFont
+from PySide6.QtWidgets import QFrame, QHBoxLayout, QLineEdit, QVBoxLayout, QWidget
 
 from ...lock import LockGuard
 from .. import theme
+from ..widgets.pill import Pill
+from ..widgets.text import heading, plain, primary_button
 
 
 class LockPage(QWidget):
@@ -13,34 +16,59 @@ class LockPage(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.guard = LockGuard()
-        name = QLabel("Canary")
-        name.setFont(theme.display(120))
-        self.prompt = QLabel("Type the passphrase to unlock.")
+        card = QFrame()
+        card.setObjectName("lockcard")
+        card.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+        card.setFixedWidth(400)
+
+        mark = QWidget()
+        mark.setFixedSize(18, 18)
+        mark.setStyleSheet(f"background: {theme.CANARY.name()}; border-radius: 5px;")
+        name = heading("Canary", 22)
+        brand = QHBoxLayout()
+        brand.setSpacing(8)
+        brand.addWidget(mark)
+        brand.addWidget(name)
+        brand.addStretch(1)
+        self.prompt = plain("Type the passphrase to unlock.", 14, role="muted", wrap=True)
         self.field = QLineEdit()
         self.field.setEchoMode(QLineEdit.EchoMode.Password)
         self.field.setPlaceholderText("Passphrase")
-        self.field.setFixedWidth(420)
+        self.field.setFont(theme.body(15))
         self.field.returnPressed.connect(self._submit)
-        self.button = QPushButton("Unlock")
-        self.button.setProperty("primary", True)
+        self.button = primary_button("Unlock")
+        self.button.setMinimumHeight(34)
         self.button.clicked.connect(self._submit)
-        self.message = QLabel("")
-        self.message.setProperty("role", "error")
+        self.message = plain("", 13, role="error", wrap=True)
+        self.message.setVisible(False)
 
-        row = QHBoxLayout()
-        row.setSpacing(12)
-        row.addWidget(self.field)
-        row.addWidget(self.button)
-        row.addStretch(1)
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 40, 0, 0)
-        layout.setSpacing(16)
-        layout.addWidget(name)
-        layout.addWidget(self.prompt)
-        layout.addLayout(row)
-        layout.addWidget(self.message)
-        layout.addStretch(1)
-        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        inner = QVBoxLayout(card)
+        inner.setContentsMargins(24, 22, 24, 22)
+        inner.setSpacing(10)
+        inner.addLayout(brand)
+        inner.addSpacing(2)
+        inner.addWidget(self.prompt)
+        inner.addSpacing(4)
+        inner.addWidget(self.field)
+        inner.addWidget(self.button)
+        inner.addWidget(self.message)
+
+        footnote = plain("Runs on this laptop only. Nothing is hosted.", 12, role="muted")
+        synthetic = Pill("Mock exam, synthetic people", "inconclusive", px=12)
+        foot = QHBoxLayout()
+        foot.setSpacing(10)
+        foot.addStretch(1)
+        foot.addWidget(synthetic)
+        foot.addWidget(footnote)
+        foot.addStretch(1)
+
+        column = QVBoxLayout(self)
+        column.setContentsMargins(16, 16, 16, 16)
+        column.addStretch(3)
+        column.addWidget(card, 0, Qt.AlignmentFlag.AlignHCenter)
+        column.addSpacing(14)
+        column.addLayout(foot)
+        column.addStretch(4)
 
         self._countdown = QTimer(self)
         self._countdown.setInterval(1000)
@@ -48,6 +76,7 @@ class LockPage(QWidget):
 
     def show_message(self, text: str) -> None:
         self.message.setText(text)
+        self.message.setVisible(bool(text))
 
     def _submit(self) -> None:
         if self.guard.blocked_for() > 0:

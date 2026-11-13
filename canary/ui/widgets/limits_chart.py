@@ -6,9 +6,9 @@ from .. import theme
 
 SERIES = (
     # key, legend words, colour, line width, dashed, point radius
-    ("traced_right", "Right copy traced", theme.BALLPOINT, 2.6, False, 5.5),
-    ("lead_right", "Right copy named, strong lead or better", theme.BALLPOINT, 1.4, True, 3.0),
-    ("lead_wrong", "A wrong copy named", theme.SEAL, 1.6, False, 3.0),
+    ("traced_right", "Right copy traced", theme.ACCENT, 2.4, False, 4.5),
+    ("lead_right", "Right copy named, strong lead or better", theme.ACCENT, 1.4, True, 3.0),
+    ("lead_wrong", "A wrong copy named", theme.DANGER, 1.6, False, 3.0),
 )
 
 
@@ -57,8 +57,8 @@ class LimitsChart(QWidget):
             painter.setPen(Qt.PenStyle.NoPen)
             painter.setBrush(colour)
             painter.drawEllipse(QPointF(x + 15, 16), radius, radius)
-            painter.setPen(theme.CARBON)
-            painter.setFont(theme.body(14))
+            painter.setPen(theme.INK)
+            painter.setFont(theme.body(13))
             advance = painter.fontMetrics().horizontalAdvance(words)
             painter.drawText(QRectF(x + 38, 4, advance + 4, 24), Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft, words)
             x += 38 + advance + 34
@@ -67,25 +67,25 @@ class LimitsChart(QWidget):
         painter.setFont(small)
         for share in (0.0, 0.25, 0.5, 0.75, 1.0):
             y = plot.bottom() - share * plot.height()
-            painter.setPen(QPen(theme.DROPOUT if share == 0 else theme.RULE, 1))
+            painter.setPen(QPen(theme.BORDER_STRONG if share == 0 else theme.BORDER, 1))
             painter.drawLine(QPointF(plot.left(), y), QPointF(plot.right(), y))
-            painter.setPen(theme.MUTED)
+            painter.setPen(theme.INK_2)
             painter.drawText(QRectF(0, y - 10, plot.left() - 10, 20), Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter,
                              f"{share * 100:.0f}%")
         if not self._points:
             return
         for i, point in enumerate(self._points):
             at = self._at(i, 0)
-            painter.setPen(QPen(theme.DROPOUT, 1))
+            painter.setPen(QPen(theme.BORDER_STRONG, 1))
             painter.drawLine(QPointF(at.x(), plot.bottom()), QPointF(at.x(), plot.bottom() + 5))
-            painter.setPen(theme.CARBON)
+            painter.setPen(theme.INK)
             painter.drawText(QRectF(at.x() - 30, plot.bottom() + 8, 60, 20), Qt.AlignmentFlag.AlignHCenter, str(point["k"]))
-        painter.setPen(theme.MUTED)
+        painter.setPen(theme.INK_2)
         painter.drawText(QRectF(plot.left(), plot.bottom() + 30, plot.width(), 22),
                          Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter, "Questions in the leak")
 
-        # the lines, least important first so the traced line sits on top
-        for key, words, colour, width, dashed, radius in reversed(SERIES):
+        # the lines: strong lead, then traced, then a wrong copy last, so the safety figure is never hidden
+        for key, words, colour, width, dashed, radius in (SERIES[1], SERIES[0], SERIES[2]):
             path = QPainterPath()
             for i, point in enumerate(self._points):
                 at = self._at(i, point[key])
@@ -103,8 +103,8 @@ class LimitsChart(QWidget):
                 painter.drawEllipse(self._at(i, point[key]), radius, radius)
 
         # the traced line carries its numbers
-        painter.setFont(theme.body(14))
-        painter.setPen(theme.BALLPOINT)
+        painter.setFont(theme.body(13))
+        painter.setPen(theme.ACCENT_INK)
         for i, point in enumerate(self._points):
             share = point["traced_right"]
             at = self._at(i, share)
@@ -112,5 +112,5 @@ class LimitsChart(QWidget):
             below = share > 0.9
             advance = painter.fontMetrics().horizontalAdvance(words)
             box = QRectF(at.x() - advance / 2 - 3, at.y() + (10 if below else -30), advance + 6, 20)
-            painter.fillRect(box, theme.BOND)                  # keeps the number readable where another line passes
+            painter.fillRect(box, theme.SURFACE)                  # keeps the number readable where another line passes
             painter.drawText(box, Qt.AlignmentFlag.AlignCenter, words)

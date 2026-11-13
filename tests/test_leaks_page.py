@@ -13,7 +13,7 @@ from canary.ui import theme  # noqa: E402
 from canary.ui.main_window import MainWindow  # noqa: E402
 from canary.ui.pages.leaks import AddLeakDialog, verdict_words  # noqa: E402
 from canary.ui.widgets import StatusLine  # noqa: E402
-from canary.ui.widgets.ruled_table import ToneRole  # noqa: E402
+from canary.ui.widgets.ruled_table import PillRole  # noqa: E402
 from canary.vault import Vault  # noqa: E402
 
 PASSPHRASE = "a long test passphrase"
@@ -72,7 +72,7 @@ def test_rows_show_chat_sender_time_status_and_verdict(window):
     assert (cell(0, 3), cell(0, 4)) == ("Waiting to be read", "No verdict yet")
     assert (cell(1, 3), cell(1, 4)) == ("Read", "Not our paper")
     assert (cell(2, 1), cell(2, 2), cell(2, 4)) == ("Added by hand", "Added by hand", "Traced: translator copy 23")
-    assert model.data(model.index(2, 4), ToneRole) == "traced" and model.data(model.index(1, 4), ToneRole) == "seal"
+    assert model.data(model.index(2, 4), PillRole) == "traced" and model.data(model.index(1, 4), PillRole) == "not_our_paper"
     assert "3 leaks, 1 waiting" in page.summary.text()
     work(window)
     window.on_leak_changed(3)
@@ -100,7 +100,7 @@ def test_opening_a_row_opens_its_case_and_a_caseless_row_opens_the_leak(window):
     assert case.view.status == "queued" and case.banner.title.text() == "Waiting to be read"
     work(window)
     window.on_leak_changed(case.leak_id)                         # the leak on screen has now been read
-    assert case.banner.title.text() == "We couldn't read this clearly."
+    assert case.banner.title.text() == "We couldn't read this clearly"
 
 
 def test_follow_new_leaks_opens_the_new_case_and_plays_its_real_funnel(window, monkeypatch):
@@ -167,10 +167,10 @@ def test_locking_closes_the_add_dialog(window):
 
 def test_verdict_words_never_name_a_copy_without_a_verdict_that_allows_it():
     row = lambda **kw: queries.LeakRow(1, "manual", "c", "s", None, "2026", kw.pop("status", "done"), kw.pop("verdict", None), 1, **kw)
-    assert verdict_words(row(verdict="inconclusive")) == ("Not enough to name anyone yet", "muted")
-    assert verdict_words(row(verdict="strong_lead", stage="print", copy_no=12)) == ("Strong lead: printed copy 12", "lead")
+    assert verdict_words(row(verdict="inconclusive")) == ("Not enough to name anyone yet", "inconclusive")
+    assert verdict_words(row(verdict="strong_lead", stage="print", copy_no=12)) == ("Strong lead: printed copy 12", "strong_lead")
     assert verdict_words(row(status="unreadable"))[0] == "We couldn't read this clearly"
-    assert verdict_words(row(status="failed")) == ("No verdict", "seal")
+    assert verdict_words(row(status="failed")) == ("No verdict", "failed")
 
 
 # ---- the status line
@@ -182,7 +182,7 @@ def test_the_status_line_reports_chats_telegram_and_the_photo_reader(app):
     line = StatusLine()
     status = queries.Status([("examleaks_demo", "Exam <b>leaks</b>"), ("neet_demo", "NEET")], {"queued": 1, "done": 3}, 4, True)
     line.show_status(status, lurker.ListenerState(True, "Telegram connected on port 5222.", 2), READY)
-    assert line.text() == ("Watching 2 chats.  Telegram connected on port 5222.  Photo reader ready, on this Mac.  "
+    assert line.text() == ("Watching 2 chats.\nTelegram connected on port 5222.\nPhoto reader ready, on this Mac.\n"
                            "1 leak waiting to be read.")
     line.show_status(status, lurker.ListenerState(True, "Telegram connected.", 2),
                      (False, "Photos can only be read on a Mac. Typed leaks still work."))
@@ -250,7 +250,6 @@ def test_limits_screen_says_when_the_simulation_has_not_been_run(window):
     window.show_page("limits")
     assert not page.missing.isHidden() and page.loaded.isHidden() and not page.run_button.isHidden()
     assert "has not been run on this laptop yet" in page.message.text()
-    assert window.marks.states() == [False] * 7
 
 
 def test_limits_screen_draws_from_the_saved_file_without_rerunning(window, monkeypatch):
@@ -266,7 +265,6 @@ def test_limits_screen_draws_from_the_saved_file_without_rerunning(window, monke
     assert len(page._buttons) == 7 and page._buttons[0].isChecked()
     assert page.title.text() == "Translator leak, typed, values kept" and len(page.chart.points()) == 7
     assert "Simulation, not field results" in page.note.text() and "assumed" in page.note.text()
-    assert window.marks.states() == [True, True, True, False, True, True, False]
     page._buttons[3].click()
     assert page.title.text().startswith("Translator leak with numbers removed") and "cannot name anyone" in page.sentence.text()
     assert all(p["traced_right"] == 0 for p in page.chart.points())

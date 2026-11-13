@@ -1,8 +1,8 @@
 from pathlib import Path
 
 from PySide6.QtCore import QSize, Qt
-from PySide6.QtGui import QImageReader, QPixmap, QTextCharFormat, QTextCursor
-from PySide6.QtWidgets import QLabel, QPlainTextEdit, QTextEdit, QVBoxLayout, QWidget
+from PySide6.QtGui import QImageReader, QPixmap, QTextBlockFormat, QTextCursor
+from PySide6.QtWidgets import QLabel, QPlainTextEdit, QVBoxLayout, QWidget
 
 from .. import theme
 from .text import plain
@@ -24,11 +24,12 @@ class LeakView(QWidget):
         self.image.setTextFormat(Qt.TextFormat.PlainText)
         self.image.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
         self.image.setVisible(False)
-        self.note = plain("", 14, role="muted", wrap=True)
+        self.note = plain("", 13, role="muted", wrap=True)
         self.note.setVisible(False)
         self.text = QPlainTextEdit()
         self.text.setReadOnly(True)
-        self.text.setFont(theme.body(15))
+        self.text.setFont(theme.body(14))
+        self.text.setProperty("embedded", True)
         self.text.setLineWrapMode(QPlainTextEdit.LineWrapMode.WidgetWidth)
         self.text.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse | Qt.TextInteractionFlag.TextSelectableByKeyboard)
         self.text.setMinimumHeight(140)
@@ -64,33 +65,31 @@ class LeakView(QWidget):
             text = view.raw_text or ""
             spans = []
             for q in view.questions:
-                if q.exposed and q.span:                       # the question itself, not its options
-                    start, end = q.span
-                    labels = [i for i in (text.find(mark, start, end) for mark in ("\n(A)", "\n(a)", "\nA)", "\nA.", "\n(1)"))
-                              if i > start]
-                    spans.append((start, min(labels) if labels else end))
+                if q.exposed and q.span:                       # the whole question, options included
+                    spans.append(tuple(q.span))
             self._highlight(spans)
 
     def _highlight(self, spans: list[tuple[int, int]]) -> None:
-        """Mark exposed questions in highlighter, always with black text."""
-        fmt = QTextCharFormat()
-        fmt.setBackground(theme.HIGHLIGHTER)
-        fmt.setForeground(theme.TIMING)
+        """Tint each real question from the paper as one block, every line of it, wrapped lines and options included.
+
+        The tint is a block background, which the text box paints the full width of every line it covers.
+        """
+        document = self.text.document()
         length = len(self.text.toPlainText())
-        selections = []
+        tint = QTextBlockFormat()
+        tint.setBackground(theme.ACCENT_SOFT)
+        count = 0
         for start, end in spans:
             if not 0 <= start < end <= length:
                 continue
-            cursor = QTextCursor(self.text.document())
-            cursor.setPosition(start)
-            cursor.setPosition(end, QTextCursor.MoveMode.KeepAnchor)
-            selection = QTextEdit.ExtraSelection()
-            selection.cursor, selection.format = cursor, fmt
-            selections.append(selection)
-        self.text.setExtraSelections(selections)
-        self.highlighted = len(selections)
-        top = QTextCursor(self.text.document())
-        self.text.setTextCursor(top)
+            block = document.findBlock(start)
+            while block.isValid() and block.position() < end:
+                cursor = QTextCursor(block)
+                cursor.mergeBlockFormat(tint)
+                block = block.next()
+            count += 1
+        self.highlighted = count
+        self.text.setTextCursor(QTextCursor(document))
 
     def _load_image(self, path: str) -> None:
         reader = QImageReader(path)
@@ -114,7 +113,7 @@ class LeakView(QWidget):
 
     def _fit(self) -> None:
         if self._pixmap is not None:
-            box = QSize(max(120, self.width()), 240)
+            box = QSize(max(120, self.width()), 200)
             self.image.setPixmap(self._pixmap.scaled(box, Qt.AspectRatioMode.KeepAspectRatio,
                                                      Qt.TransformationMode.SmoothTransformation))
 

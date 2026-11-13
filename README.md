@@ -151,9 +151,9 @@ canary/                    the app — one Python package
     theme.py                   palette and fonts
     background.py              worker and Telegram listener beside the window
     screenshot.py              renders every screen to PNG
-    widgets/                   Bubble, OMRNumber, Funnel, CustodyTimeline, ClueTable, LeakView, LimitsChart…
+    widgets/                   Panel, Pill, Switch, Funnel, CustodyTimeline, ClueTable, LeakView, LimitsChart…
     pages/                     Lock, Leaks, Case, Limits
-    fonts/                     Khand & Mukta (bundled)
+    fonts/                     Mukta (bundled)
 tests/                     pytest suite (244 tests)
 bank/                      question sources & build_bank.py
 scripts/                   the scripts that built the frozen test leaks

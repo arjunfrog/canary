@@ -138,12 +138,14 @@ def test_a_traced_case_shows_source_copy_holder_clues_and_time(page):
     assert page.link.text() == "https://t.me/examleaks_demo/41" and page.copy_link.isVisible()
     assert page.banner.verdict == "traced" and page.banner.title.text() == "Traced"
     assert page.stage_words.text() == "Leaked after printing"
-    assert page.omr.accessibleName() == "Copy 4821" and "Kavya Nair" in page.issued_to.text()
+    assert (page.copy_number.text(), page.copy_kind.text()) == ("4821", "Printed copy") and "Kavya Nair" in page.issued_to.text()
+    assert page.matched_value.text() == "7 of 8" and page.risk_figure.text() == "1 in 2.7 million"
     assert page.fit_value.text() == "1 of 5,000" and page.risk_value.text() == "1 in 2.7 million"
     assert page.read_in.text() == "Read in 38 s"
-    assert page.clue_table.row_count() == 8 and page.timeline.height() > 100
+    assert page.clue_table.row_count() == 8
+    lines = page.timeline.lines()
+    assert len(lines) == 2 and lines[-1].endswith("Kavya Nair, centre superintendent · held it at the leak")
     assert "7 of 8 clues match printed copy 4821" in page.sentence.text()
-    assert page.marks() == [True, True, False, True, True, True, True, True]      # one per clue, black when read
     assert page.leak_view.highlighted == 1                                       # only the real question is in highlighter
     page._copy_link()
     assert QApplication.clipboard().text() == "https://t.me/examleaks_demo/41"
@@ -159,16 +161,21 @@ def test_every_verdict_has_honest_wording(page, verdict, title, words):
     page.show_case(view, play=False)
     assert page.banner.title.text() == title and words in page.sentence.text()
     named = verdict == "strong_lead"
-    assert (page.omr is not None) == named
+    if verdict == "not_our_paper":
+        assert not page.copy_cell.isHidden() and page.copy_cell.label.text() == "Questions read"
+        assert (page.copy_number.text(), page.matched_value.text(), page.copy_kind.text()) == ("2", "1", "")
+    else:
+        assert (page.copy_number.text() != "None named") == named
     assert page.custody_section.isVisible() == named
     if verdict == "inconclusive":
-        assert "No copy is named" in page.copy_kind.text() and not page.issue.isVisible()
+        assert page.copy_number.text() == "None named" and not page.issue.isVisible()
+        assert page.matched_cell.label.text() == "Clues read"
         assert page.fit_value.text() == "3 of 5,000"
     if verdict == "not_our_paper":
         assert not page.lower.isVisible() and not page.funnel_row.isVisible() and not page.response_section.isVisible()
 
 
-@pytest.mark.parametrize("status, title", [("unreadable", "We couldn't read this clearly."), ("queued", "Waiting to be read"),
+@pytest.mark.parametrize("status, title", [("unreadable", "We couldn't read this clearly"), ("queued", "Waiting to be read"),
                                            ("failed", "This leak could not be analysed")])
 def test_leaks_without_a_case_say_what_happened_in_plain_words(page, status, title):
     page.show_case(fixture_view(status=status), play=False)
@@ -191,7 +198,7 @@ def test_leaked_text_is_only_ever_shown_as_plain_text(page):
 def test_the_case_screen_uses_only_the_theme_fonts(page):
     page.show_case(fixture_view(), play=False)
     families = {label.font().family() for label in page.findChildren(QLabel)}
-    assert families <= {"Khand", "Mukta"}
+    assert families == {"Mukta"}
 
 
 def test_a_replay_is_labelled_and_cannot_issue_evidence(page):
@@ -205,8 +212,7 @@ def test_a_replay_is_labelled_and_cannot_issue_evidence(page):
 def test_showing_another_case_replaces_the_copy_number(page):
     page.show_case(fixture_view(), play=False)
     page.show_case(fixture_view(stage="translation", copy_no=23, total=50), play=False)
-    numbers = page.findChildren(type(page.omr))
-    assert [n.accessibleName() for n in numbers if n.parent() is not None] == ["Copy 23"]
+    assert (page.copy_number.text(), page.copy_kind.text()) == ("23", "Translator copy")
     assert page.stage_words.text() == "Leaked before printing"
 
 
@@ -219,7 +225,7 @@ def test_widgets_build_on_their_own(app):
     table = ClueTable()
     table.set_clues(fixture_view().clues, named=True)
     model = table.model()
-    assert [model.data(model.index(r, 2)) for r in (0, 2, 3)] == ["Matches this copy", "Could not be read", "Does not match"]
+    assert [model.data(model.index(r, 2)) for r in (0, 2, 3)] == ["Matches", "Could not be read", "Does not match"]
     view = LeakView()
     view.show_leak(fixture_view())
     assert view.highlighted == 1

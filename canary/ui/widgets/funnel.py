@@ -6,6 +6,8 @@ from PySide6.QtWidgets import QSizePolicy, QWidget
 
 from .. import theme
 
+EMPTY = theme.CELL                   # a copy that no longer fits: a quiet grey cell
+
 
 class Funnel(QWidget):
     """One bubble per candidate copy, emptying clue by clue until the copies that still fit are left.
@@ -15,7 +17,7 @@ class Funnel(QWidget):
     says which copies were still in the running.
     """
 
-    PAD = 10                           # room for the ring drawn round a single small bubble
+    PAD = 10                           # room for the ring drawn round a single small cell
     progress = Signal(float)           # how many steps have played, with the fraction of the one in progress
     finished = Signal()
 
@@ -107,7 +109,11 @@ class Funnel(QWidget):
             if width / cols < best[2]:
                 break
         cols, rows, cell = best
-        cell = min(cell, 44.0)
+        if cell > 30.0:                                  # cells stay small; spread them across the width instead
+            cell = 30.0
+            cols = min(self._n, max(1, int(width // cell)))
+            rows = -(-self._n // cols)
+            cell = min(30.0, height / rows)
         return cols, rows, cell, float(pad if cell < 14 else 0), float(pad if cell < 14 else 0)
 
     def _centre(self, slot: int, grid) -> QPointF:
@@ -130,18 +136,18 @@ class Funnel(QWidget):
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         grid = self._grid()
         cell = grid[2]
-        radius = max(1.0, cell * 0.36)
+        side = max(1.0, cell * (0.78 if cell >= 8 else 0.86))     # a square with a gap, like a cell in a grid
+        corner = min(3.0, side * 0.2)
+        painter.setPen(Qt.PenStyle.NoPen)
         if kind == "empty":
-            painter.setPen(QPen(theme.DROPOUT, 1.5 if cell >= 14 else (1.0 if cell >= 7 else 0.6)))
-            painter.setBrush(Qt.BrushStyle.NoBrush)
-            for slot in range(self._n):
-                painter.drawEllipse(self._centre(slot, grid), radius, radius)
+            painter.setBrush(EMPTY)
+            slots = range(self._n)
         else:
-            painter.setPen(Qt.PenStyle.NoPen)
-            painter.setBrush(theme.BALLPOINT)
-            fill = radius + (0.75 if cell >= 14 else 0.4)
-            for slot in self._order[:count]:
-                painter.drawEllipse(self._centre(slot, grid), fill, fill)
+            painter.setBrush(theme.ACCENT)
+            slots = self._order[:count]
+        for slot in slots:
+            c = self._centre(slot, grid)
+            painter.drawRoundedRect(QRectF(c.x() - side / 2, c.y() - side / 2, side, side), corner, corner)
         painter.end()
         self._cache[key] = pixmap
         return pixmap
@@ -165,14 +171,14 @@ class Funnel(QWidget):
             painter.setOpacity(1.0)
         if self._named and self._position >= last and self._order:
             grid = self._grid()
-            if grid[2] < 14:                               # a single small dot needs a ring to be found
+            if grid[2] < 14:                               # a single small cell needs a ring to be found
                 painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-                painter.setPen(QPen(theme.BALLPOINT, 2))
+                painter.setPen(QPen(theme.ACCENT, 2))
                 painter.setBrush(Qt.BrushStyle.NoBrush)
                 centre = self._centre(self._order[0], grid)
                 painter.drawEllipse(centre, 9, 9)
                 painter.setPen(Qt.PenStyle.NoPen)
-                painter.setBrush(theme.BALLPOINT)
+                painter.setBrush(theme.ACCENT)
                 painter.drawEllipse(centre, 3.5, 3.5)
 
     def resizeEvent(self, event) -> None:

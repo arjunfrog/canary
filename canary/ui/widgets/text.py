@@ -1,4 +1,4 @@
-"""Labels and small helpers shared by the screens.
+"""Labels, buttons and small helpers shared by the screens.
 
 Text that came from a leak or from Telegram is untrusted. plain() makes a label that shows its text
 exactly as written and never interprets it as rich text or a link.
@@ -12,7 +12,7 @@ from PySide6.QtWidgets import QLabel, QPushButton
 from .. import theme
 
 
-def plain(text: str = "", px: int = 16, role: str | None = None, weight: QFont.Weight = QFont.Weight.Normal,
+def plain(text: str = "", px: int = 14, role: str | None = None, weight: QFont.Weight = QFont.Weight.Normal,
           wrap: bool = False, selectable: bool = False) -> QLabel:
     label = QLabel()
     label.setTextFormat(Qt.TextFormat.PlainText)          # never rich text, whatever the string contains
@@ -27,33 +27,41 @@ def plain(text: str = "", px: int = 16, role: str | None = None, weight: QFont.W
     return label
 
 
-def heading(text: str, px: int = 30, semibold: bool = False) -> QLabel:
+def heading(text: str, px: int = 15) -> QLabel:
     label = QLabel()
     label.setTextFormat(Qt.TextFormat.PlainText)
     label.setText(text)
-    label.setFont(theme.display(px, semibold=semibold))
+    label.setFont(theme.heading(px))
     return label
 
 
 def caption(text: str) -> QLabel:
-    """A small muted label over a value."""
-    return plain(text, 14, role="muted")
+    """A small secondary label over a value."""
+    return plain(text, 12, role="muted")
 
 
-def link_button(text: str) -> QPushButton:
+def _button(text: str, kind: str | None) -> QPushButton:
     button = QPushButton(text)
-    button.setProperty("link", True)
-    button.setFont(theme.body(16))
+    if kind:
+        button.setProperty(kind, True)
+    button.setFont(theme.body(14, QFont.Weight.Medium))
     button.setCursor(Qt.CursorShape.PointingHandCursor)
     return button
+
+
+def button(text: str) -> QPushButton:
+    """A secondary action: white, bordered."""
+    return _button(text, None)
 
 
 def primary_button(text: str) -> QPushButton:
-    button = QPushButton(text)
-    button.setProperty("primary", True)
-    button.setFont(theme.body(18))
-    button.setCursor(Qt.CursorShape.PointingHandCursor)
-    return button
+    """The one main action of a screen."""
+    return _button(text, "primary")
+
+
+def link_button(text: str) -> QPushButton:
+    """A quiet action that reads as a link."""
+    return _button(text, "link")
 
 
 def when(iso: str | None) -> str:
@@ -68,6 +76,15 @@ def when(iso: str | None) -> str:
         moment = moment.replace(tzinfo=timezone.utc)
     local = moment.astimezone()
     return f"{local.day} {local.strftime('%b %Y, %H:%M')}"
+
+
+def short_when(iso: str | None) -> str:
+    """An ISO time as "13 Nov, 09:30", for rows where the year is the same throughout."""
+    full = when(iso)
+    if full == "Time not known":
+        return full
+    day_month_year, clock = full.split(", ")
+    return f"{day_month_year.rsplit(' ', 1)[0]}, {clock}"
 
 
 def one_in(expected: float | None) -> str:

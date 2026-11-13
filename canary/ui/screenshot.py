@@ -47,8 +47,7 @@ def fixture_home(root: Path) -> list[int]:
         pass
     failed = leaks.add_manual_leak(conn, text=leak_text(printed[40:50]))
     conn.execute("UPDATE leaks SET status = 'failed', error = ? WHERE id = ?",
-                 ("Google wants payment before this key can be used: check Billing for this key's project in Google AI "
-                  "Studio. Typed leaks still work.", failed))
+                 ("The Mac could not read this image. It may be damaged or in an unusual format.", failed))
     conn.commit()
     queued = leaks.add_manual_leak(conn, text=leak_text(printed[30:40]))
     conn.close()
@@ -89,9 +88,7 @@ def render_all(out_dir: Path, width: int = 1440, height: int = 900) -> list[Path
             grab("lock")
             # Show the screens without the passphrase step and without starting the background thread.
             window._unlocked = True
-            window.name.setVisible(True)
             window.nav_bar.setVisible(True)
-            window.status.setVisible(True)
             window.status.show_status(queries.status(window.conn), None, (True, "Photo reader ready, on this Mac."))
             window.show_page("leaks")
             grab("leaks")

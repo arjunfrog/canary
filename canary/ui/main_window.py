@@ -1,6 +1,7 @@
 import time
 
 from PySide6.QtCore import QEvent, QObject, Qt, QTimer
+from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (QButtonGroup, QFrame, QHBoxLayout, QLabel, QMainWindow, QPushButton, QStackedWidget,
                                QVBoxLayout, QWidget)
 
@@ -9,14 +10,15 @@ from ..vault import Vault, WrongPassphrase
 from . import theme
 from .background import Background
 from .pages import CasePage, LeaksPage, LimitsPage, LockPage
-from .widgets import StatusLine, SyntheticLabel, TimingMarks
-from .widgets.ruled_section import rule
+from .widgets import Pill, StatusLine
+from .widgets.text import heading
 
 ACTIVITY = {QEvent.Type.KeyPress, QEvent.Type.MouseButtonPress, QEvent.Type.MouseMove, QEvent.Type.Wheel}
+SIDEBAR_WIDTH = 208
 
 
 class MainWindow(QMainWindow):
-    """The sheet every screen sits on: timing marks down the left, navigation on top, one screen at a time.
+    """The console: a sidebar with the screens and the status, and one screen at a time beside it.
 
     It opens locked. The passphrase opens the vault, starts the background thread and shows the Leaks screen.
     After 10 minutes with no key or mouse activity it locks again. Nothing can be opened while it is locked.
@@ -37,32 +39,49 @@ class MainWindow(QMainWindow):
         self.conn = db.connect()
         self._last_activity = time.monotonic()
 
-        # left rail: timing marks and the margin rule
-        self.marks = TimingMarks(total=14, done=0)      # the screen being shown sets these
-        rail = QWidget()
-        rail.setFixedWidth(64)
-        rail_layout = QVBoxLayout(rail)
-        rail_layout.setContentsMargins(16, 118, 16, 0)
-        rail_layout.addWidget(self.marks)
-        rail_layout.addStretch(1)
-        margin = QFrame()
-        margin.setFixedWidth(1)
-        margin.setStyleSheet(f"background: {theme.DROPOUT.name()};")
-
-        # header: name, navigation, synthetic label
-        self.name = QLabel("Canary")
-        self.name.setFont(theme.display(40))
+        # sidebar: the mark, the screens, the synthetic label and the status
+        self.nav_bar = QFrame()
+        self.nav_bar.setObjectName("sidebar")
+        self.nav_bar.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+        self.nav_bar.setFixedWidth(SIDEBAR_WIDTH)
+        mark = QLabel()
+        mark.setFixedSize(16, 16)
+        mark.setStyleSheet(f"background: {theme.CANARY.name()}; border-radius: 4px;")
+        self.name = heading("Canary", 17)
+        brand = QHBoxLayout()
+        brand.setContentsMargins(6, 0, 0, 0)
+        brand.setSpacing(8)
+        brand.addWidget(mark)
+        brand.addWidget(self.name)
+        brand.addStretch(1)
         self.nav = QButtonGroup(self)
         self.nav.setExclusive(True)
-        self.nav_bar = QWidget()
-        nav_layout = QHBoxLayout(self.nav_bar)
-        nav_layout.setContentsMargins(32, 0, 0, 2)
-        nav_layout.setSpacing(24)
-        header = QHBoxLayout()
-        header.addWidget(self.name, 0, Qt.AlignmentFlag.AlignBottom)
-        header.addWidget(self.nav_bar, 0, Qt.AlignmentFlag.AlignBottom)
-        header.addStretch(1)
-        header.addWidget(SyntheticLabel(), 0, Qt.AlignmentFlag.AlignVCenter)
+        self._buttons: dict[str, QPushButton] = {}
+        side = QVBoxLayout(self.nav_bar)
+        side.setContentsMargins(10, 14, 10, 12)
+        side.setSpacing(2)
+        side.addLayout(brand)
+        side.addSpacing(14)
+        for key, label in (("leaks", "Leaks"), ("limits", "Limits")):
+            button = QPushButton(label)
+            button.setCheckable(True)
+            button.setProperty("nav", True)
+            button.setFont(theme.body(14, QFont.Weight.Medium))
+            button.setCursor(Qt.CursorShape.PointingHandCursor)
+            button.clicked.connect(lambda _=False, k=key: self.show_page(k))
+            self.nav.addButton(button)
+            side.addWidget(button)
+            self._buttons[key] = button
+        side.addStretch(1)
+        self.synthetic = Pill("Mock exam, synthetic people", "inconclusive", px=12)
+        side.addWidget(self.synthetic, 0, Qt.AlignmentFlag.AlignLeft)
+        side.addSpacing(10)
+        self.status = StatusLine()
+        self.status.setContentsMargins(4, 0, 4, 0)
+        side.addWidget(self.status)
+        if replay is not None:
+            for button in self._buttons.values():
+                button.setEnabled(False)             # a replay shows one case and nothing else
 
         # screens
         self.stack = QStackedWidget()
@@ -72,38 +91,13 @@ class MainWindow(QMainWindow):
         self.stack.addWidget(self.lock_page)
         for page in self.pages.values():
             self.stack.addWidget(page)
-        self._buttons: dict[str, QPushButton] = {}
-        for key, label in (("leaks", "Leaks"), ("limits", "Limits")):
-            button = QPushButton(label)
-            button.setCheckable(True)
-            button.setProperty("nav", True)
-            button.setFont(theme.body(20))
-            button.setCursor(Qt.CursorShape.PointingHandCursor)
-            button.clicked.connect(lambda _=False, k=key: self.show_page(k))
-            self.nav.addButton(button)
-            nav_layout.addWidget(button)
-            self._buttons[key] = button
-        if replay is not None:
-            self.nav_bar.setEnabled(False)               # a replay shows one case and nothing else
-
-        self.status = StatusLine()
-        sheet = QVBoxLayout()
-        sheet.setContentsMargins(40, 28, 40, 16)
-        sheet.setSpacing(10)
-        sheet.addLayout(header)
-        sheet.addWidget(rule())
-        sheet.addSpacing(18)
-        sheet.addWidget(self.stack, 1)
-        sheet.addWidget(rule(theme.RULE))
-        sheet.addWidget(self.status)
 
         root = QWidget()
         row = QHBoxLayout(root)
         row.setContentsMargins(0, 0, 0, 0)
         row.setSpacing(0)
-        row.addWidget(rail)
-        row.addWidget(margin)
-        row.addLayout(sheet, 1)
+        row.addWidget(self.nav_bar)
+        row.addWidget(self.stack, 1)
         self.setCentralWidget(root)
 
         self._idle = QTimer(self)
@@ -124,10 +118,7 @@ class MainWindow(QMainWindow):
 
     def lock(self, first: bool = False) -> None:
         self._unlocked = False
-        self.name.setVisible(False)              # the lock screen shows the name itself, large
-        self.nav_bar.setVisible(False)
-        self.status.setVisible(False)
-        self.marks.set_progress(14, 0)
+        self.nav_bar.setVisible(False)           # the lock screen stands alone
         for page in self.pages.values():
             page.on_lock()                       # close dialogs and stop animations, so nothing shows behind the lock
         self.stack.setCurrentWidget(self.lock_page)
@@ -156,9 +147,7 @@ class MainWindow(QMainWindow):
         self._unlocked = True
         audit.record(self.conn, "unlocked")
         self._last_activity = time.monotonic()
-        self.name.setVisible(True)
         self.nav_bar.setVisible(True)
-        self.status.setVisible(True)
         if self.replay is not None:
             audit.record(self.conn, "replay opened", {"leak_id": self.replay.leak_id})
             self.status.show_replay()
@@ -192,7 +181,6 @@ class MainWindow(QMainWindow):
             button.setChecked(name == key)
             self.nav.setExclusive(True)
         self.pages[key].refresh()
-        self.marks.set_states(self.pages[key].marks())
 
     def open_case(self, case_id: int, play: bool = True) -> bool:
         """Show the Case screen for one case, and record that it was viewed. Does nothing while locked."""
@@ -224,11 +212,7 @@ class MainWindow(QMainWindow):
         page = self.pages["case"]
         page.show_case(view, play=play)
         self.stack.setCurrentWidget(page)
-        self.nav.setExclusive(False)
-        for button in self._buttons.values():
-            button.setChecked(False)
-        self.nav.setExclusive(True)
-        self.marks.set_states(page.marks())
+        self._buttons["leaks"].setChecked(True)          # a case belongs to the Leaks screen
 
     def on_leak_changed(self, leak_id: int) -> None:
         if not self._unlocked:

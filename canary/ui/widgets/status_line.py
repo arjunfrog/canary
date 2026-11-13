@@ -5,13 +5,14 @@ from .. import theme
 
 
 class StatusLine(QLabel):
-    """Watched chats, Telegram and the photo reader at a glance."""
+    """Watched chats, Telegram and the photo reader at a glance, one fact per line, at the foot of the sidebar."""
 
     def __init__(self, parent=None):
         super().__init__("", parent)
         self.setTextFormat(Qt.TextFormat.PlainText)          # chat titles come from Telegram: plain text only
-        self.setFont(theme.body(14))
-        self.setProperty("role", "small")
+        self.setFont(theme.body(12))
+        self.setProperty("role", "muted")
+        self.setWordWrap(True)
 
     def show_replay(self) -> None:
         self.setText("Replay. Nothing is being read or watched, and no network is used.")
@@ -35,4 +36,4 @@ class StatusLine(QLabel):
             parts.append(f"{waiting} leak{'s' if waiting != 1 else ''} waiting to be read.")
         if not status.seeded:
             parts.append("No copies yet. Run: python -m canary seed")
-        self.setText("  ".join(parts))
+        self.setText("\n".join(parts))

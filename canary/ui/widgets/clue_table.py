@@ -1,8 +1,9 @@
 from PySide6.QtCore import QAbstractTableModel, QModelIndex, Qt
 
-from .ruled_table import BubbleRole, RuledTable, ToneRole
+from .ruled_table import MarkRole, RuledTable, ToneRole
 
 KIND_WORDS = {"value": "Values", "trap": "Trap question", "order": "Option order"}
+ROW = 30
 
 
 class ClueModel(QAbstractTableModel):
@@ -30,28 +31,28 @@ class ClueModel(QAbstractTableModel):
         return None
 
     def result(self, clue) -> tuple[str, bool | None, str | None]:
-        """(words, bubble, tone) for one clue."""
+        """(words, mark, tone) for one clue. The mark is filled for a match and hollow for a miss."""
         if not clue.read_ok:
             return "Could not be read", None, "muted"
         if clue.kind == "value" and clue.matched is None and self._named:
-            return "Real values: shows it was printed", None, "muted"
+            return "Real value", None, "muted"
         if not self._named or clue.matched is None:
             return "Read", None, None
-        return ("Matches this copy", True, None) if clue.matched else ("Does not match", False, "muted")
+        return ("Matches", True, None) if clue.matched else ("Does not match", False, "muted")
 
     def data(self, index, role=Qt.ItemDataRole.DisplayRole):
         if not index.isValid():
             return None
         clue = self._rows[index.row()]
-        words, bubble, tone = self.result(clue)
+        words, mark, tone = self.result(clue)
         if role == Qt.ItemDataRole.DisplayRole:
             if index.column() == 0:
-                return f"Question {clue.number}" if clue.number is not None else "Question"
+                return f"{clue.number}" if clue.number is not None else ""
             if index.column() == 1:
                 return KIND_WORDS.get(clue.kind, "")
             return words
-        if role == BubbleRole and index.column() == 2:
-            return bubble
+        if role == MarkRole and index.column() == 2:
+            return mark
         if role == ToneRole and index.column() == 2:
             return tone
         return None
@@ -61,18 +62,17 @@ class ClueTable(RuledTable):
     """Each clue read from the leak: which question, what kind of clue, and whether it matched the named copy."""
 
     def __init__(self, parent=None):
-        super().__init__(parent, row_height=36)
+        super().__init__(parent, row_height=ROW)
         self._model = ClueModel(self)
         self.setModel(self._model)
         self.setSelectionMode(RuledTable.SelectionMode.NoSelection)
         self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self.setColumnWidth(0, 130)
-        self.setColumnWidth(1, 130)
+        self.setCursor(Qt.CursorShape.ArrowCursor)
+        self.setColumnWidth(0, 74)
+        self.setColumnWidth(1, 108)
 
     def set_clues(self, clues: list, named: bool) -> None:
         self._model.set_clues(clues, named)
-        rows = self._model.rowCount()
-        self.setFixedHeight(min(rows, 9) * 36 + 38 if rows else 38)
 
     def row_count(self) -> int:
         return self._model.rowCount()

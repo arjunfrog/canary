@@ -8,7 +8,7 @@ from PySide6.QtWidgets import QApplication  # noqa: E402
 
 from canary.ui import theme  # noqa: E402
 from canary.ui.main_window import MainWindow  # noqa: E402
-from canary.ui.widgets import OMRNumber, VerdictBanner  # noqa: E402
+from canary.ui.widgets import Pill, VerdictBadge  # noqa: E402
 
 PASSPHRASE = "a long test passphrase"
 
@@ -87,9 +87,12 @@ def test_screenshot_writes_an_image_per_screen(app, canary_home, tmp_path):
 
 
 def test_base_widgets_build(app):
-    assert OMRNumber(4821).accessibleName() == "Copy 4821"
-    for verdict in ("traced", "strong_lead", "inconclusive", "not_our_paper"):
-        assert VerdictBanner(verdict).verdict == verdict
+    assert (Pill("Traced", "traced").text(), Pill("Traced", "traced").tone()) == ("Traced", "traced")
+    words = {"traced": "Traced", "strong_lead": "Strong lead", "inconclusive": "Not enough to name anyone yet",
+             "not_our_paper": "Not our paper"}
+    for verdict, title in words.items():
+        badge = VerdictBadge(verdict)
+        assert badge.verdict == verdict and badge.title.text() == title and badge.note.text()
 
 
 # ---- task 8: opening cases
@@ -128,14 +131,14 @@ def test_open_case_switches_to_the_case_screen_and_writes_the_audit_row(case_win
     assert not win.open_case(99999)
 
 
-def test_the_timing_marks_are_set_by_the_screen_being_shown(case_window):
+def test_the_sidebar_shows_which_screen_is_open_and_a_case_belongs_to_leaks(case_window):
     win = case_window
-    win.show_page("leaks")
-    assert win.marks.states() == [True, True]                  # one mark per leak, black once read
-    win.open_case(win.ids["case"], play=False)
-    assert win.marks.states() == [True] * 28                   # one mark per clue, black when read
     win.show_page("limits")
-    assert win.marks.states() != [True] * 28
+    assert win._buttons["limits"].isChecked() and not win._buttons["leaks"].isChecked()
+    win.open_case(win.ids["case"], play=False)
+    assert win._buttons["leaks"].isChecked() and not win._buttons["limits"].isChecked()
+    win.show_page("leaks")
+    assert win._buttons["leaks"].isChecked()
 
 
 def test_nothing_can_be_opened_while_the_window_is_locked(case_window):

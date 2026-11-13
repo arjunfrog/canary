@@ -1,0 +1,579 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-13T23:55:09+00:00",
+  "title": "Design System: Canary",
+  "extensions": {
+    "colorMeta": {
+      "ground": {
+        "role": "neutral",
+        "displayName": "Cool Ground",
+        "canonical": "#F6F7F9",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#0B0B0C",
+          "#242526",
+          "#414243",
+          "#606163",
+          "#818284",
+          "#A4A5A7",
+          "#C8C9CB",
+          "#EEEEEF"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Paper White",
+        "canonical": "#FFFFFF",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#A5A5A5",
+          "#C9C9C9",
+          "#EEEEEE"
+        ]
+      },
+      "sunken": {
+        "role": "neutral",
+        "displayName": "Quiet Fill",
+        "canonical": "#F2F4F7",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#0A0B0D",
+          "#242527",
+          "#404244",
+          "#606164",
+          "#818285",
+          "#A3A5A8",
+          "#C7C9CC",
+          "#EEEEF0"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#E3E6EB",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#090B0E",
+          "#232529",
+          "#404246",
+          "#5F6166",
+          "#808287",
+          "#A2A5AA",
+          "#C6C9CE",
+          "#EDEEF1"
+        ]
+      },
+      "border-strong": {
+        "role": "neutral",
+        "displayName": "Firm Line",
+        "canonical": "#CDD2DA",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#0A0B0E",
+          "#232529",
+          "#3F4246",
+          "#5E6167",
+          "#7F8389",
+          "#A1A5AC",
+          "#C5C9D1",
+          "#ECEEF2"
+        ]
+      },
+      "cell": {
+        "role": "neutral",
+        "displayName": "Ruled-out Cell",
+        "canonical": "#E4E8EE",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#090B0F",
+          "#22252A",
+          "#3F4247",
+          "#5E6167",
+          "#7F8388",
+          "#A1A5AB",
+          "#C5C9CF",
+          "#EDEEF1"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#0E1525",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#050A19",
+          "#1D2535",
+          "#3A4252",
+          "#5A6171",
+          "#7B8291",
+          "#9FA5B3",
+          "#C3C9D5",
+          "#ECEEF3"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Secondary Ink",
+        "canonical": "#525B71",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#070B15",
+          "#1F2533",
+          "#3A4254",
+          "#586177",
+          "#7A8296",
+          "#9EA5B7",
+          "#C3C9D8",
+          "#ECEEF3"
+        ]
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Faint Ink",
+        "canonical": "#8A92A6",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#080B12",
+          "#21252F",
+          "#3D424F",
+          "#5B6171",
+          "#7B8295",
+          "#9DA5B8",
+          "#C2C9DB",
+          "#ECEEF5"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Canary Blue",
+        "canonical": "#2B59E8",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#02003F",
+          "#04116F",
+          "#1130A2",
+          "#2550D8",
+          "#4777F9",
+          "#709FFF",
+          "#9CC6FF",
+          "#DFEFFF"
+        ]
+      },
+      "accent-hover": {
+        "role": "primary",
+        "displayName": "Pressed Blue",
+        "canonical": "#1F47C9",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#030042",
+          "#030E71",
+          "#1130A3",
+          "#2953D0",
+          "#4F7BE8",
+          "#78A1FF",
+          "#A3C8FF",
+          "#E2EFFF"
+        ]
+      },
+      "accent-soft": {
+        "role": "primary",
+        "displayName": "Blue Wash",
+        "canonical": "#EBF0FE",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#0A0B0F",
+          "#23252B",
+          "#3F4249",
+          "#5E6169",
+          "#7F828C",
+          "#A1A5B0",
+          "#C4C9D5",
+          "#ECEEF4"
+        ]
+      },
+      "accent-ink": {
+        "role": "primary",
+        "displayName": "Blue Ink",
+        "canonical": "#1D43BE",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#030043",
+          "#030F70",
+          "#1131A1",
+          "#2C55C9",
+          "#527CE3",
+          "#7BA2FB",
+          "#A5C8FF",
+          "#E2EFFF"
+        ]
+      },
+      "canary": {
+        "role": "brand",
+        "displayName": "Canary Yellow",
+        "canonical": "#F2C200",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#190600",
+          "#372000",
+          "#593D00",
+          "#7D5C00",
+          "#A37D00",
+          "#CA9F00",
+          "#F3C308",
+          "#FFEEBD"
+        ]
+      },
+      "traced-ink": {
+        "role": "state",
+        "displayName": "Traced Green ink",
+        "canonical": "#0B6B39",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#001300",
+          "#00300D",
+          "#005126",
+          "#1F7342",
+          "#519367",
+          "#7DB48D",
+          "#A8D6B5",
+          "#E4F3E8"
+        ]
+      },
+      "traced-fill": {
+        "role": "state",
+        "displayName": "Traced Green fill",
+        "canonical": "#E2F5E9",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#070D09",
+          "#1F2722",
+          "#3B453F",
+          "#59655D",
+          "#79867E",
+          "#9AA9A0",
+          "#BDCEC3",
+          "#E9F1EC"
+        ]
+      },
+      "lead-ink": {
+        "role": "state",
+        "displayName": "Lead Amber ink",
+        "canonical": "#8A4A00",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#1E0100",
+          "#411700",
+          "#673100",
+          "#8E4F0D",
+          "#AD7444",
+          "#CC9971",
+          "#EBBF9E",
+          "#FAEBE1"
+        ]
+      },
+      "lead-fill": {
+        "role": "state",
+        "displayName": "Lead Amber fill",
+        "canonical": "#FDF0D9",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#0F0A04",
+          "#2A241B",
+          "#484135",
+          "#686052",
+          "#8A8171",
+          "#AEA491",
+          "#D3C8B3",
+          "#F3EEE4"
+        ]
+      },
+      "slate-ink": {
+        "role": "state",
+        "displayName": "Slate ink",
+        "canonical": "#475069",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#060A18",
+          "#1E2436",
+          "#394158",
+          "#586179",
+          "#7A8298",
+          "#9DA5B8",
+          "#C2C9DA",
+          "#ECEEF4"
+        ]
+      },
+      "slate-fill": {
+        "role": "state",
+        "displayName": "Slate fill",
+        "canonical": "#ECEEF3",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#0A0B0E",
+          "#242529",
+          "#404246",
+          "#5F6165",
+          "#808287",
+          "#A3A5AA",
+          "#C7C9CE",
+          "#EDEEF0"
+        ]
+      },
+      "alarm-ink": {
+        "role": "state",
+        "displayName": "Alarm Red ink",
+        "canonical": "#A3191D",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#2B0000",
+          "#550000",
+          "#81000B",
+          "#AC2B29",
+          "#CA5A53",
+          "#E8857C",
+          "#FFB0A7",
+          "#FFE7E3"
+        ]
+      },
+      "alarm-fill": {
+        "role": "state",
+        "displayName": "Alarm Red fill",
+        "canonical": "#FCE7E7",
+        "qtSource": "canary/ui/theme.py",
+        "tonalRamp": [
+          "#100909",
+          "#2B2323",
+          "#4A3F3F",
+          "#6A5E5E",
+          "#8D7E7E",
+          "#B1A0A0",
+          "#D7C4C4",
+          "#F5ECEC"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page titles in PageHeader."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Panel titles."
+      },
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "Key numbers in the figures strip and the funnel count. Rendered from the nearest bundled Mukta face; no Bold file is bundled."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text, table cells, leak text, inputs."
+      },
+      "body-small": {
+        "displayName": "Body small",
+        "purpose": "Subtitles, verdict notes, response lists, chart labels, error messages."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Captions over figures, notes under values, sidebar status lines."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "Push buttons and sidebar items."
+      },
+      "pill": {
+        "displayName": "Pill",
+        "purpose": "Verdict and label pills, 12 to 14px."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "funnel-step",
+        "value": "420ms per clue, clamped to 2600-9000ms total, crossfade (QVariantAnimation)",
+        "purpose": "The funnel narrowing; the only self-playing animation. CANARY_REDUCE_MOTION=1 shows the final state."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "window-min",
+        "value": "1100x700"
+      },
+      {
+        "name": "window-default",
+        "value": "1440x900"
+      }
+    ],
+    "platform": "Native PySide6 (Qt Widgets, Fusion style). Snippets are web approximations for the panel only; the product has no HTML or CSS."
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one main action of a screen (primary_button()).",
+      "html": "<button class=\"ds-btn-primary\">Issue evidence file</button>",
+      "css": ".ds-btn-primary { font-family: Mukta, sans-serif; font-variant-numeric: tabular-nums; font-size: 14px; font-weight: 500; background: #2B59E8; color: #FFFFFF; border: 1px solid #2B59E8; border-radius: 6px; padding: 4px 12px; min-height: 30px; cursor: pointer; } .ds-btn-primary:hover { background: #1F47C9; border-color: #1F47C9; } .ds-btn-primary:focus-visible { outline: none; border-color: #0E1525; } .ds-btn-primary:disabled { background: #E3E6EB; color: #8A92A6; border-color: #E3E6EB; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "A secondary action: white, bordered (button()).",
+      "html": "<button class=\"ds-btn-secondary\">Back to leaks</button>",
+      "css": ".ds-btn-secondary { font-family: Mukta, sans-serif; font-variant-numeric: tabular-nums; font-size: 14px; font-weight: 500; background: #FFFFFF; color: #0E1525; border: 1px solid #CDD2DA; border-radius: 6px; padding: 4px 12px; min-height: 30px; cursor: pointer; } .ds-btn-secondary:hover { background: #F2F4F7; } .ds-btn-secondary:active { background: #E3E6EB; } .ds-btn-secondary:focus-visible { outline: none; border-color: #2B59E8; }"
+    },
+    {
+      "name": "Link Button",
+      "kind": "button",
+      "refersTo": "button-link",
+      "description": "A quiet in-panel action that reads as a link (link_button()).",
+      "html": "<button class=\"ds-btn-link\">Play again</button>",
+      "css": ".ds-btn-link { font-family: Mukta, sans-serif; font-variant-numeric: tabular-nums; font-size: 14px; font-weight: 500; background: transparent; color: #1D43BE; border: none; padding: 2px 0; cursor: pointer; } .ds-btn-link:hover { color: #1F47C9; text-decoration: underline; } .ds-btn-link:focus-visible { outline: 1px solid #2B59E8; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "QLineEdit: white, firm border, blue border on focus, no glow.",
+      "html": "<input class=\"ds-input\" placeholder=\"Passphrase\" type=\"password\">",
+      "css": ".ds-input { font-family: Mukta, sans-serif; font-variant-numeric: tabular-nums; font-size: 14px; background: #FFFFFF; color: #0E1525; border: 1px solid #CDD2DA; border-radius: 6px; padding: 6px 10px; } .ds-input::placeholder { color: #8A92A6; } .ds-input:focus, .ds-input:focus-visible { outline: none; border-color: #2B59E8; } .ds-input:disabled { background: #F2F4F7; color: #8A92A6; border-color: #E3E6EB; }"
+    },
+    {
+      "name": "Sidebar",
+      "kind": "nav",
+      "refersTo": "sidebar",
+      "description": "The 208px white sidebar: brand mark, screens, synthetic pill, status lines.",
+      "html": "<nav class=\"ds-side\"><div class=\"ds-side-brand\"><span class=\"ds-side-mark\"></span>Canary</div><a class=\"ds-side-item ds-side-active\">Leaks</a><a class=\"ds-side-item\">Limits</a></nav>",
+      "css": ".ds-side { font-family: Mukta, sans-serif; font-variant-numeric: tabular-nums; width: 208px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E3E6EB; padding: 14px 10px 12px; display: flex; flex-direction: column; gap: 2px; } .ds-side-brand { display: flex; align-items: center; gap: 8px; padding-left: 6px; margin-bottom: 14px; font-size: 17px; font-weight: 600; color: #0E1525; } .ds-side-mark { width: 16px; height: 16px; border-radius: 4px; background: #F2C200; } .ds-side-item { font-size: 14px; font-weight: 500; color: #525B71; padding: 5px 10px; border-radius: 6px; cursor: pointer; } .ds-side-item:hover { background: #F2F4F7; color: #0E1525; } .ds-side-active, .ds-side-active:hover { background: #EBF0FE; color: #1D43BE; }"
+    },
+    {
+      "name": "Verdict Pills",
+      "kind": "chip",
+      "refersTo": "pill-traced",
+      "description": "State colour lives only here, always with the verdict in words.",
+      "html": "<div class=\"ds-pills\"><span class=\"ds-pill ds-pill-traced\">Traced</span><span class=\"ds-pill ds-pill-lead\">Strong lead</span><span class=\"ds-pill ds-pill-quiet\">Not enough to name anyone yet</span><span class=\"ds-pill ds-pill-alarm\">Not our paper</span></div>",
+      "css": ".ds-pills { display: flex; flex-wrap: wrap; gap: 8px; } .ds-pill { font-family: Mukta, sans-serif; font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 600; border-radius: 9999px; padding: 2px 9px; line-height: 19px; } .ds-pill-traced { background: #E2F5E9; color: #0B6B39; } .ds-pill-lead { background: #FDF0D9; color: #8A4A00; } .ds-pill-quiet { background: #ECEEF3; color: #475069; } .ds-pill-alarm { background: #FCE7E7; color: #A3191D; }"
+    },
+    {
+      "name": "Panel",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "A white bordered panel with a title row and divider. Never nested, no shadow.",
+      "html": "<section class=\"ds-panel\"><header class=\"ds-panel-head\"><span class=\"ds-panel-title\">Clues</span><span class=\"ds-panel-sub\">28 of 28 match this copy</span></header><div class=\"ds-panel-body\">All 28 clues match translator copy 23. No other copy comes close.</div></section>",
+      "css": ".ds-panel { font-family: Mukta, sans-serif; font-variant-numeric: tabular-nums; background: #FFFFFF; border: 1px solid #E3E6EB; border-radius: 8px; color: #0E1525; } .ds-panel-head { display: flex; gap: 10px; align-items: baseline; padding: 8px 12px; border-bottom: 1px solid #E3E6EB; } .ds-panel-title { font-size: 14px; font-weight: 600; } .ds-panel-sub { font-size: 12px; color: #525B71; margin-left: auto; } .ds-panel-body { font-size: 14px; padding: 10px 12px 12px; }"
+    },
+    {
+      "name": "Figures Strip",
+      "kind": "custom",
+      "refersTo": "panel",
+      "description": "Key figures in one flush panel, cells split by vertical hairlines.",
+      "html": "<div class=\"ds-figs\"><div class=\"ds-fig\"><span class=\"ds-fig-cap\">Copy</span><span class=\"ds-fig-val\">23</span><span class=\"ds-fig-cap\">Translator copy</span></div><div class=\"ds-fig\"><span class=\"ds-fig-cap\">Clues that match</span><span class=\"ds-fig-val\">28 of 28</span></div><div class=\"ds-fig\"><span class=\"ds-fig-cap\">Chance of a match this good by luck</span><span class=\"ds-fig-val\">under 1 in a trillion</span></div></div>",
+      "css": ".ds-figs { font-family: Mukta, sans-serif; font-variant-numeric: tabular-nums; display: flex; background: #FFFFFF; border: 1px solid #E3E6EB; border-radius: 8px; } .ds-fig { flex: 1; display: flex; flex-direction: column; gap: 2px; padding: 9px 14px 10px; } .ds-fig + .ds-fig { border-left: 1px solid #E3E6EB; } .ds-fig-cap { font-size: 12px; color: #525B71; } .ds-fig-val { font-size: 22px; font-weight: 700; color: #0E1525; }"
+    },
+    {
+      "name": "Ruled Table",
+      "kind": "custom",
+      "refersTo": "table-row",
+      "description": "RuledTable: quiet header, one hairline per row, no grid.",
+      "html": "<table class=\"ds-table\"><thead><tr><th>Question</th><th>Clue</th><th>Result</th></tr></thead><tbody><tr><td>1</td><td>Values</td><td><span class=\"ds-mark\"></span>Matches</td></tr><tr class=\"ds-sel\"><td>1</td><td>Option order</td><td><span class=\"ds-mark\"></span>Matches</td></tr><tr><td>2</td><td>Values</td><td><span class=\"ds-mark ds-mark-off\"></span>No match</td></tr></tbody></table>",
+      "css": ".ds-table { font-family: Mukta, sans-serif; font-variant-numeric: tabular-nums; border-collapse: collapse; width: 100%; font-size: 14px; color: #0E1525; } .ds-table th { background: #F2F4F7; color: #525B71; font-size: 12px; font-weight: 500; text-align: left; height: 30px; padding: 4px 10px; border-bottom: 1px solid #E3E6EB; } .ds-table td { height: 36px; padding: 0 10px; border-bottom: 1px solid #E3E6EB; } .ds-table tbody tr:hover { background: #F2F4F7; } .ds-table tr.ds-sel { background: #EBF0FE; } .ds-mark { display: inline-block; width: 9px; height: 9px; border-radius: 2px; background: #2B59E8; margin-right: 8px; } .ds-mark-off { background: transparent; border: 1.2px solid #8A92A6; box-sizing: border-box; }"
+    },
+    {
+      "name": "Funnel",
+      "kind": "custom",
+      "refersTo": "funnel-cell-live",
+      "description": "Signature: every candidate copy as a cell; ruled-out copies grey, copies that still fit blue.",
+      "html": "<div class=\"ds-funnel\"><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell ds-live\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell ds-live\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell ds-live\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i><i class=\"ds-cell\"></i></div>",
+      "css": ".ds-funnel { display: grid; grid-template-columns: repeat(14, 22px); gap: 8px; } .ds-cell { width: 22px; height: 22px; border-radius: 3px; background: #E4E8EE; } .ds-live { background: #2B59E8; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Quiet Console",
+    "overview": "Canary is a security console made to the standard of Linear, Vercel and the Stripe Dashboard. A side navigation, a header per screen, a strip of key figures, then the work in bordered white panels on a cool near-white ground. Everything is visible in one laptop screen at 1440x900. The density comes from tight, aligned panels and hairline rules, not from shrinking the type.\n\nThe system holds back colour so that colour means something. Ink and greys do the structural work. One blue marks what the operator can act on and what still fits. State tones appear only as verdict pills, and each pill says its verdict in words. The Canary yellow appears once per screen, as the brand mark. The only thing that moves by itself is the funnel.\n\nThe owner retired the old answer-sheet (OMR) look on 14 Nov 2026. Bubbles as decoration, timing marks, pink rules and highlighter yellow are no longer part of the system. The console also must not read as a generic admin dashboard, a dark hacker terminal, a playful colourful app or a lifeless grey one.",
+    "keyCharacteristics": [
+      "Light theme only, identical on macOS and Windows (Fusion style plus one fixed `QPalette`).",
+      "One typeface, Mukta, with tabular figures in every size.",
+      "White 8px panels with 1px borders on a cool ground, never nested, no shadows.",
+      "One blue accent for actions, selection, links and live copies; never for state.",
+      "State colour lives in verdict pills, always beside the verdict in words.",
+      "Sentence case everywhere; plain words for an exam controller."
+    ],
+    "rules": [
+      {
+        "name": "The One Accent Rule",
+        "body": "Blue means \"act here\" or \"still fits\". It never marks a verdict, a warning or a success.",
+        "section": "colors"
+      },
+      {
+        "name": "The Pill-Only State Rule",
+        "body": "Green, amber and red appear as verdict pills, with the verdict in words on the pill. Colour is never the only carrier of a verdict.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Canary Rule",
+        "body": "Yellow is the brand mark and nothing else: not a highlight, not a warning, not a verdict.",
+        "section": "colors"
+      },
+      {
+        "name": "The setFont Rule",
+        "body": "Fonts are set in code with `theme.body(px, weight)` or `theme.heading(px)` and `setFont`. Never write a font rule in a stylesheet for a plain widget; a stylesheet font overrides `setFont`. Sizes are in pixels so macOS and Windows match.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Rule",
+        "body": "Every font from `theme.body()` turns on `tnum`, so digits line up in columns and do not jump while they change.",
+        "section": "typography"
+      },
+      {
+        "name": "The Sentence Case Rule",
+        "body": "Every label, title, button and pill is in sentence case. No all-caps, no letter-spaced eyebrows, no monospace labels.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Screen Rule",
+        "body": "A decided case fits at 1440x900 without the page scrolling. Long content scrolls inside its panel.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat Panel Rule",
+        "body": "No drop shadows, no gradients. A panel is white with a 1px Hairline border.",
+        "section": "elevation"
+      },
+      {
+        "name": "The No Nesting Rule",
+        "body": "Panels are never nested inside each other. Inside a panel, separate regions with `divider()` (a 1px Hairline line), not with another bordered box.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** take every colour from `canary/ui/theme.py`; never write a new hex in a screen.",
+      "**Do** set fonts with `theme.body(px, weight)` or `theme.heading(px)` and `setFont`, in pixels, with tabular figures.",
+      "**Do** show anything read from a leak or from Telegram through `plain()` or `Qt.TextFormat.PlainText`, never as rich text or a live link.",
+      "**Do** put state colour only in a `Pill` or `VerdictBadge`, with the verdict in words on it.",
+      "**Do** keep the number behind a verdict next to the verdict, in the figures strip.",
+      "**Do** separate regions inside a panel with `divider()`, and lay screens out with `Page.frame()` (16px gutter, 12px gap).",
+      "**Do** give every screen a loading, empty and error state, and label demo data \"Mock exam, synthetic people\".",
+      "**Do** draw pills, the switch, funnel cells, table marks, timelines and charts with `QPainter`.",
+      "**Do** honour `CANARY_REDUCE_MOTION=1` by showing the funnel's final state."
+    ],
+    "donts": [
+      "**Don't** use a dark theme, or let macOS or Windows dark mode change the palette.",
+      "**Don't** use Canary Blue for a state, a warning or a success.",
+      "**Don't** use Canary Yellow anywhere but the brand mark.",
+      "**Don't** nest a panel inside a panel, or add drop shadows or gradients.",
+      "**Don't** write a font rule in a stylesheet for a plain widget.",
+      "**Don't** use all-caps labels, letter-spaced eyebrows or monospace labels.",
+      "**Don't** put arrows or icons in buttons.",
+      "**Don't** use default Qt table styling, native grey group boxes, Qt Charts or a web view.",
+      "**Don't** point at a copy on an inconclusive case, in words or in pictures.",
+      "**Don't** animate anything except the funnel.",
+      "**Don't** bring back the retired answer-sheet look: decorative bubbles, timing marks, pink rules, highlighter yellow."
+    ]
+  }
+}

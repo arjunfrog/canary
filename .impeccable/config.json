@@ -1,0 +1,80 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-13T23:18:23.297Z",
+        "reason": "throwaway decision sketch, not shipping UI; density is the brief (user: \"i dont like too much padding\")"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-13T23:18:23.323Z",
+        "reason": "throwaway decision sketch, not shipping UI; density is the brief (user: \"i dont like too much padding\")"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-13T23:18:23.347Z",
+        "reason": "throwaway decision sketch; the flagged lines are single-line display numbers (copy number, key figures), not body text"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/coupon.html"
+        ],
+        "createdAt": "2026-11-13T23:22:02.784Z",
+        "reason": "throwaway decision sketch; the faint text is the numbers of ruled-out copies, deliberately receded like a disabled item"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/terminal.html"
+        ],
+        "createdAt": "2026-11-13T23:22:02.805Z",
+        "reason": "throwaway decision sketch; the faint text is the struck-out numbers of ruled-out copies, deliberately receded like a disabled item"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/coupon.html"
+        ],
+        "createdAt": "2026-11-13T23:22:23.643Z",
+        "reason": "throwaway decision sketch, not shipping UI; density is the brief (user: \"i dont like too much padding\")"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/terminal.html"
+        ],
+        "createdAt": "2026-11-13T23:22:23.665Z",
+        "reason": "throwaway decision sketch, not shipping UI; density is the brief (user: \"i dont like too much padding\")"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/board.html"
+        ],
+        "createdAt": "2026-11-13T23:22:23.685Z",
+        "reason": "throwaway decision sketch, not shipping UI; density is the brief (user: \"i dont like too much padding\")"
+      }
+    ]
+  }
+}

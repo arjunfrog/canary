@@ -1,34 +1,35 @@
 from pathlib import Path
 
 from PySide6.QtCore import QAbstractTableModel, QModelIndex, Qt
-from PySide6.QtWidgets import QDialog, QFileDialog, QHBoxLayout, QPlainTextEdit, QVBoxLayout
+from PySide6.QtGui import QFont
+from PySide6.QtWidgets import QDialog, QFileDialog, QHBoxLayout, QPlainTextEdit, QVBoxLayout, QWidget
 
 from ... import leaks, queries
 from .. import theme
-from ..widgets import BubbleToggle, RuledSection, RuledTable
-from ..widgets.ruled_table import ToneRole
-from ..widgets.text import COPY_WORDS, heading, link_button, plain, primary_button, when
-from .placeholder import Page
+from ..widgets import Panel, RuledTable, Switch, divider
+from ..widgets.ruled_table import PillRole, ToneRole
+from ..widgets.text import COPY_WORDS, button, caption, heading, plain, primary_button, when
+from .placeholder import Page, PageHeader
 
 STATUS_WORDS = {"queued": "Waiting to be read", "reading": "Being read", "done": "Read", "unreadable": "Couldn't read it",
                 "failed": "Could not be analysed"}
 
 
-def verdict_words(row) -> tuple[str, str | None]:
-    """(words, tone) for a leak's verdict cell."""
+def verdict_words(row) -> tuple[str, str]:
+    """(words, tone) for a leak's verdict cell. The tone names one of theme.TONES."""
     if row.verdict == "traced":
         return f"Traced: {COPY_WORDS.get(row.stage, 'copy').lower()} {row.copy_no}", "traced"
     if row.verdict == "strong_lead":
-        return f"Strong lead: {COPY_WORDS.get(row.stage, 'copy').lower()} {row.copy_no}", "lead"
+        return f"Strong lead: {COPY_WORDS.get(row.stage, 'copy').lower()} {row.copy_no}", "strong_lead"
     if row.verdict == "inconclusive":
-        return "Not enough to name anyone yet", "muted"
+        return "Not enough to name anyone yet", "inconclusive"
     if row.verdict == "not_our_paper":
-        return "Not our paper", "seal"
+        return "Not our paper", "not_our_paper"
     if row.status == "unreadable":
-        return "We couldn't read this clearly", "muted"
+        return "We couldn't read this clearly", "unreadable"
     if row.status == "failed":
-        return "No verdict", "seal"
-    return "No verdict yet", "muted"
+        return "No verdict", "failed"
+    return "No verdict yet", "waiting"
 
 
 class LeaksModel(QAbstractTableModel):
@@ -61,12 +62,12 @@ class LeaksModel(QAbstractTableModel):
         if role == Qt.ItemDataRole.DisplayRole:
             return (when(row.posted_at or row.received_at), row.chat, row.sender, STATUS_WORDS.get(row.status, row.status),
                     verdict_words(row)[0])[index.column()]
+        if role == PillRole and index.column() == 4:
+            return verdict_words(row)[1]
         if role == ToneRole:
-            if index.column() == 4:
-                return verdict_words(row)[1]
-            if index.column() == 3 and row.status in ("failed",):
-                return "seal"
-            if index.column() == 3 and row.status in ("queued", "reading", "unreadable"):
+            if index.column() == 3 and row.status == "failed":
+                return "error"
+            if index.column() in (0, 3) and row.status != "failed":
                 return "muted"
         return None
 
@@ -81,44 +82,49 @@ class AddLeakDialog(QDialog):
         self.setWindowTitle("Add a leak")
         self.setModal(True)
         self.setAcceptDrops(True)
-        self.resize(720, 560)
+        self.resize(640, 480)
         self.text = QPlainTextEdit()
         self.text.setProperty("editable", True)
-        self.text.setFont(theme.body(15))
+        self.text.setFont(theme.body(14))
         self.text.setPlaceholderText("Paste the text of the leak here.")
         self.text.setAcceptDrops(False)                      # dropped files go to the dialog, not into the text
-        self.choose = link_button("Choose an image")
+        self.choose = button("Choose an image")
         self.choose.clicked.connect(self._choose)
-        self.image_label = plain("Or drop an image here: a photo or screenshot of the paper.", 15, role="muted")
-        self.message = plain("", 15, role="error", wrap=True)
+        self.image_label = plain("Or drop a photo or screenshot of the paper here.", 13, role="muted")
+        self.message = plain("", 13, role="error", wrap=True)
+        self.message.setVisible(False)
         self.add = primary_button("Add this leak")
         self.add.clicked.connect(self._submit)
-        self.cancel = link_button("Cancel")
+        self.cancel = button("Cancel")
         self.cancel.clicked.connect(self.reject)
         image_row = QHBoxLayout()
-        image_row.setSpacing(16)
+        image_row.setSpacing(10)
         image_row.addWidget(self.choose)
         image_row.addWidget(self.image_label, 1)
         buttons = QHBoxLayout()
-        buttons.setSpacing(20)
-        buttons.addWidget(self.add)
-        buttons.addWidget(self.cancel)
+        buttons.setSpacing(8)
         buttons.addStretch(1)
+        buttons.addWidget(self.cancel)
+        buttons.addWidget(self.add)
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(32, 24, 32, 24)
-        layout.setSpacing(12)
-        layout.addWidget(heading("Add a leak", 34))
-        layout.addWidget(plain("Typed leaks are read on this laptop, with no network. Images go to the photo reader.", 15,
+        layout.setContentsMargins(20, 18, 20, 18)
+        layout.setSpacing(10)
+        layout.addWidget(heading("Add a leak", 18))
+        layout.addWidget(plain("Typed leaks and photos are both read on this laptop. Nothing is sent anywhere.", 13,
                                role="muted", wrap=True))
         layout.addWidget(self.text, 1)
         layout.addLayout(image_row)
         layout.addWidget(self.message)
         layout.addLayout(buttons)
 
+    def _say(self, text: str) -> None:
+        self.message.setText(text)
+        self.message.setVisible(bool(text))
+
     def set_image(self, path: str) -> None:
         self.image_path = path
         self.image_label.setText(f"Image chosen: {Path(path).name}")
-        self.message.setText("")
+        self._say("")
 
     def _choose(self) -> None:
         path, _ = QFileDialog.getOpenFileName(self, "Choose an image of the leak", "", "Images (*.jpg *.jpeg *.png *.webp)")
@@ -140,18 +146,32 @@ class AddLeakDialog(QDialog):
             return
         text = self.text.toPlainText()
         if self.image_path and text.strip():
-            self.message.setText("Add the text or the image, not both. Clear one of them.")
+            self._say("Add the text or the image, not both. Clear one of them.")
             return
         if not self.image_path and not text.strip():
-            self.message.setText("Paste some text or choose an image first.")
+            self._say("Paste some text or choose an image first.")
             return
         try:
             self.leak_id = leaks.add_manual_leak(self.conn, text=None if self.image_path else text,
                                                  image_path=self.image_path)
         except leaks.LeakRefused as exc:
-            self.message.setText(str(exc))
+            self._say(str(exc))
             return
         self.accept()
+
+
+class Figure(QWidget):
+    """One key figure in a strip: a small label over a number."""
+
+    def __init__(self, label: str, parent=None):
+        super().__init__(parent)
+        self.label = caption(label)
+        self.value = plain("0", 20, weight=QFont.Weight.DemiBold)
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(14, 8, 14, 9)
+        layout.setSpacing(0)
+        layout.addWidget(self.label)
+        layout.addWidget(self.value)
 
 
 class LeaksPage(Page):
@@ -160,43 +180,53 @@ class LeaksPage(Page):
     def __init__(self, window=None):
         super().__init__(window)
         self._dialog: AddLeakDialog | None = None
-        section = RuledSection("Leaks")
-        self.follow_toggle = BubbleToggle("Follow new leaks")
+        self.header = PageHeader("Leaks", "Every paper posted in a watched chat or added by hand, newest first.")
+        self.follow_toggle = Switch("Follow new leaks")
         self.follow_toggle.setToolTip("Open each new case by itself and play its funnel")
         self.add_button = primary_button("Add a leak")
         self.add_button.clicked.connect(self.open_add_dialog)
-        self.summary = plain("", 15, role="muted")
-        bar = QHBoxLayout()
-        bar.setSpacing(24)
-        bar.addWidget(self.add_button)
-        bar.addWidget(self.follow_toggle)
-        bar.addStretch(1)
-        bar.addWidget(self.summary)
-        self.message = plain("", 18, role="muted", wrap=True)
+        self.header.actions.addWidget(self.follow_toggle)
+        self.header.actions.addSpacing(6)
+        self.header.actions.addWidget(self.add_button)
+
+        self.figures_panel = Panel()
+        strip = QHBoxLayout()
+        strip.setContentsMargins(0, 0, 0, 0)
+        strip.setSpacing(0)
+        self.figures = {key: Figure(label) for key, label in (("total", "Leaks"), ("traced", "Traced"),
+                                                              ("lead", "Strong leads"), ("fake", "Not our paper"),
+                                                              ("waiting", "Waiting to be read"))}
+        for i, figure in enumerate(self.figures.values()):
+            if i:
+                strip.addWidget(divider(vertical=True))
+            strip.addWidget(figure, 1)
+        self.figures_panel.body.setContentsMargins(0, 0, 0, 0)
+        self.figures_panel.body.addLayout(strip)
+
+        self.table_panel = Panel("All leaks", flush=True)
+        self.summary = plain("", 12, role="muted")
+        self.table_panel.actions.addWidget(self.summary)
+        self.message = plain("", 14, role="muted", wrap=True)
+        self.message.setContentsMargins(12, 14, 12, 14)
         self.table = RuledTable()
         self.model = LeaksModel(self)
         self.table.setModel(self.model)
-        for column, width in enumerate((190, 250, 250, 190)):
+        for column, width in enumerate((156, 230, 250, 170)):
             self.table.setColumnWidth(column, width)
         self.table.activated.connect(self._open_index)
         self.table.clicked.connect(self._open_index)
-        section.body.addLayout(bar)
-        section.body.addSpacing(10)
-        section.body.addWidget(self.message)
-        section.body.addWidget(self.table, 1)
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(section, 1)
+        self.table_panel.body.addWidget(self.message)
+        self.table_panel.body.addWidget(self.table, 1)
+
+        layout = self.frame(self)
+        layout.addWidget(self.header)
+        layout.addWidget(self.figures_panel)
+        layout.addWidget(self.table_panel, 1)
         self.show_loading()
 
     @property
     def follow(self) -> bool:
         return self.follow_toggle.isChecked()
-
-    def marks(self) -> list[bool]:
-        """One mark per leak on the list, black once it has been read."""
-        rows = self.model.rows[:26]
-        return [r.status in ("done", "unreadable") for r in rows] or [False] * 14
 
     def on_lock(self) -> None:
         if self._dialog is not None:
@@ -214,6 +244,8 @@ class LeaksPage(Page):
         except Exception as exc:                              # the list could not be read: say so in plain words
             self.model.set_rows([])
             self.message.setProperty("role", "error")
+            self.message.style().unpolish(self.message)
+            self.message.style().polish(self.message)
             self.message.setText(f"The list of leaks could not be read from this laptop's database. ({type(exc).__name__})")
             self.message.setVisible(True)
             self.table.setVisible(False)
@@ -226,9 +258,12 @@ class LeaksPage(Page):
             self.message.setText("No leaks yet. When a watched chat posts a paper it appears here. "
                                  "You can also add one by hand with \"Add a leak\".")
         waiting = sum(1 for r in rows if r.status in ("queued", "reading"))
+        counts = {"total": len(rows), "traced": sum(r.verdict == "traced" for r in rows),
+                  "lead": sum(r.verdict == "strong_lead" for r in rows), "fake": sum(r.verdict == "not_our_paper" for r in rows),
+                  "waiting": waiting}
+        for key, figure in self.figures.items():
+            figure.value.setText(f"{counts[key]:,}")
         self.summary.setText(f"{len(rows)} leak{'s' if len(rows) != 1 else ''}" + (f", {waiting} waiting to be read" if waiting else ""))
-        if self.app_window is not None and self.app_window.stack.currentWidget() is self:
-            self.app_window.marks.set_states(self.marks())
 
     def _open_index(self, index) -> None:
         if index.isValid():
