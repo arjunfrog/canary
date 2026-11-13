@@ -9,6 +9,7 @@ import getpass
 import hashlib
 import shutil
 import sys
+import time
 from pathlib import Path
 
 from . import __version__, analyze, audit, config, db, worker
@@ -16,8 +17,6 @@ from .vault import SECRET_NAMES, Vault, WrongPassphrase
 
 # command -> (help, task that builds it)
 NOT_BUILT = {
-    "seed": ("Create the exam, copies, people and custody chains", 4),
-    "verify-chain": ("Check one copy's custody chain", 4),
     "read": ("Read a photo and print the questions found", 5),
     "tg-login": ("Log the Telegram account in, once", 7),
     "watch": ("Watch a public channel or group", 7),
@@ -116,6 +115,26 @@ def cmd_print_copies(args) -> int:
     for path in written:
         print(path)
     return 0
+
+
+def cmd_seed(args) -> int:
+    from . import seed
+    started = time.monotonic()
+    counts = seed.seed(db.connect())
+    for name, count in counts.items():
+        print(f"{name:18} {count:>6}")
+    print(f"Seeded in {time.monotonic() - started:.1f} s. Every person is synthetic.")
+    return 0
+
+
+def cmd_verify_chain(args) -> int:
+    from . import seed
+    try:
+        ok = seed.verify_chain(db.connect(), args.stage, args.copy)
+    except LookupError as exc:
+        sys.exit(str(exc))
+    print(f"The custody chain of {args.stage} copy {args.copy} " + ("verifies." if ok else "is broken."))
+    return 0 if ok else 1
 
 
 def cmd_verify_audit(args) -> int:
@@ -218,6 +237,13 @@ def build_parser() -> argparse.ArgumentParser:
     copies.add_argument("--print", metavar="N,N", help="printed copy numbers, 1 to 5000")
     copies.add_argument("--out", metavar="DIR", required=True)
     copies.set_defaults(fn=cmd_print_copies)
+
+    sub.add_parser("seed", help="Create the exam, copies, synthetic people and custody chains").set_defaults(fn=cmd_seed)
+
+    chain = sub.add_parser("verify-chain", help="Check one copy's custody chain")
+    chain.add_argument("--stage", choices=("translation", "print"), required=True)
+    chain.add_argument("--copy", type=int, required=True)
+    chain.set_defaults(fn=cmd_verify_chain)
 
     add = sub.add_parser("add-leak", help="Queue a leak by hand")
     source = add.add_mutually_exclusive_group(required=True)
