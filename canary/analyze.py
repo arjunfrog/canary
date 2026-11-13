@@ -25,7 +25,7 @@ MAX_QUESTIONS = 400        # a leak is never longer than this; anything more is 
 MAX_TEXT = 400_000
 
 _NUMBER = re.compile(r"\d+(?:\.\d+)?")
-_QUESTION_START = re.compile(r"^[ \t>*-]*(?:Q(?:uestion|ues)?\.?[ \t]*)?(\d{1,3})[ \t]*[.):\]][ \t]+(?=\S)", re.I | re.M)
+_QUESTION_START = re.compile(r"^[ \t>*-]*(?:Q(?:uestion|ues)?\.?[ \t]*)?(\d{1,3})[ \t]*[.):\]](?:[ \t]+(?=\S)|(?=[^\d\s]))", re.I | re.M)
 # Option label styles, tried in this order: (A)  A)  A.  (1)  1)
 _LABEL_STYLES = (
     lambda c, n: rf"\(\s*[{c}{c.lower()}]\s*\)",
@@ -221,14 +221,22 @@ class Matcher:
         expected = fp.canonical_options(question, set_no)
         if len(shown) != 4:
             return None
+        # The last option is often followed by stray text (a page footer, a channel's signature), so it is
+        # also compared after trimming it to the length of the option it is being compared with.
         if question.kind == "numeric":
             want, got = [_option_key(o) for o in expected], [_option_key(o) for o in shown]
             if len(set(want)) == 4 and all(k[1] for k in want):
+                if got[3] not in want:
+                    got[3] = (got[3][0], got[3][1][:len(want[0][1])])
                 return tuple(want.index(g) for g in got) if sorted(got) == sorted(want) else None
         want = [normalise(o, numbers=None) for o in expected]
         order = []
-        for option in shown:
-            scores = [fuzz.ratio(normalise(option, numbers=None), w) for w in want]
+        for slot, option in enumerate(shown):
+            text = normalise(option, numbers=None)
+            scores = [fuzz.ratio(text, w) for w in want]
+            if slot == 3 and max(scores) < 85:
+                words = text.split()
+                scores = [fuzz.ratio(" ".join(words[:len(w.split())]), w) for w in want]
             top = max(scores)
             if top < 85 or scores.count(top) > 1:
                 return None

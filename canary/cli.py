@@ -16,7 +16,6 @@ from .vault import SECRET_NAMES, Vault, WrongPassphrase
 
 # command -> (help, task that builds it)
 NOT_BUILT = {
-    "print-copies": ("Write copies as PDF, with sealed slips", 3),
     "seed": ("Create the exam, copies, people and custody chains", 4),
     "verify-chain": ("Check one copy's custody chain", 4),
     "read": ("Read a photo and print the questions found", 5),
@@ -94,6 +93,28 @@ def cmd_decode(args) -> int:
     for step in result.steps:
         print(f"          {step['clue']:>4}  {step['question_id']:8}  {step['kind']:6}  {step['remaining']:>11}  "
               f"{step['expected_false_matches']:.3g}")
+    return 0
+
+
+def _numbers(text: str | None) -> list[int]:
+    try:
+        return [int(n) for n in (text or "").split(",") if n.strip()]
+    except ValueError:
+        sys.exit(f"Copy numbers must be whole numbers separated by commas, not {text!r}.")
+
+
+def cmd_print_copies(args) -> int:
+    from . import pdf
+    translator, printed = _numbers(args.translator), _numbers(args.print)
+    if not translator and not printed:
+        sys.exit("Name at least one copy: --translator 7,23 or --print 12,4821")
+    vault = unlock()
+    try:
+        written = pdf.print_copies(db.connect(), fingerprint_key(vault), translator, printed, Path(args.out))
+    except ValueError as exc:
+        sys.exit(str(exc))
+    for path in written:
+        print(path)
     return 0
 
 
@@ -191,6 +212,12 @@ def build_parser() -> argparse.ArgumentParser:
     decode = sub.add_parser("decode", help="Decode a typed leak from a file")
     decode.add_argument("--text", metavar="FILE", required=True)
     decode.set_defaults(fn=cmd_decode)
+
+    copies = sub.add_parser("print-copies", help="Write copies as PDF, with a sealed slip for each")
+    copies.add_argument("--translator", metavar="N,N", help="translator copy numbers, 1 to 50")
+    copies.add_argument("--print", metavar="N,N", help="printed copy numbers, 1 to 5000")
+    copies.add_argument("--out", metavar="DIR", required=True)
+    copies.set_defaults(fn=cmd_print_copies)
 
     add = sub.add_parser("add-leak", help="Queue a leak by hand")
     source = add.add_mutually_exclusive_group(required=True)
