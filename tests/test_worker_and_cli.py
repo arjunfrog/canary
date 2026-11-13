@@ -58,3 +58,31 @@ def test_verify_audit_command(conn, capsys):
 def test_unbuilt_commands_say_which_task_builds_them(command, capsys):
     assert cli.main([command]) == 2
     assert f"task {cli.NOT_BUILT[command][1]}" in capsys.readouterr().out
+
+
+def test_run_worker_processes_the_queue_off_the_event_loop_and_requeues_interrupted_leaks(conn):
+    import asyncio
+    import threading
+    stuck, waiting = queue(conn), queue(conn)
+    conn.execute("UPDATE leaks SET status = 'reading' WHERE id = ?", (stuck,))      # a run that was stopped part-way
+    conn.commit()
+    done, threads = [], set()
+
+    def handler(c, leak):
+        threads.add(threading.current_thread().name)
+        c.execute("UPDATE leaks SET status = 'done' WHERE id = ?", (leak["id"],))
+        c.commit()
+
+    async def scenario():
+        stop = asyncio.Event()
+
+        def on_done(leak_id):
+            done.append(leak_id)
+            if len(done) == 2:
+                stop.set()
+        await asyncio.wait_for(worker.run_worker(handler, stop, on_done=on_done, interval=0.05), timeout=10)
+
+    asyncio.run(scenario())
+    assert done == [stuck, waiting]
+    assert threads and threading.current_thread().name not in threads
+    assert status(conn, stuck)["status"] == status(conn, waiting)["status"] == "done"

@@ -15,9 +15,6 @@ from .vault import SECRET_NAMES, Vault, WrongPassphrase
 
 # command -> (help, task that builds it)
 NOT_BUILT = {
-    "tg-login": ("Log the Telegram account in, once", 7),
-    "watch": ("Watch a public channel or group", 7),
-    "unwatch": ("Stop watching a channel or group", 7),
     "verify": ("Verify a signed evidence file", 11),
     "sim": ("Run the limits simulation", 12),
     "check": ("Run the end-to-end health check", 13),
@@ -154,6 +151,39 @@ def cmd_read(args) -> int:
     return 0
 
 
+def cmd_tg_login(args) -> int:
+    from . import lurker
+    vault = unlock()
+    try:
+        name = asyncio.run(lurker.login(vault))
+    except lurker.TelegramNotReady as exc:
+        sys.exit(str(exc))
+    audit.record(db.connect(), "telegram login saved")
+    print(f"Logged in as {name}. The session is saved in the vault, not in a file.")
+    return 0
+
+
+def cmd_watch(args) -> int:
+    from . import lurker
+    vault = unlock()
+    try:
+        title = asyncio.run(lurker.watch(db.connect(), vault, args.username))
+    except lurker.TelegramNotReady as exc:
+        sys.exit(str(exc))
+    print(f"Watching {title}. New posts are read from now on, and the last {lurker.BACKFILL} when the app starts.")
+    return 0
+
+
+def cmd_unwatch(args) -> int:
+    from . import lurker
+    try:
+        removed = lurker.unwatch(db.connect(), args.username)
+    except lurker.TelegramNotReady as exc:
+        sys.exit(str(exc))
+    print("Stopped watching it." if removed else "That chat was not being watched.")
+    return 0
+
+
 def cmd_verify_audit(args) -> int:
     ok, bad = audit.verify(db.connect())
     print("Audit log verifies." if ok else f"Audit log is broken at row {bad}.")
@@ -194,14 +224,17 @@ def cmd_run(args) -> int:
     if not args.headless:
         from .ui.app import run_app               # imported here so the other commands work without Qt
         return run_app()
+    from . import lurker
     vault = unlock()
     conn = db.connect()
     audit.record(conn, "unlocked")
-    print(f"Canary {__version__} is running with no window. Data: {config.home()}")
-    print("Worker: on.  Telegram listener: not built yet (task 7).  Ctrl+C to stop.")
+    print(f"Canary {__version__} is running with no window. Data: {config.home()}", flush=True)
+    print("Worker: on.  Telegram listener: on if the vault holds a login.  Ctrl+C to stop.", flush=True)
 
     async def main() -> None:
-        await worker.run_worker(conn, analyze.make_handler(vault), asyncio.Event())
+        stop = asyncio.Event()
+        await asyncio.gather(worker.run_worker(analyze.make_handler(vault), stop),
+                             lurker.run_listener(conn, vault, stop))
 
     try:
         asyncio.run(main())
@@ -259,6 +292,14 @@ def build_parser() -> argparse.ArgumentParser:
     read.add_argument("photo", metavar="PHOTO")
     read.add_argument("--no-cache", action="store_true", help="ask the reader again even if this photo was read before")
     read.set_defaults(fn=cmd_read)
+
+    sub.add_parser("tg-login", help="Log the Telegram account in, once").set_defaults(fn=cmd_tg_login)
+    watch = sub.add_parser("watch", help="Watch a public channel or group")
+    watch.add_argument("username", metavar="USERNAME")
+    watch.set_defaults(fn=cmd_watch)
+    unwatch = sub.add_parser("unwatch", help="Stop watching a channel or group")
+    unwatch.add_argument("username", metavar="USERNAME")
+    unwatch.set_defaults(fn=cmd_unwatch)
 
     add = sub.add_parser("add-leak", help="Queue a leak by hand")
     source = add.add_mutually_exclusive_group(required=True)

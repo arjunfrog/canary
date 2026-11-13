@@ -137,7 +137,7 @@ class MainWindow(QMainWindow):
         audit.record(self.conn, "unlocked")
         if self.background is None:
             self.background = Background(self.vault, self)
-            self.background.changed.connect(self.refresh)
+            self.background.leak_changed.connect(lambda _id: self.refresh())
             self.background.start()
         self._last_activity = time.monotonic()
         self.name.setVisible(True)
