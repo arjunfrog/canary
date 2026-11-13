@@ -4,6 +4,7 @@ Everything read from a leak is untrusted data. It is parsed, compared with the b
 plain text. Nothing in it is ever run or followed.
 """
 import json
+import math
 import re
 import sqlite3
 import time
@@ -22,6 +23,9 @@ from .fingerprint import Clue
 MATCH_THRESHOLD = 70       # at or above: this is that bank question
 CLEARLY_DIFFERENT = 40     # below: not a question from the bank. Between the two: a damaged real question, or unsure
 MIN_LEGIBLE = 5
+RETOLD_SUPPORT = 0.45      # shared wording at or above this: possibly a bank question retold, so never "clearly different"
+LEAK_RETOLD_SUPPORT = 0.25  # if the middle unmatched question shares this much, the leak is never "not our paper"
+STEM_NUMBERS_SUPPORT = 0.2  # shared wording needed before a stem's numbers alone are taken as a value set
 MAX_QUESTIONS = 400        # a leak is never longer than this; anything more is dropped
 MAX_TEXT = 400_000
 
@@ -67,6 +71,7 @@ class Finding:
     set_no: int | None = None                  # numeric: 0 real, 1 to 8 decoy, None if the numbers fit no set
     order: tuple[int, ...] | None = None
     clues: list[Clue] = field(default_factory=list)
+    shared: float = 0.0                        # unmatched only: wording shared with the closest bank question, 0 to 1
 
     @property
     def matched(self) -> bool:
@@ -201,6 +206,24 @@ class Matcher:
             for text in (q.stem, *q.options, *(o for v in q.value_sets for o in v.options)):
                 vocabulary.update(_words(text))
         self.vocabulary = frozenset(vocabulary)
+        # The numbers in a stem alone, for a retelling that kept the values but dropped the options. Weaker than
+        # the full signature, so it is only trusted for two or more numbers and with some support from the words.
+        self.stem_signatures: dict = {}
+        for q in self.pool:
+            if q.kind == "numeric":
+                for set_no, numbers in enumerate(self.set_numbers[q.id]):
+                    signature = tuple(sorted(numbers))
+                    if len(signature) >= 2:
+                        self.stem_signatures[signature] = None if signature in self.stem_signatures else (q, set_no)
+        # Each stem as a set of words, and how telling each word is (rarer words weigh more).
+        self.stem_words = {q.id: frozenset(normalise(q.value_sets[0].stem if q.kind == "numeric" else q.stem).split())
+                           for q in self.pool}
+        seen_in: dict = {}
+        for words in self.stem_words.values():
+            for word in words:
+                seen_in[word] = seen_in.get(word, 0) + 1
+        self.word_weight = {word: math.log((len(self.pool) + 1) / (count + 1)) + 0.1 for word, count in seen_in.items()}
+        self.unseen_weight = math.log(len(self.pool) + 1) + 0.1
         # In how many bank stems each word appears. A word in one or two stems is what that question is about.
         self.stem_count: dict = {}
         for q in self.pool:
@@ -221,9 +244,13 @@ class Matcher:
             return False
         ours = normalise(question.value_sets[0].stem if question.kind == "numeric" else question.stem).split()
         theirs = normalise(read.stem_for_matching).split()
-        for tag, a0, a1, b0, b1 in SequenceMatcher(None, ours, theirs, autojunk=False).get_opcodes():
-            if tag != "replace":
-                continue
+        changes = [op for op in SequenceMatcher(None, ours, theirs, autojunk=False).get_opcodes() if op[0] != "equal"]
+        kept = len(ours) - (changes[0][2] - changes[0][1]) if len(changes) == 1 else 0
+        if len(changes) != 1 or changes[0][0] != "replace" or kept < 2 or kept * 2 < len(ours):
+            # Damage and retelling change words here and there. A different subject in the same sentence is
+            # one swap, with every other word exactly as the bank has it.
+            return False
+        for tag, a0, a1, b0, b1 in changes:
             for mine in ours[a0:a1]:
                 if len(mine) < 4 or mine in _COMMON:
                     continue
@@ -280,6 +307,36 @@ class Matcher:
         _, raw, index = process.extractOne(query, self.templates, scorer=fuzz.ratio)
         return self.owner[index], max(0.0, (raw - 50.0) * 2.0)
 
+    def shared_words(self, stem: str, question) -> float:
+        """How much of the wording a stem shares with a bank question, from 0 to 1, with rarer words weighing more.
+
+        Unlike the letter-by-letter score this survives a loose retelling, where the sentences are rebuilt but
+        the telling words, units and number slots remain.
+        """
+        theirs, ours = frozenset(normalise(stem).split()), self.stem_words[question.id]
+        weight = lambda words: sum(self.word_weight.get(w, self.unseen_weight) for w in words)
+        union = weight(theirs | ours)
+        return weight(theirs & ours) / union if union else 0.0
+
+    def most_shared(self, stem: str):
+        """(bank question, shared_words) for the bank question sharing the most wording with this stem."""
+        return max(((q, self.shared_words(stem, q)) for q in self.pool), key=lambda pair: pair[1])
+
+    def by_stem_numbers(self, read: ReadQuestion):
+        """(bank question, set number) when a stem's numbers alone point at one value set and its words do not object.
+
+        For a leak retold with its values but without its options. Two or more numbers must equal exactly one
+        value set in the whole bank, and the stem must share some wording with that question, because two
+        numbers can coincide by chance.
+        """
+        for stem in (read.stem_en, read.stem):
+            if not stem:
+                continue
+            found = self.stem_signatures.get(tuple(sorted(numbers_in(stem))))
+            if found and self.shared_words(stem, found[0]) >= STEM_NUMBERS_SUPPORT:
+                return found
+        return None
+
     def by_numbers(self, read: ReadQuestion):
         """(bank question, set number) if the numbers alone identify this question, else None.
 
@@ -301,6 +358,13 @@ class Matcher:
 
     def find(self, read: ReadQuestion) -> Finding:
         question, score = self.best(read.stem_for_matching)
+        if score < CLEARLY_DIFFERENT and normalise(read.stem_for_matching):
+            # Letter by letter this looks like nothing in the bank. If it still shares much of a bank question's
+            # wording it may be that question retold, so it is "unsure", not "clearly different": a real paper
+            # put into other words must never be called a fake.
+            retold, shared = self.most_shared(read.stem_for_matching)
+            if shared >= RETOLD_SUPPORT:
+                question, score = retold, float(CLEARLY_DIFFERENT)
         if (question is not None and CLEARLY_DIFFERENT <= score < MATCH_THRESHOLD
                 and self.cleanly_written(read.stem_for_matching) and self.options_clearly_differ(question, read)):
             # Wording that resembles a bank stem, cleanly written, with someone else's options: a different
@@ -315,6 +379,11 @@ class Matcher:
             if numbered is not None:                           # the words did not match, but the numbers do
                 question, known_set = numbered
                 score = max(score, 90.0)
+            else:
+                numbered = self.by_stem_numbers(read)
+                if numbered is not None:                       # retold without options: the stem's numbers, backed by its words
+                    question, known_set = numbered
+                    score = max(score, float(MATCH_THRESHOLD))
         finding = Finding(read, score=round(score, 1))
         if question is None or score < MATCH_THRESHOLD:
             return finding
@@ -410,6 +479,8 @@ def collect(questions: list[ReadQuestion], bank) -> list[Finding]:
             # strings (a ruined scan, or a script nothing here can read) is treated as hard to read, so it
             # can make a leak "unreadable" but never "not our paper".
             read.legible = False
+        if not finding.matched and normalise(read.stem_for_matching):
+            finding.shared = round(matcher.most_shared(read.stem_for_matching)[1], 3)
         if finding.question_id in seen:                      # the same question twice: keep the first reading only
             finding.clues = []
         elif finding.question_id:
@@ -434,11 +505,21 @@ def assess(findings: list[Finding]) -> str:
         return "unreadable"
     if unmatched and damaged > len(unmatched) / 2 and matched < len(findings) / 2:
         return "unreadable"
-    if legible >= MIN_LEGIBLE and matched < 0.2 * len(findings) and damaged == 0:
+    if legible >= MIN_LEGIBLE and matched < 0.2 * len(findings) and damaged == 0 and not _shares_our_wording(unmatched):
         return "not_our_paper"
     if matched == 0:
         return "unreadable"
     return "decode"
+
+
+def _shares_our_wording(unmatched: list[Finding]) -> bool:
+    """Do these questions, taken together, read like bank questions put into other words?
+
+    One invented question can share a subject with the bank. A whole paper whose typical question shares a
+    quarter of a bank question's telling words is not "clearly different": it may be ours, retold.
+    """
+    shared = sorted(f.shared for f in unmatched)
+    return bool(shared) and shared[len(shared) // 2] >= LEAK_RETOLD_SUPPORT
 
 
 @dataclass

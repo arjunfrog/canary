@@ -1,0 +1,56 @@
+1. A car starts from rest and accelerates uniformly at 3 m/s² for 6 s. The distance it covers is
+(A) 54 m    (B) 108 m
+(C) 9 m    (D) 18 m
+
+2. A stone falls freely from a height of 500 m. With g = 10 m/s², it reaches the ground in
+(A) 5 s    (B) 100 s
+(C) 50 s    (D) 10 s
+
+3. A ball is thrown vertically upward at 40 m/s. With g = 10 m/s², the maximum height it reaches is
+(A) 40 m    (B) 160 m
+(C) 4 m    (D) 80 m
+
+4. A force of 40 N acts on a body of mass 2 kg initially at rest. Its speed after 4 s is
+(A) 20 m/s    (B) 40 m/s
+(C) 80 m/s    (D) 320 m/s
+
+5. A body of mass 4 kg moves with a speed of 6 m/s. Its kinetic energy is
+(A) 72 J    (B) 24 J
+(C) 12 J    (D) 144 J
+
+6. A spring of force constant 2000 N/m is stretched by 10 cm. The potential energy stored in it is
+(A) 20 J    (B) 10 J
+(C) 100 J    (D) 200 J
+
+7. A wave of frequency 100 Hz travels with a speed of 340 m/s. Its wavelength is
+(A) 34000 m    (B) 1.7 m
+(C) 3.4 m    (D) 6.8 m
+
+8. Resistors of 4 Ω and 60 Ω are connected in parallel. Their equivalent resistance is
+(A) 64 Ω    (B) 3.75 Ω
+(C) 7.5 Ω    (D) 32 Ω
+
+9. An electric heater rated 880 W operates at 110 V. The current it draws is
+(A) 4 A    (B) 16 A
+(C) 8 A    (D) 13.75 A
+
+10. A wire of length 4 m carrying 10 A is placed perpendicular to a magnetic field of 0.2 T. The force on it is
+(A) 16 N    (B) 8 N
+(C) 4 N    (D) 0.5 N
+
+11. An object is placed 15 cm in front of a convex lens of focal length 10 cm. The image distance is
+(A) 6 cm    (B) 30 cm
+(C) 5 cm    (D) 25 cm
+
+12. Light of photon energy 5 eV falls on a metal of work function 1.5 eV. The maximum kinetic energy of the photoelectrons is
+(A) 8.5 eV    (B) 1.75 eV
+(C) 3.5 eV    (D) 6.5 eV
+
+13. A car moving at 40 m/s is brought to rest by a uniform retardation of 4 m/s². Its stopping distance is
+(A) 5 m    (B) 200 m
+(C) 400 m    (D) 10 m
+
+14. A capacitor of 2 μF is charged to 400 V. The energy stored in it is
+(A) 0.8 mJ    (B) 160 mJ
+(C) 0.4 mJ    (D) 320 mJ
+

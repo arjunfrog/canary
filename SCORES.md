@@ -61,3 +61,52 @@ Scores below are for both sets together: 84 readable leaks and 42 set aside.
 | 2 | A question is recognised by its numbers when its words do not match: the numbers in the stem (in any order) and all four options must equal exactly one value set of exactly one bank question. Before, a translator's paper typed in Hindi was called "not our paper", and a loosely retold one was unreadable | 78 = 92.9% | 38 = 90.5% | none | yes |
 | 3 | Typed questions that are not "cleanly written" (most words found in the bank's vocabulary) count as hard to read, so ruined text can be unreadable but never "not our paper". It fixed the ruined leaks but broke 8 fakes: ordinary words such as "bird" or "egg" are not in the bank, so clean fakes were taken for damage | 72 = 85.7% | 36 = 85.7% | none | no, reverted |
 | 4 | Same aim as round 3, judged differently: a typed question counts as hard to read when under 60% of its letter triples occur in the bank's words. Ordinary words the bank never uses still pass; the debris of a ruined scan, or Hindi script, does not. Text ruined at 70% to 90% is now unreadable instead of "not our paper" | 80 = 95.2% | 40 = 95.2% | none | yes |
+| 5 | The same sentence about a different subject is a different question: "Quinine is obtained from" beside the bank's "Morphine is obtained from", or "not a unit of power" beside "not a unit of energy". It applies only when a word the bank question is about was swapped for an unrelated one, never when the numbers fit a value set or the options are that question's, and not to everyday words or typing slips. Before, such stems counted as damaged or even as matched, so a fake came out unreadable or "not enough to name anyone" | 84 = 100% | 42 = 100% | none | yes |
+
+## Where the rounds stopped
+
+After round 5 nothing fails on either set: 84 of 84 readable and 42 of 42 set aside, with no wrong copy named. No
+change can raise a full score, so every further round would be a round with no gain. The loop stops here rather
+than logging three empty rounds. `tests/test_score.py` now fails if any leak in either set, read or set aside,
+is lost again.
+
+| | Readable | Set aside | Wrong copy |
+|---|---|---|---|
+| Set 1, start (round 0) | 56 of 60 = 93.3% | 28 of 30 = 93.3% | none |
+| Set 1, end | 60 of 60 = 100% | 30 of 30 = 100% | none |
+| Set 2, start (tool as of round 1) | 12 of 24 = 50.0% | 5 of 12 = 41.7% | none |
+| Set 2, end | 24 of 24 = 100% | 12 of 12 = 100% | none |
+| Both sets, end | 84 of 84 = 100% | 42 of 42 = 100% | none |
+
+A full score says the sets are too easy for the tool as it now stands, not that the tool is finished. See the
+limits below.
+
+## Fixes made after the rounds, outside the score
+
+With the sets saturated, the tool was probed by hand for the two outcomes that must never happen: a wrong copy
+named, and a real paper called a fake. These are ordinary bug fixes with their own tests
+(`tests/test_robustness.py`, `tests/test_analyze.py`). They are not scored rounds: the score could not rise, so
+each was only required to leave both scores at 100% with no wrong copy named, which they did.
+
+| Found by probing | Fix |
+|---|---|
+| A real physics paper retold loosely, values kept, no options: "not our paper" | A stem's numbers alone are taken as a value set when two or more of them equal exactly one value set in the bank and the stem shares some wording with that question. Such a leak now gives a strong lead on, or traces, the right translator |
+| A real paper retold loosely with numbers and options removed: "not our paper" | A question that shares much of a bank question's wording is "unsure", never "clearly different". And a leak whose typical unmatched question shares a quarter of a bank question's telling words is never "not our paper" |
+| Round 5's rule misfired on moderately damaged text: 3 of 600 damaged real leaks were called "not our paper" | The "same sentence, different subject" rule now needs exactly one swapped phrase with the rest of the sentence word for word as in the bank. 0 of 600 afterwards |
+
+Randomised checks after these fixes: 1,300 random leaks (real ones changed nine different ways, two or three copies
+merged, fakes with random numbers, bank stems with invented numbers) named a wrong copy 0 times. Merged copies were
+only ever traced to one of the copies involved.
+
+## Limits the score does not show
+
+- No photo has been read. Every "photo" leak here is the mocked reader's output, so misread rates for real phone
+  photos are unknown. `scripts/README.md` describes the measuring script that would fill this in.
+- The retelling in these sets is rule-based. A person, or a translation model, rewords differently.
+- Fakes are 58 invented questions. A fake built from another real paper of the same syllabus may overlap the bank
+  more than these do, and would then come out "couldn't read it" or "not enough to name anyone" rather than
+  "not our paper". That is the safe side to fail on.
+- A leak whose options were reshuffled by the leaker keeps its option-order clues as noise. With few value clues
+  that can turn a traced leak into a strong lead. The brief's maths counts every clue read, so this was left alone.
+- Typed text in a script the tool cannot read is recognised only through its numbers and options. A Hindi leak of
+  biology questions alone comes out "couldn't read it".

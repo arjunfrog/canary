@@ -193,3 +193,44 @@ def test_add_leak_then_cases_shows_the_right_case(seeded, bank, tmp_path, capsys
     assert cli.main(["cases"]) == 0
     out = capsys.readouterr().out
     assert "traced" in out and "print" in out and "   12" in out and "done" in out
+
+
+# ---- found by probing after the scored rounds: a real paper put into other words
+
+def retold_block(questions, change):
+    return "\n\n".join(f"{q.number}. {change(q.stem)}" for q in questions) + "\n"
+
+
+def test_a_loosely_retold_paper_with_its_values_still_points_at_the_right_translator(bank):
+    from canary.samples import retell_hard
+    for copy_no, seed in ((17, 7), (40, 11)):
+        copy = fp.render_translator_copy(KEY, 1, copy_no, bank)
+        result = analyze.analyse_text(retold_block(copy[:14], lambda s: retell_hard(s, seed)), KEY, bank=bank)
+        assert result.verdict in ("traced", "strong_lead") and (result.stage, result.copy_no) == ("translation", copy_no)
+        chemistry = [q for q in copy if q.subject == "chemistry" and q.set_no][:14]
+        result = analyze.analyse_text(retold_block(chemistry, lambda s: retell_hard(s, seed)), KEY, bank=bank)
+        assert (result.verdict, result.copy_no) == ("traced", copy_no)
+
+
+def test_a_real_paper_retold_without_numbers_or_options_is_never_called_not_our_paper(bank):
+    from canary.samples import retell, retell_hard, strip_numbers
+    translator, printed = fp.render_translator_copy(KEY, 1, 17, bank), fp.render_print_copy(KEY, 1, 99, bank)
+    parts = [translator[:14], translator[14:28], translator[22:36], [q for q in printed if q.subject == "biology"][10:24],
+             [q for q in printed if q.subject == "chemistry"][20:34]]
+    for part in parts:
+        for seed in (7, 8, 9):
+            for change in (lambda s: strip_numbers(retell_hard(s, seed)), lambda s: strip_numbers(retell(s, seed)),
+                           lambda s: retell_hard(s, seed)):
+                result = analyze.analyse_text(retold_block(part, change), KEY, bank=bank)
+                assert result.verdict != "not_our_paper"
+                assert result.copy_no is None or (result.stage, result.copy_no) in (("translation", 17), ("print", 99))
+
+
+def test_stem_numbers_alone_need_two_numbers_one_value_set_and_some_shared_wording(bank):
+    matcher = analyze.matcher_for(bank)
+    copy = fp.render_translator_copy(KEY, 1, 23, bank)
+    first = copy[0]                                               # a car, an acceleration and a time
+    assert matcher.by_stem_numbers(analyze.ReadQuestion(1, first.stem)) == (bank.by_id[first.question_id], first.set_no)
+    numbers = " and ".join(analyze.numbers_in(first.stem))
+    assert matcher.by_stem_numbers(analyze.ReadQuestion(1, f"A pendulum swings {numbers} times before lunch")) is None
+    assert matcher.by_stem_numbers(analyze.ReadQuestion(1, "A car starts from rest and covers some distance")) is None

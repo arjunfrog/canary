@@ -83,3 +83,11 @@ def test_score_command_runs_and_no_wrong_copy_is_named(capsys):
     out = capsys.readouterr().out
     assert "leaks I may read:" in out and "set-aside leaks:" in out
     assert code == 0 and "No wrong copy was named." in out
+
+
+def test_both_sets_are_answered_in_full_and_no_wrong_copy_is_named():
+    """Where the rounds in SCORES.md ended. A later change that loses a leak, read or set aside, fails here."""
+    outcomes, _ = score.run()
+    summary = score.summarise(outcomes)
+    assert summary["read"] == {"right": 84, "total": 84, "wrong_copy": 0}
+    assert summary["held"] == {"right": 42, "total": 42, "wrong_copy": 0}
