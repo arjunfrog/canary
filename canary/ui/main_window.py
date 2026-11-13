@@ -9,7 +9,7 @@ from ..vault import Vault, WrongPassphrase
 from . import theme
 from .background import Background
 from .pages import CasePage, LeaksPage, LimitsPage, LockPage
-from .widgets import StatusLine, SyntheticLabel, TimingMarks
+from .widgets import StatusLine, TimingMarks
 from .widgets.ruled_section import rule
 
 ACTIVITY = {QEvent.Type.KeyPress, QEvent.Type.MouseButtonPress, QEvent.Type.MouseMove, QEvent.Type.Wheel}
@@ -62,7 +62,6 @@ class MainWindow(QMainWindow):
         header.addWidget(self.name, 0, Qt.AlignmentFlag.AlignBottom)
         header.addWidget(self.nav_bar, 0, Qt.AlignmentFlag.AlignBottom)
         header.addStretch(1)
-        header.addWidget(SyntheticLabel(), 0, Qt.AlignmentFlag.AlignVCenter)
 
         # screens
         self.stack = QStackedWidget()
