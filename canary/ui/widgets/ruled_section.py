@@ -1,3 +1,4 @@
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QFrame, QLabel, QVBoxLayout, QWidget
 
 from .. import theme
@@ -18,7 +19,9 @@ class RuledSection(QWidget):
         super().__init__(parent)
         self.body = QVBoxLayout()
         self.body.setContentsMargins(0, 12, 0, 0)
-        heading = QLabel(title)
+        heading = QLabel()
+        heading.setTextFormat(Qt.TextFormat.PlainText)
+        heading.setText(title)
         heading.setFont(theme.display(30, semibold=False))
         outer = QVBoxLayout(self)
         outer.setContentsMargins(0, 0, 0, 28)
