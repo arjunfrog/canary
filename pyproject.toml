@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "canary"
+version = "0.1.0"
+description = "Traces a leaked exam paper to the copy it came from."
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+dependencies = [
+    "cryptography",      # vault, signatures
+    "numpy",             # decoding 5,000 copies quickly (task 2)
+    "rapidfuzz",         # matching leaked questions to the bank (task 6)
+    "reportlab",         # exam papers as PDF (task 3)
+    "pypdf",             # PDF round-trip test (task 3)
+    "google-genai",      # photo reader (task 5)
+    "telethon>=1,<2",    # Telegram listener (task 7)
+    "PySide6-Essentials",  # the desktop app (Qt), macOS and Windows. Essentials only: the add-on modules include GPL ones
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pyinstaller"]
+
+[project.scripts]
+canary = "canary.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["canary*"]
+
+[tool.setuptools.package-data]
+canary = ["schema.sql", "data/bank.db", "ui/fonts/*.ttf"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

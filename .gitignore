@@ -1,0 +1,17 @@
+# Python
+.venv/
+__pycache__/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+
+# Never commit secrets or runtime data
+*.session
+vault.bin
+*.db-wal
+*.db-shm
+.env
+
+# macOS
+.DS_Store

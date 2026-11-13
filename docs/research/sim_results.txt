@@ -1,0 +1,63 @@
+translators=50 print copies=5000 trials=4000 seed=7
+k = questions leaked. Misread rates are assumed, not measured.
+
+== Translation stage, 50 translators, Strong lead: right copy named % [matches needed/clues], wrong namings
+scenario                                                    k=5              k=8             k=10             k=14             k=20             k=30
+Typed, values kept (2% misread)                           never     99.1% 7/8 w0   100.0% 8/10 w0   100.0% 9/14 w0  100.0% 11/20 w0  100.0% 14/30 w0
+Retold or translated (5% misread)                         never     95.7% 7/8 w0    99.2% 8/10 w0   100.0% 9/14 w0  100.0% 11/20 w0  100.0% 14/30 w0
+Messy handwriting (20% misread)                           never     58.7% 7/8 w0    73.8% 8/10 w0    97.5% 9/14 w0   99.9% 11/20 w0  100.0% 14/30 w0
+Phone photo: values 5%, option order 10%          99.6% 7/10 w0   100.0% 8/16 w0   100.0% 9/20 w0  100.0% 11/28 w0  100.0% 13/40 w0  100.0% 16/60 w0
+Typed, values kept, plus 3 traps seen              91.1% 8/8 w0   100.0% 9/11 w0   100.0% 9/13 w0  100.0% 11/17 w0  100.0% 12/23 w0  100.0% 15/33 w0
+
+== Translation stage, 50 translators, Traced: right copy named % [matches needed/clues], wrong namings
+scenario                                                    k=5              k=8             k=10             k=14             k=20             k=30
+Typed, values kept (2% misread)                           never            never   84.4% 10/10 w0   99.9% 12/14 w0  100.0% 14/20 w0  100.0% 17/30 w0
+Retold or translated (5% misread)                         never            never   63.4% 10/10 w0   97.9% 12/14 w0  100.0% 14/20 w0  100.0% 17/30 w0
+Messy handwriting (20% misread)                           never            never   14.2% 10/10 w0   54.0% 12/14 w0   95.2% 14/20 w0  100.0% 17/30 w0
+Phone photo: values 5%, option order 10%          85.7% 9/10 w0  100.0% 11/16 w0  100.0% 12/20 w0  100.0% 14/28 w0  100.0% 17/40 w0  100.0% 21/60 w0
+Typed, values kept, plus 3 traps seen                     never   85.4% 11/11 w0   98.8% 12/13 w0  100.0% 13/17 w0  100.0% 16/23 w0  100.0% 19/33 w0
+
+Numbers removed: a translator holds 6 traps and traps alone need 8 for a
+Strong lead, so a leak with no numbers and no option order is never named.
+
+== Print stage, 5,000 copies, option order, Strong lead: right copy named % [matches needed/clues], wrong namings
+scenario                                                    k=5              k=8             k=10             k=14             k=20             k=30
+Clean photo or retype (2% misread)                 89.6% 5/5 w3    100.0% 6/8 w0   100.0% 7/10 w0   100.0% 8/14 w0   100.0% 9/20 w0  100.0% 11/30 w0
+Typical phone photo (10% misread)                  60.1% 5/5 w3     96.4% 6/8 w1    98.4% 7/10 w0   100.0% 8/14 w0   100.0% 9/20 w0  100.0% 11/30 w0
+Messy handwriting (20% misread)                    34.5% 5/5 w1     81.2% 6/8 w1    90.1% 7/10 w0    99.1% 8/14 w0   100.0% 9/20 w0  100.0% 11/30 w0
+
+== Print stage, 5,000 copies, option order, Traced: right copy named % [matches needed/clues], wrong namings
+scenario                                                    k=5              k=8             k=10             k=14             k=20             k=30
+Clean photo or retype (2% misread)                        never     85.5% 8/8 w0    97.9% 9/10 w0  100.0% 10/14 w0  100.0% 11/20 w0  100.0% 13/30 w0
+Typical phone photo (10% misread)                         never     46.4% 8/8 w0    73.7% 9/10 w0   99.4% 10/14 w0  100.0% 11/20 w0  100.0% 13/30 w0
+Messy handwriting (20% misread)                           never     19.1% 8/8 w0    40.5% 9/10 w0   88.3% 10/14 w0   99.9% 11/20 w0  100.0% 13/30 w0
+
+Print stage with options reshuffled or left out: no clue, never named.
+
+== Merged copies, at least one leaker named, Strong lead: right copy named % [matches needed/clues], wrong namings
+scenario                                                    k=5              k=8             k=10             k=14             k=20             k=30
+2 translators merge, values (5% misread)                  never     11.1% 7/8 w0    19.0% 8/10 w0    59.7% 9/14 w2   92.7% 11/20 w2  100.0% 14/30 w0
+
+== Merged copies, at least one leaker named, Traced: right copy named % [matches needed/clues], wrong namings
+scenario                                                    k=5              k=8             k=10             k=14             k=20             k=30
+2 translators merge, values (5% misread)                  never            never    0.4% 10/10 w0    3.1% 12/14 w0   23.9% 14/20 w0   83.4% 17/30 w0
+
+== Merged copies, at least one leaker named, Strong lead: right copy named % [matches needed/clues], wrong namings
+scenario                                                    k=5              k=8             k=10             k=14             k=20             k=30
+3 translators merge, values (5% misread)                  never      2.8% 7/8 w0     3.7% 8/10 w0    17.7% 9/14 w2   40.2% 11/20 w0   75.0% 14/30 w0
+
+== Merged copies, at least one leaker named, Traced: right copy named % [matches needed/clues], wrong namings
+scenario                                                    k=5              k=8             k=10             k=14             k=20             k=30
+3 translators merge, values (5% misread)                  never            never    0.0% 10/10 w0    0.2% 12/14 w0    2.1% 14/20 w0   15.6% 17/30 w0
+
+== Fewest clean clues that can reach each bar
+  value sets, 50 translators     Strong lead  needs 6
+  value sets, 50 translators     Traced       needs 9
+  value sets, 500 translators    Strong lead  needs 7
+  value sets, 500 translators    Traced       needs 10
+  traps, 50 translators          Strong lead  needs 8
+  traps, 50 translators          Traced       needs 13
+  option order, 5,000 copies     Strong lead  needs 5
+  option order, 5,000 copies     Traced       needs 8
+  option order, 50,000 copies    Strong lead  needs 6
+  option order, 50,000 copies    Traced       needs 8

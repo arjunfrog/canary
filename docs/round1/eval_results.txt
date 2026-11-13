@@ -1,0 +1,463 @@
+# eval_overview.py
+AgriTech comments [] hidden cols [] hidden rows 0 merged 0
+FinTech comments [] hidden cols [] hidden rows 0 merged 0
+HealthTech comments [] hidden cols [] hidden rows 0 merged 0
+Cybersecurity comments [] hidden cols [] hidden rows 0 merged 0
+Hardware-IoT-Robotics comments [] hidden cols [] hidden rows 0 merged 0
+Open Innovation comments [] hidden cols [] hidden rows 0 merged 0
+total teams 522 green 70
+
+== SHORTLIST CUTOFFS
+AgriTech                 shortlisted  8/58 cutoff 72 top 77 | best-not-shortlisted 71
+Cybersecurity            shortlisted 12/89 cutoff 75 top 79 | best-not-shortlisted 74
+FinTech                  shortlisted  6/40 cutoff 73 top 85 | best-not-shortlisted 71
+Hardware-IoT-Robotics    shortlisted  7/50 cutoff 70 top 79 | best-not-shortlisted 69
+HealthTech               shortlisted 12/96 cutoff 73 top 80 | best-not-shortlisted 72
+Open Innovation          shortlisted 25/189 cutoff 63 top 81 | best-not-shortlisted 62
+
+== GLOBAL SHORTLIST TOP 25 (all tracks)
+1 FinTech Y2K Devs [21.0, 20.0, 22.0, 22.0, 85.0]
+2 FinTech Null Stacks [18.0, 18.0, 23.0, 23.0, 82.0]
+3 Open Innovat Shinkai Devs [19.0, 18.0, 23.0, 21.0, 81.0]
+4 HealthTech Na’vi [21.0, 20.0, 22.0, 17.0, 80.0]
+5 FinTech VantaWard [20.0, 19.0, 20.0, 20.0, 79.0]
+6 HealthTech Tech Titans [22.0, 20.0, 22.0, 15.0, 79.0]
+7 Cybersecurit RADIOHEAD [21.0, 21.0, 19.0, 18.0, 79.0]
+8 Cybersecurit KANYARASI [22.0, 18.0, 20.0, 19.0, 79.0]
+9 Cybersecurit ByteMe [19.0, 18.0, 21.0, 21.0, 79.0]
+10 Hardware-IoT Vision [21.0, 21.0, 21.0, 16.0, 79.0]
+11 AgriTech Team Resonance [20.0, 21.0, 21.0, 15.0, 77.0]
+12 AgriTech Debug4X [22.0, 21.0, 21.0, 13.0, 77.0]
+13 HealthTech EYEONIX [22.0, 19.0, 21.0, 15.0, 77.0]
+14 HealthTech NEXUS [20.0, 19.0, 20.0, 18.0, 77.0]
+15 AgriTech AgriSentinels [19.0, 19.0, 17.0, 21.0, 76.0]
+16 HealthTech VYBEX [21.0, 19.0, 20.0, 16.0, 76.0]
+17 HealthTech AFTERSHOCK [21.0, 19.0, 19.0, 17.0, 76.0]
+18 HealthTech DUALITH [20.0, 19.0, 21.0, 16.0, 76.0]
+19 Cybersecurit SIRIUS [19.0, 21.0, 20.0, 16.0, 76.0]
+20 Cybersecurit dark_protocol [20.0, 18.0, 20.0, 18.0, 76.0]
+21 Cybersecurit Skill Issue [18.0, 18.0, 20.0, 20.0, 76.0]
+22 Cybersecurit Stellar [22.0, 17.0, 19.0, 18.0, 76.0]
+23 Hardware-IoT CIRCUIT MAKERS [20.0, 16.0, 21.0, 19.0, 76.0]
+24 Cybersecurit Zenith [22.0, 17.0, 20.0, 16.0, 75.0]
+25 Cybersecurit Hash Squad [19.0, 18.0, 19.0, 19.0, 75.0]
+rank of RADIOHEAD overall among green: [7] of 70
+
+== SUBSCORE: shortlisted vs not (all tracks) and stdev
+Impact      shortlisted mean  18.6 sd  2.5 | others mean  15.5 sd  2.8 | gap  3.1
+Creativity  shortlisted mean  18.0 sd  2.1 | others mean  12.7 sd  3.4 | gap  5.3
+Design      shortlisted mean  19.7 sd  1.6 | others mean  15.0 sd  2.9 | gap  4.6
+Execution   shortlisted mean  16.7 sd  2.6 | others mean  14.4 sd  3.3 | gap  2.4
+Overall     shortlisted mean  73.0 sd  4.9 | others mean  57.6 sd  8.6 | gap 15.4
+
+== Cyber shortlisted subscore means + RADIOHEAD delta
+Impact      us   21 | shortlist mean  20.2 max  22 | rank 5/12
+Creativity  us   21 | shortlist mean  18.9 max  21 | rank 1/12
+Design      us   19 | shortlist mean  19.5 max  21 | rank 8/12
+Execution   us   18 | shortlist mean  17.8 max  21 | rank 5/12
+Overall     us   79 | shortlist mean  76.3 max  79 | rank 1/12
+
+== Global top by each subscore among shortlisted
+Impact [('Debug4X', 22.0), ('Tech Titans', 22.0), ('EYEONIX', 22.0), ('KANYARASI', 22.0), ('Stellar', 22.0)]
+Creativity [('Code Ninjas', 22.0), ('Team Resonance', 21.0), ('Debug4X', 21.0), ('Git Gud', 21.0), ('Coriander Leaves', 21.0)]
+Design [('Null Stacks', 23.0), ('Shinkai Devs', 23.0), ('Y2K Devs', 22.0), ('Na’vi', 22.0), ('Tech Titans', 22.0)]
+Execution [('Null Stacks', 23.0), ('Y2K Devs', 22.0), ('HAIKYUU', 22.0), ('AgriSentinels', 21.0), ('ByteMe', 21.0)]
+
+== Correlation of subscores to overall (all scored)
+Impact 0.782
+Creativity 0.812
+Design 0.895
+Execution 0.487
+
+== Competing ideas: keyword grep across all remarks
+AgriTech | Graviton | 71.0 | Explainable eligibility with document checklists and a well-scoped 24-hour phase; add a clear workflow diagram.
+AgriTech | Nexora | 57.0 | Practical documentation focus with missing-evidence checks; sharpen differentiation and add a 24-hour plan with clear milestones
+FinTech | Pixelated Pros | 66.0 | Timely, original spending-control layer for AI agents; add concrete policy examples, threat scenarios and an hourly timeline.
+FinTech | 3Sum | 58.0 | Well-thought-out poller–queue–executor design; define a paper-trading demo scope and a differentiator from existing automation tools.
+HealthTech | MAHA YODHAS | 70.0 | Rigorous, honest referral state machine with failure-case testing; add a clinical example showing the handover in practice.
+HealthTech | DataForge | 65.0 | Well-structured provenance plus anomaly detection; scope the blockchain and AI layers into a focused 24-hour demo
+HealthTech | BROCODE | 63.0 | Detailed, budget-aware workflow with a good example; many input modes are ambitious, so prioritise one for 24 hours.
+HealthTech | Nexora | 58.0 | Useful focus on flagging unclear follow-up instructions; explain the rule-based extraction with examples and add a 24-hour plan.
+HealthTech | VYASA TECH | 53.0 | Sensible document-first flow with OCR correction; specify the tools, how report comparison works, and a 24-hour plan.
+Cybersecur | TECHNOVA | 74.0 | Focused canary-based memorisation audit with a clear hourly plan; confirm LoRA fine-tuning fits the time and compute available
+Cybersecur | Pied Piper | 74.0 | Novel focus on cross-agent leak paths with deterministic, verified fixes; define how the "planned agent map" is authored.
+Cybersecur | TechMorphix | 72.0 | Timely, well-structured agent policy gateway with provenance tracking; the target figures need a defined test set and timeline.
+Cybersecur | Too Much | 70.0 | Rigorous multi-signal poisoning detection with canary rollback and hash-chained audit logs; plan GPU time for CIFAR-10 runs.
+Cybersecur | The Conquerors | 69.0 | Well-reasoned zero-trust agent firewall with provenance controls; the roadmap spans months, so define the 24-hour demo slice.
+Cybersecur | We Googled It | 68.0 | Sound provenance-based action control for agents; name the actual libraries and add an hour-wise build plan.
+Cybersecur | UNTHINKN | 66.0 | Interesting source-dependency tracing for investigations; define the synthetic dataset and how ECHO TRACE detects shared sources.
+Cybersecur | Epoch Delta | 65.0 | Well-researched wallet tracing with a clear flow; the Elliptic++ training data is Bitcoin while the MVP traces Ethereum. Trim the stack for 24 hours.
+Open Innov | Hackaholics | 62.0 | Well-architected pipeline; strengthen it with evidence of how often beginners struggle with stack traces and how you'll test OCR accuracy.
+Open Innov | Stellar | 58.0 | Clear, buildable concept with a good combination-risk angle; add evidence and numbers on privacy harm and a concrete example.
+Open Innov | Beyond Binary | 54.0 | Clear, buildable workflow with a good redaction demo; strengthen with evidence of real leak incidents and sharper differentiation.
+Open Innov | TAS² INOVATERS | 53.0 | Clear, feasible workflow; strengthen with real complaint data, statistics and a concrete example of conflict detection.
+Open Innov | CMP Coders | 50.0 | Clear, feasible stack and flow; strengthen with concrete failure examples, evidence of the problem, and a focused demo scenario.
+
+== Theme tallies in remarks (substring count across 452 remarks)
+  hourly plan / 24h plan               89
+  scope too big / trim / narrow        136
+  define dataset / data sources        58
+  claims need evidence / test set      57
+  honest (praise)                      40
+  differentiator / common idea         97
+  tidy slides/placeholder/template     30
+  demo slice / demo fallback           83
+  name the actual model/libs           60
+  newly built vs reused                4
+  scope/legal consent                  13
+  workflow diagram/UX screens          17
+
+== Execution<=10 reasons
+   AgriTech Nexora 10.0 Detailed sensor-fusion design with clear shelf-life logic; the hardware and model training need trimming to fit 24 hours.
+   AgriTech The Frontline 8.0 Rigorous, honest research design for coconut BSR; UAV and NIR work don't fit 24 hours, so define a dashboard-only demo.
+   AgriTech GitSetGo 8.0 Open Innovation idea, not AgriTech; thoughtful explainable eligibility design, but the implementation roadmap is missing.
+   AgriTech AquaSol 6.0 Detailed hardware architecture, but drones and multispectral sensing are too much for 24 hours; scope down and add a timeline.
+   AgriTech AgriTrust 10.0 Interesting demand-pooling and escrow model; the official template isn't used, and escrow logic plus a 24-hour plan need detail.
+   AgriTech NEXORA 10.0 Two separate problems combined loosely; the USP repeats the existing approach, and a 24-hour plan is needed.
+   AgriTech Team Vortex Project Title: BioSentry 4.0 Bold mycelium-sensing concept; claims need evidence, the content is thin, and a living-sensor demo isn't feasible in 24 hours.
+   AgriTech BFB (Build For Bharat) 5.0 Broad super-app vision; the impact slide holds template text, and the workflow and focused MVP plan are missing.
+   AgriTech LUNA 8.0 Interesting multi-agent vision, but the tech stack, agent logic and data sources are vague; add concrete design and timeline.
+   AgriTech VISIONARIES 10.0 HealthTech idea, not AgriTech; routing needs specific data sources, prediction method and a differentiator from navigation apps
+   AgriTech TeamUltron 9.0 Scope is unfocused (holograms, coding assistance); specify the AI models and data, and pick one core farmer problem.
+   AgriTech FourNex 6.0 Listed under Open Innovation; robots, self-driving delivery and a marketplace are too broad, so pick one focused, buildable core.
+   AgriTech Byte Alchemy 9.0 Relevant market-access goal, but the content is brief; detail the matching logic, tech stack, differentiator and a 24-hour plan.
+   AgriTech TRICODE 7.0 Relevant goal, but the content is generic; specify sensors, the advice model, a clear differentiator and a 24-hour plan.
+   AgriTech Floating Farm 3.0 Imaginative concept, but it skips the official template, team details and software plan, and a 24-hour build isn’t feasible.
+   FinTech Bit by Bit 9.0 Original privacy-preserving income proof for gig workers; zero-knowledge proofs are ambitious, so scope a realistic 24-hour demo.
+   FinTech Corsair Devs 10.0 Excellent architecture and clear agent roles; the heavy stack lacks a 24-hour timeline, so define a realistic demo scope.
+   FinTech Anveshan 9.0 Strong, specific focus on dairy farmers with a rich architecture; the scope and partner data are unrealistic for 24 hours.
+   FinTech Grid 7.0 Strong problem data and detection signals; the roadmap is missing and the impact slide repeats, so add a 24-hour plan.
+   FinTech Bombat Girls 10.0 Ambitious save-earn-launch vision; the scope is very broad, so narrow the MVP and add a 24-hour timeline.
+   FinTech FinWise 9.0 Clear target users, but the workflow and tech stack are missing; the idea needs a distinctive feature and a 24-hour plan.
+   HealthTe Brogrammers 9.0 Inclusive dual-pathway intake vision; sign language, ABHA and teleconsult together are too broad, so pick one core flow.
+   HealthTe Life Line 8.0 Good visualization and consent driven recording with doctor verification; Impact and Execution slide is missing and scope needs to be focused.
+   HealthTe Pixel Minds 7.0 Well-presented all-in-one vision, but AR, wearables and SOS make the scope unrealistic; focus on one core feature.
+   HealthTe Server Busy 9.0 Important stroke-care gap; define the agents, the stroke-recognition method, a concrete stack and an hourly plan.
+   HealthTe Data Dynamo 10.0 Practical, unified feature set but weak HealthTech fit; remove the leftover template notes and replace the four-week roadmap with 24 hours.
+   HealthTe ANVESHA 10.0 Relevant problem, but the stack is hedged ("if implemented"); specify the severity model, hospital matching logic and a 24-hour plan.
+   HealthTe Genblox 10.0 The concept is too general; specify which ECG conditions are detected, the dataset and model, and a 24-hour plan.
+   Cybersec VANTER 7.0 Important multi-source investigation problem, but 13 engines and a cloud stack far exceed 24 hours; pick one core flow
+   Cybersec AXION 10.0 Broad forensic platform with an unrealistic 24-hour scope; narrow to a few evidence types and remove leftover placeholder notes.
+   Cybersec KiMi 7.0 Ambitious deepfake vision, but the scope is unrealistic for two members; pick one capability and define a concrete 24-hour build.
+   Cybersec CyberSentinel AI 7.0 The scope (eBPF, fine-tuned 70B model, Kubernetes) is unrealistic for 24 hours; add a team name and a focused demo slice.
+   Cybersec COLOSSUS 10.0 The concept is too general; specify the data sources, models, response actions and a focused 24-hour demo
+   Cybersec CRYPTIC CORE 8.0 Relevant problem, but the details are thin; define the forgery checks, datasets, explainability method and an hourly build plan.
+   Hardware STARK LABS 9.0 Bold aerial look-ahead concept with references and a demo; drone flight and signal override are unrealistic for 24 hours.
+   Hardware Blue Nex 9.0 Coordinated robots plus drone with honest caveats; the plan spans eight weeks and Wi-Fi CSI is ambitious, so define a 24-hour slice.
+   Hardware Code for India 9.0 Impressive multi-robot vision with ROS 2 simulation; five robots is unrealistic for 24 hours, so pick one robot plus the dashboard.
+   Hardware Crown 10.0 Ambitious autonomy goal; define the navigation method and a narrow 24-hour demo, as full warehouse autonomy is unrealistic.
+   Hardware CIRCUIT BREAKERS 7.0 Playful concept, but a flying palm-sized butterfly is unrealistic; define what "danger" means and simplify to a wearable form.
+   Open Inn Botany Defenders 9.0 Very thorough wiring and power plan for an offline crop scout; narrow the 24-hour scope and show real field data.
+   Open Inn Homies 10.0 Thoughtful, locally grounded material design; add baseline heat and cost data, and scope a 24-hour demo.
+   Open Inn ImpactMinds 10.0 Well-evidenced fishermen safety problem and clear architecture; narrow the demo scope to alerts and boundary warnings.
+   Open Inn QBIT 10.0 Strong integrated decision-loop concept; narrow the scope for a 24-hour demo and add quantified demurrage evidence.
+   Open Inn SCYP_X 9.0 Clear problem and thorough pipeline; narrow to a focused MVP and name the AI models.
+   Open Inn Beyond The Prompts 10.0 Clear architecture and a thoughtful conflict-handling idea; add evidence of user pain and narrow the demo scope.
+   Open Inn TechTeros 9.0 Clear marketplace blueprint with a good regional-language focus; add evidence for the problem and narrow the 24-hour demo scope.
+   Open Inn Team Diamond Blender 7.0 Strong data-driven problem framing; narrow to one SDG slice and one working data pipeline for a 24-hour demo.
+   Open Inn Yaps-Coder 9.0 Clear problem and end-to-end workflow; narrow to one demo-able flow with sample data and add figures.
+   Open Inn EcoPulse Innovations 8.0 Interesting idea of turning roadside exhaust into ink; add data on emission volumes and define a small, testable demo.
+   Open Inn MOST Innovators 8.0 Interesting chemistry-led concept; add target numbers, a heat-release trigger method and a feasible 24-hour demo scope.
+   Open Inn Clover Dynamics 10.0 Clear merchant copilot concept with a sensible pipeline; add data evidence and a narrower, demo-ready scope.
+   Open Inn ECONEXIS 10.0 Clear problem and closed-loop workflow; please add data sources, the prediction model, tech stack and architecture.
+   Open Inn FinovaX 10.0 Clear end-to-end disaster coordination flow; add real data, named tools, and a narrower demo scope.
+   Open Inn Apexpredator 4.0 Interesting dual-modality idea; please add a concrete dataset, model, hardware plan and a scope that fits 24 hours.
+
+== Execution>=20 remarks (not shortlisted)
+   AgriTech Team Fearless 20.0 Risk-aware dispatch and sell-or-store comparison with a clear hourly plan; explain how spoilage risk is estimated.
+   AgriTech Launchpad 20.0 Strong pixel-level design with model benchmarking and hourly plan; explain relevance to Indian smallholder fields and drone access.
+   FinTech Team Zenith 21.0 Thoughtful parsing pipeline, review queue and hourly plan; specify how the AI chatbot works while keeping data on-device.
+   Cybersec NeuroNova 21.0 Well-scoped evidence-and-retest API checker with a clear hourly plan; add an object-level access test beyond the three checks.
+   Hardware NeptuneX 20.0 Well-scoped hardware build with a clear hourly plan and a safety co-processor; name the MPPT algorithm and support the 30% figure.
+   Open Inn Build Ops 20.0 Safety-minded text-to-SQL design with measured benchmark results; sharpen what is distinctive and add evidence of how many teams face this.
+   Open Inn OMEGA 20.0 Practical, buildable concept with a clear sensor flow; strengthen it with real-world evidence on workshop downtime and a sharper differentiator.
+   Open Inn AUREL 20.0 Clear, buildable accessibility concept; strengthen it with real statistics, field evidence, and a concrete architecture diagram.
+   Open Inn ECOROVER 21.0 Clear, practical campus-sharing idea with a feasible scope; add usage data and a sharper differentiator.
+
+== Design>=20 remarks
+   AgriTech Krushi Yantra 21.0 Well-structured zone-wise design with prototype screens and honest status labels; trim the hardware scope for 24 hours.
+   AgriTech Launchpad 20.0 Strong pixel-level design with model benchmarking and hourly plan; explain relevance to Indian smallholder fields and drone access.
+   AgriTech Singularity 20.0 Strong net-of-transport verdict with honest confidence ranges and backtesting; roadmap is in months, so add a 24-hour plan.
+   AgriTech Nexora 21.0 Detailed sensor-fusion design with clear shelf-life logic; the hardware and model training need trimming to fit 24 hours.
+   FinTech Team Zenith 20.0 Thoughtful parsing pipeline, review queue and hourly plan; specify how the AI chatbot works while keeping data on-device.
+   FinTech Corsair Devs 20.0 Excellent architecture and clear agent roles; the heavy stack lacks a 24-hour timeline, so define a realistic demo scope.
+   HealthTe VISION 20.0 Thoughtful alarm-fatigue design with signal-quality checks and safety overrides; explain how deterioration data will be labelled.
+   HealthTe AFTER HOURS 20.0 Rigorous, honest forecasting plan with sound validation; name the dataset you will use and simplify the slide layout.
+   HealthTe LakeForge 20.0 Strong database-driven safety pipeline with doctor approval; the AWS stack and five roles are heavy for 24 hours.
+   Cybersec Panani 20.0 Strong end-to-end simulated QKD command channel with a live attacker demo; clarify the path from simulation to real deployment.
+   Cybersec TECHNOVA 20.0 Focused canary-based memorisation audit with a clear hourly plan; confirm LoRA fine-tuning fits the time and compute available
+   Cybersec DaysGone 20.0 Specific, well-engineered passive mail-TLS posture analysis with compliance mapping and tests; explain how synthetic training data is validated.
+   Cybersec VectorX 20.0 Honest, well-scoped JS–Wasm evidence pipeline with a clear hourly plan; explain the user value beyond research analysts.
+   Cybersec The Conquerors 20.0 Well-reasoned zero-trust agent firewall with provenance controls; the roadmap spans months, so define the 24-hour demo slice.
+   Open Inn AURYVEX NOVA 20.0 Well-architected platform with a clear user journey; strengthen it with data on the training gap and a narrower demo scope.
+   Open Inn Botany Defenders 22.0 Very thorough wiring and power plan for an offline crop scout; narrow the 24-hour scope and show real field data.
+   Open Inn Team Upgrade 20.0 Well-structured platform with a clear architecture and user journeys; narrow the 24-hour scope and add field evidence.
+
+# eval_mistakes.py
+teams with remarks 452 baseline I/C/D/E/O [15.5, 12.7, 15.0, 14.4, 57.6]
+
+ANTI-PATTERN                         n   Imp   Cre   Des   Exe   Ovr   delta vs baseline (I C D E O)
+vague/generic/thin content          20  14.2   9.3  10.4  11.4  45.5   -1.2 -3.3 -4.6 -2.9 -12.1
+infeasible/fantasy demo             11  15.1  14.8  12.1   7.2  49.2   -0.4 +2.2 -3.0 -7.2 -8.4
+workflow/architecture missing       24  14.3  11.3  13.0  13.8  52.4   -1.2 -1.3 -2.1 -0.5 -5.1
+common idea/no differentiator       82  14.5   9.1  13.8  15.9  53.3   -1.0 -3.5 -1.2 +1.5 -4.2
+scope unrealistic/too broad         19  16.6  14.3  14.0   8.6  53.4   +1.1 +1.6 -1.0 -5.8 -4.1
+no evidence of the problem          94  12.9  11.3  14.4  15.0  53.6   -2.6 -1.4 -0.7 +0.6 -4.0
+missing dataset/data source         58  15.4  11.9  13.6  13.0  54.0   -0.1 -0.7 -1.5 -1.3 -3.6
+missing tech stack/model/libs       60  16.0  12.0  13.4  13.4  54.9   +0.5 -0.6 -1.6 -1.0 -2.7
+mismatch between parts               7  15.7  12.4  14.3  12.9  55.3   +0.2 -0.2 -0.8 -1.5 -2.3
+wrong track/fit                     11  16.4  13.4  15.4  11.5  56.6   +0.9 +0.7 +0.3 -2.8 -0.9
+template/placeholder/slide mess     36  16.6  12.9  14.4  13.5  57.4   +1.1 +0.2 -0.7 -0.8 -0.2
+no 24h/hourly plan asked            95  16.8  13.3  15.1  14.2  59.4   +1.3 +0.6 +0.1 -0.2 +1.8
+unsupported number/claim            44  16.8  14.3  15.8  14.7  61.6   +1.3 +1.6 +0.8 +0.4 +4.1
+reused/prebuilt unclear              3  17.7  14.0  16.7  14.3  62.7   +2.2 +1.3 +1.6 -0.0 +5.1
+roadmap in months/weeks              8  18.8  15.2  17.1  11.6  62.8   +3.3 +2.6 +2.1 -2.7 +5.2
+stack/hardware too heavy            29  18.1  15.8  17.5  12.7  64.1   +2.6 +3.2 +2.4 -1.7 +6.6
+misuse/consent/authorisation        26  18.0  14.6  16.6  15.0  64.3   +2.5 +2.0 +1.6 +0.6 +6.7
+
+== Count per track
+                                    AgriTec  Cyberse  FinTech  Hardwar  HealthT  Open In
+no 24h/hourly plan asked                 25       26       17        9       16        2
+roadmap in months/weeks                   2        1        2        2        1        0
+scope unrealistic/too broad               4        6        2        4        3        0
+stack/hardware too heavy                  4        8        1        5        9        2
+vague/generic/thin content                5        7        1        1        5        1
+common idea/no differentiator            16       12        8        7       15       24
+missing tech stack/model/libs             4       18        2        7       17       12
+missing dataset/data source               2       20        1        3       15       17
+unsupported number/claim                  4        9        3        7       10       11
+no evidence of the problem                0        2        2        1        1       88
+template/placeholder/slide mess           6       11        3        3       13        0
+wrong track/fit                           6        1        0        1        2        1
+workflow/architecture missing             3        0        2        0        1       18
+infeasible/fantasy demo                   4        2        1        4        0        0
+misuse/consent/authorisation              2        5        0        4       11        4
+reused/prebuilt unclear                   0        3        0        0        0        0
+mismatch between parts                    1        3        0        0        1        2
+
+== Positive phrases: mean overall when remark uses them
+hourly plan praised                 32  17.6  14.4  17.1  16.8  65.9
+honest                              40  16.7  13.4  17.0  16.4  63.5
+well-scoped/feasible               101  13.6  10.8  14.2  16.8  55.4
+measured/benchmark/backtest         19  17.0  13.8  16.9  17.3  65.1
+working/prototype/live demo         26  16.1  12.6  15.7  16.0  60.4
+rigorous                            27  17.6  16.1  17.6  13.9  65.0
+original/novel                      51  15.2  11.1  14.5  15.9  56.7
+
+== NEAR MISSES: best 6 not shortlisted per track (what stopped them)
+-- AgriTech
+   71 [19, 15, 18, 19] Graviton | Explainable eligibility with document checklists and a well-scoped 24-hour phase; add a clear workflow diagram.
+   71 [20, 19, 18, 14] Chai And Chaos | Original claim-accountability audit trail with well-sourced, honest limits; add an hour-by-hour build plan.
+   71 [18, 15, 18, 20] Team Fearless | Risk-aware dispatch and sell-or-store comparison with a clear hourly plan; explain how spoilage risk is estimated.
+   70 [18, 15, 21, 16] Krushi Yantra | Well-structured zone-wise design with prototype screens and honest status labels; trim the hardware scope for 24 hours.
+   70 [16, 14, 20, 20] Launchpad | Strong pixel-level design with model benchmarking and hourly plan; explain relevance to Indian smallholder fields and drone access.
+   69 [21, 15, 20, 13] Singularity | Strong net-of-transport verdict with honest confidence ranges and backtesting; roadmap is in months, so add a 24-hour plan.
+-- Cybersecurity
+   74 [19, 17, 20, 18] Panani | Strong end-to-end simulated QKD command channel with a live attacker demo; clarify the path from simulation to real deployment.
+   74 [18, 18, 20, 18] TECHNOVA | Focused canary-based memorisation audit with a clear hourly plan; confirm LoRA fine-tuning fits the time and compute available
+   74 [21, 15, 19, 19] PromptPioneers | Well-scoped pre-payment UPI and QR check with explainable rules and a clear hourly plan; fix the team-name typo.
+   74 [19, 20, 19, 16] Pied Piper | Novel focus on cross-agent leak paths with deterministic, verified fixes; define how the "planned agent map" is authored.
+   73 [17, 17, 20, 19] DaysGone | Specific, well-engineered passive mail-TLS posture analysis with compliance mapping and tests; explain how synthetic training data is validated.
+   73 [20, 18, 19, 16] BEHEMOTH | Thoughtful episode-level scam reasoning with consent and evidence; clarify what is newly built versus reused from the earlier prototype.
+-- FinTech
+   71 [21, 20, 18, 12] Code Alchemists | Sharp, real co-pay pain point with claim-aware underwriting; roadmap is in months, so add a 24-hour demo plan.
+   70 [15, 14, 20, 21] Team Zenith | Thoughtful parsing pipeline, review queue and hourly plan; specify how the AI chatbot works while keeping data on-device.
+   69 [21, 19, 18, 11] Backlog Coders | Strong, specific mule-tracing concept with detailed architecture; plan spans 12 weeks and relies on restricted data, so define a 24-hour scope.
+   69 [19, 16, 19, 15] Infinity | Well-researched problem and thoughtful certainty-tagging design; the six-day roadmap should be condensed into a 24-hour plan.
+   68 [19, 19, 18, 12] Dodgers | Original rule-to-evidence compliance loop with a clear stack; add an hourly plan and detail on how evidence is verified.
+   68 [21, 21, 17, 9] Bit by Bit | Original privacy-preserving income proof for gig workers; zero-knowledge proofs are ambitious, so scope a realistic 24-hour demo.
+-- Hardware-IoT-Robotics
+   69 [17, 18, 18, 16] The Coders | Original design-to-inspection PCB workflow with deterministic DFM checks; explain how defect images and test data are sourced
+   69 [17, 15, 18, 19] Turbo Crafters | Well-scoped patrol robot with a realistic hourly plan; explain how the spill strip performs and how bypass routes are defined.
+   69 [18, 17, 19, 15] Wakanda’s Vision | Well-designed risk-weighted evacuation routing with a physical model and honest limits; scope the four-storey build for two members.
+   69 [15, 18, 19, 17] angrybirds | Rigorous freshness-aware landing-zone logic with a sensible bench plan; clarify the practical deployment scenario for ground beacons.
+   68 [17, 18, 17, 16] Team Breadboard | Well-structured hardware concept with a balanced design and execution approach; strengthen the submission with prototype validation, real-world testing and measurable performance results."
+   68 [17, 18, 13, 20] NeptuneX | Well-scoped hardware build with a clear hourly plan and a safety co-processor; name the MPPT algorithm and support the 30% figure.
+-- HealthTech
+   72 [19, 18, 20, 15] VISION | Thoughtful alarm-fatigue design with signal-quality checks and safety overrides; explain how deterioration data will be labelled.
+   72 [19, 17, 20, 16] AFTER HOURS | Rigorous, honest forecasting plan with sound validation; name the dataset you will use and simplify the slide layout.
+   70 [19, 13, 19, 19] TEAM FLARE | Well-scoped, honest screening pipeline with quality checks and Grad-CAM; add a distinctive angle beyond standard DR grading.
+   70 [19, 15, 18, 18] Worriors | Specific four-role coordination loop with crash detection; explain how false alarms are handled and support the 30-40% target.
+   70 [18, 17, 19, 16] XTRUE | Thoughtful, accessible visual intake with body map and offline drafts; plan how ISL content will be sourced and reviewed.
+   70 [20, 19, 19, 12] Byteinit | Compassionate, grounded dementia companion with family-approved memory; address voice-cloning consent and narrow the 24-hour scope.
+-- Open Innovation
+   62 [14, 12, 17, 19] HELIX | Clear, buildable concept with a smart false-alarm filter; strengthen it with real sensor data and cost or downtime figures.
+   62 [14, 13, 20, 15] AURYVEX NOVA | Well-architected platform with a clear user journey; strengthen it with data on the training gap and a narrower demo scope.
+   62 [13, 14, 19, 16] Hackaholics | Well-architected pipeline; strengthen it with evidence of how often beginners struggle with stack traces and how you'll test OCR accuracy.
+   62 [14, 15, 18, 15] Pointers | Clear, well-structured concept; strengthen it with real complaint data, local statistics and a narrower 24-hour demo scope.
+   62 [16, 15, 22, 9] Botany Defenders | Very thorough wiring and power plan for an offline crop scout; narrow the 24-hour scope and show real field data.
+   62 [13, 14, 17, 18] GOD OF UNIVERSE | Clear, realistic cascade-aware decision-support concept; strengthen it with real disaster data and evidence of responder needs.
+
+== BOTTOM 5 per track
+-- AgriTech
+   33 [9, 14, 7, 3] Floating Farm | Imaginative concept, but it skips the official template, team details and software plan, and a 24-hour build isn’t feasible.
+   34 [13, 7, 7, 7] TRICODE | Relevant goal, but the content is generic; specify sensors, the advice model, a clear differentiator and a 24-hour plan.
+   36 [13, 7, 7, 9] Byte Alchemy | Relevant market-access goal, but the content is brief; detail the matching logic, tech stack, differentiator and a 24-hour plan.
+   38 [14, 9, 9, 6] FourNex | Listed under Open Innovation; robots, self-driving delivery and a marketplace are too broad, so pick one focused, buildable core.
+   40 [13, 9, 9, 9] TeamUltron | Scope is unfocused (holograms, coding assistance); specify the AI models and data, and pick one core farmer problem.
+-- Cybersecurity
+   39 [13, 9, 9, 8] CRYPTIC CORE | Relevant problem, but the details are thin; define the forgery checks, datasets, explainability method and an hourly build plan.
+   42 [15, 8, 9, 10] COLOSSUS | The concept is too general; specify the data sources, models, response actions and a focused 24-hour demo
+   46 [15, 8, 12, 11] Tech Warriors | Generic SOC concept; specify the data sources, detection models and response actions, and fill in the track.
+   48 [15, 9, 13, 11] NEURAL NEXUS | Relevant but generic scam checker; name the datasets and threat feeds, then add an hourly 24-hour build plan.
+   50 [16, 7, 12, 15] ByteForce | Accessible goal, but detection details are thin; name the features or model, the data used and what sets it apart.
+-- FinTech
+   29 [9, 5, 6, 9] FinWise | Clear target users, but the workflow and tech stack are missing; the idea needs a distinctive feature and a 24-hour plan.
+   34 [9, 6, 7, 12] Ultrons | Simple, clear premise, but the solution is a single subtraction formula; needs deeper features, tech stack and a concrete plan.
+   40 [12, 7, 10, 11] Shunya | Useful transparency goal, but the comparison idea is common; add data sources, specific pain points and a timeline.
+   43 [13, 9, 10, 11] FinSpark | Relevant goal, but the USP slide repeats existing approaches; the AI simplifier lacks a stack and the plan lacks a timeline.
+   43 [15, 9, 8, 11] NeuroNex | Relevant problem, but the How It Works slide, tech stack and timeline are missing; the idea needs a clearer differentiator.
+-- Hardware-IoT-Robotics
+   43 [12, 14, 10, 7] CIRCUIT BREAKERS | Playful concept, but a flying palm-sized butterfly is unrealistic; define what "danger" means and simplify to a wearable form.
+   47 [14, 7, 11, 15] VisionX | Feasible but generic; define the abnormality detection method and sensors, and add a distinctive feature beyond threshold alerts.
+   48 [15, 12, 11, 10] Crown | Ambitious autonomy goal; define the navigation method and a narrow 24-hour demo, as full warehouse autonomy is unrealistic.
+   48 [12, 7, 12, 17] Our Content | Honest, simple prototype; the scope is very basic, so add monitoring depth such as logging, multiple sensors or machine-health signals.
+   50 [15, 9, 11, 15] Ambakrishi | Practical irrigation MVP, but the slides have overlapping text and the idea is common; clarify the hackathon build and what sets it apart.
+-- HealthTech
+   37 [13, 5, 9, 10] Genblox | The concept is too general; specify which ECG conditions are detected, the dataset and model, and a 24-hour plan.
+   38 [12, 5, 9, 12] Elite Force | The idea is a bit too generic; specify how symptom guidance works safely, the data sources and a clear 24-hour plan.
+   41 [15, 7, 9, 10] ANVESHA | Relevant problem, but the stack is hedged ("if implemented"); specify the severity model, hospital matching logic and a 24-hour plan.
+   42 [12, 5, 11, 14] NEXORA | Clear role-based record flow and a simple stack; the idea is very standard, so add a distinctive feature and a 24-hour plan.
+   44 [15, 8, 10, 11] VISIONARIES | Important goal, but the details are thin; specify the traffic data source, prediction model and a 24-hour plan.
+-- Open Innovation
+   37 [11, 14, 8, 4] Apexpredator | Interesting dual-modality idea; please add a concrete dataset, model, hardware plan and a scope that fits 24 hours.
+   38 [9, 6, 6, 17] Ideasphere | Clear, buildable idea; add evidence of need, a data flow and a distinctive feature to stand out.
+   39 [10, 7, 10, 12] Zenin Coders | Relevant problem and sensible stack; add data, a specific traveler scenario, and a clear architecture and demo scope.
+   39 [12, 8, 8, 11] ASHWAMEDHA | Real commuter problem; add concrete data, an ETA and occupancy method, and a clear architecture to stand out.
+   41 [10, 9, 10, 12] NEXYOUTH | Relevant problem and sensible stack; add concrete energy figures, a target model, and an architecture diagram.
+
+== High idea, weak build: Impact+Creativity >=36 but Execution <=13
+   AgriTech 62 [17, 19, 18, 8] The Frontline | Rigorous, honest research design for coconut BSR; UAV and NIR work don't fit 24 hours, so define a dashboard-only demo.
+   AgriTech 61 [19, 17, 17, 8] GitSetGo | Open Innovation idea, not AgriTech; thoughtful explainable eligibility design, but the implementation roadmap is missing.
+   FinTech 68 [21, 21, 17, 9] Bit by Bit | Original privacy-preserving income proof for gig workers; zero-knowledge proofs are ambitious, so scope a realistic 24-hour demo.
+   Hardware 60 [17, 19, 15, 9] STARK LABS | Bold aerial look-ahead concept with references and a demo; drone flight and signal override are unrealistic for 24 hours.
+   AgriTech 68 [20, 17, 21, 10] Nexora | Detailed sensor-fusion design with clear shelf-life logic; the hardware and model training need trimming to fit 24 hours.
+   FinTech 67 [20, 17, 20, 10] Corsair Devs | Excellent architecture and clear agent roles; the heavy stack lacks a 24-hour timeline, so define a realistic demo scope.
+   FinTech 69 [21, 19, 18, 11] Backlog Coders | Strong, specific mule-tracing concept with detailed architecture; plan spans 12 weeks and relies on restricted data, so define a 24-hour scope.
+   AgriTech 69 [20, 18, 19, 12] TEAM HELIO | Thoughtful evidence-first crop passport with clear trust boundaries; roadmap spans months, so add a focused 24-hour demo plan
+   AgriTech 66 [19, 17, 18, 12] YUKTI | Strong farm-to-payment loop with a clear voice journey; eight agents are ambitious, so define a lean 24-hour build plan.
+   AgriTech 63 [18, 18, 15, 12] CodeQuad | Original Rescue Chain for buyer drop-outs; name the concrete tech stack and urgency rules, and add an hourly timeline.
+   FinTech 71 [21, 20, 18, 12] Code Alchemists | Sharp, real co-pay pain point with claim-aware underwriting; roadmap is in months, so add a 24-hour demo plan.
+   FinTech 68 [19, 19, 18, 12] Dodgers | Original rule-to-evidence compliance loop with a clear stack; add an hourly plan and detail on how evidence is verified.
+   HealthTe 70 [20, 19, 19, 12] Byteinit | Compassionate, grounded dementia companion with family-approved memory; address voice-cloning consent and narrow the 24-hour scope.
+   HealthTe 70 [19, 20, 19, 12] Homie | Creative severity-aware routing with early simulation evidence; four modules plus an active bed is heavy for 24 hours.
+   HealthTe 68 [20, 18, 18, 12] Team Cosmi.c | Trust-focused stroke imaging with uncertainty checks and named datasets; training segmentation models in 24 hours is ambitious.
+   HealthTe 66 [19, 17, 18, 12] Team EMGineers | Compelling EMG and flex sensor fusion for rehab; the scope is heavy for 24 hours, so prioritise a core demo.
+   HealthTe 65 [20, 17, 16, 12] Team Alpha | Inclusive voice-first scheme guidance with a responsible disclaimer; name the eligibility data source and simplify the large stack.
+   Cybersec 69 [18, 21, 18, 12] TEAMDARK | Creative AI-versus-AI deception gateway; the 36-hour plan exceeds 24 hours, and the 0% false-positive claim needs evidence
+   Cybersec 69 [20, 17, 20, 12] The Conquerors | Well-reasoned zero-trust agent firewall with provenance controls; the roadmap spans months, so define the 24-hour demo slice.
+   Cybersec 66 [18, 19, 17, 12] TechEspadas | Ambitious encrypted-traffic NIDS with anti-poisoning logic; the eBPF and world-model scope is heavy for 24 hours, so define a demo slice.
+   Cybersec 62 [18, 18, 14, 12] Code Bite | Original focus on repeat recovery scams; finalise the tech stack, warning rules and an hourly 24-hour build plan.
+   Hardware 66 [19, 17, 18, 12] Recursion Rebels | Relevant, well-structured sensing and risk pipeline; explain the training data for displacement and narrow the 24-hour scope.
+   AgriTech 69 [21, 15, 20, 13] Singularity | Strong net-of-transport verdict with honest confidence ranges and backtesting; roadmap is in months, so add a 24-hour plan.
+   FinTech 65 [19, 18, 15, 13] Quantx | Thoughtful focus on informal earners with non-debt buffer; on-device scam interception needs clearer technical detail and a tighter scope.
+   Cybersec 68 [21, 16, 18, 13] Epoch Epsilon | Strong zero-effort, on-device protection; always-on multilingual interception is heavy for 24 hours, and SMS-permission limits need addressing.
+   Cybersec 67 [18, 18, 18, 13] TEAM PRIME | Strong selective-disclosure design using salted Merkle proofs; the blockchain and Flutter scope is heavy for 24 hours.
+
+== Weakest criterion across shortlisted teams per track (mean I C D E)
+  AgriTech                 [19.2, 19.1, 19.2, 16.5] n 8
+  Cybersecurity            [20.2, 18.9, 19.5, 17.8] n 12
+  FinTech                  [18.8, 19.5, 21.0, 18.3] n 6
+  Hardware-IoT-Robotics    [19.6, 18.1, 19.3, 16.4] n 7
+  HealthTech               [20.4, 19.4, 20.2, 15.6] n 12
+  Open Innovation          [16.4, 16.1, 19.5, 16.6] n 25
+
+== Shortlisted teams with Execution <=15 (idea carried them, final-round build risk)
+   Open Innov Neural Network [15, 17, 21, 10, 63]
+   HealthTech Code Ninjas [20, 22, 20, 11, 73]
+   AgriTech Debug4X [22, 21, 21, 13, 77]
+   FinTech Coriander Leaves [20, 21, 19, 13, 73]
+   Hardware-I Team MediCode [21, 20, 19, 13, 73]
+   Open Innov Team_Aari [19, 15, 21, 13, 68]
+   Open Innov NEURODRIVE [14, 15, 22, 13, 64]
+   HealthTech Cantina [21, 19, 19, 14, 73]
+   Cybersecur SICARIOS [20, 21, 20, 14, 75]
+   Hardware-I EPOCH ALPHA [20, 18, 19, 14, 71]
+   Open Innov Cosmic Coders [15, 19, 22, 14, 70]
+   Open Innov Collision [15, 17, 17, 14, 63]
+   AgriTech Team Resonance [20, 21, 21, 15, 77]
+   AgriTech Error 404 : Idea found [21, 17, 19, 15, 72]
+   AgriTech ArkTech [21, 18, 18, 15, 72]
+   FinTech Git Gud [16, 21, 21, 15, 73]
+   HealthTech Tech Titans [22, 20, 22, 15, 79]
+   HealthTech EYEONIX [22, 19, 21, 15, 77]
+   HealthTech HelixLogic [18, 20, 20, 15, 73]
+   Open Innov Aurex [19, 18, 21, 15, 73]
+   Open Innov Dr Doom [18, 18, 21, 15, 72]
+   Open Innov Runtime Rebels [17, 17, 18, 15, 67]
+   Open Innov DUO [14, 15, 21, 15, 65]
+
+# eval_bands.py
+== Shortlist rate by Design/Execution band (excluding Open Innovation, whose cutoff was 63)
+  Design>=19 and Execution>=18     teams  24 shortlisted  13 rate  54.2% mean overall 75.0
+  Design>=19, Execution<18         teams  52 shortlisted  25 rate  48.1% mean overall 72.1
+  Design<19, Execution>=18         teams  48 shortlisted   4 rate   8.3% mean overall 65.5
+  Design<19, Execution<18          teams 209 shortlisted   3 rate   1.4% mean overall 57.1
+== Strong idea (I+C>=36) by Execution band, all tracks
+  Execution 0-13: teams 30 shortlisted 4 rate 13%
+  Execution 14-16: teams 36 shortlisted 22 rate 61%
+  Execution 17-25: teams 28 shortlisted 20 rate 71%
+== Remark rates per track (%)
+                          AgriTech  Cybersec   FinTech  Hardware  HealthTe  Open Inn
+remarks                         50        77        34        43        84       164
+hourly plan asked               50        34        50        21        19         1
+dataset                          4        26         3         7        18        10
+name tools/model                 8        23         6        16        20         7
+evidence of problem              0         3         6         2         1        54
+differentiator                  32        16        24        16        18        15
+slide mess                      12        14         9         7        15         0
+consent/safety                   4         6         0         9        13         2
+number needs support             8        12         9        16        12         7
+== Specific remarks for our risks
+-- OCR
+   HealthTe 53 VYASA TECH | Sensible document-first flow with OCR correction; specify the tools, how report comparison works, and a 24-hour plan.
+   Cybersec 69 Pineapple | Practical Indian-ID redaction with checksum validation and a plug-in library; add an hourly plan and test OCR on poor scans.
+   Cybersec 57 SCAMMERS | Honest classifier plan with a sensible baseline; name the dataset and OCR tool, and add a distinctive feature beyond binary detection.
+   Hardware 61 Tech Forge | Working voice-controlled reading prototype; the idea is common, so add a distinctive feature and report OCR accuracy on Indian-language text.
+   Open Inn 62 Hackaholics | Well-architected pipeline; strengthen it with evidence of how often beginners struggle with stack traces and how you'll test OCR accuracy.
+-- simulation path
+   Cybersec 74 Panani | Strong end-to-end simulated QKD command channel with a live attacker demo; clarify the path from simulation to real deployment.
+   Hardware 69 angrybirds | Rigorous freshness-aware landing-zone logic with a sensible bench plan; clarify the practical deployment scenario for ground beacons.
+-- data access
+   FinTech 69 Backlog Coders | Strong, specific mule-tracing concept with detailed architecture; plan spans 12 weeks and relies on restricted data, so define a 24-hour scope.
+   FinTech 61 Anveshan | Strong, specific focus on dairy farmers with a rich architecture; the scope and partner data are unrealistic for 24 hours.
+   Cybersec 68 TEAM KALYUGA | Useful pre-payment QR safety layer; explain how the verified merchant registry will be populated and kept trustworthy.
+   Cybersec 59 NETSCOUT X | Affordable ESP32 registry-based device auditor with honest limits; clarify how client devices are observed.
+-- hedged
+   HealthTe 41 ANVESHA | Relevant problem, but the stack is hedged ("if implemented"); specify the severity model, hospital matching logic and a 24-hour plan.
+-- user value
+   AgriTech 70 Launchpad | Strong pixel-level design with model benchmarking and hourly plan; explain relevance to Indian smallholder fields and drone access.
+   Cybersec 72 VectorX | Honest, well-scoped JS–Wasm evidence pipeline with a clear hourly plan; explain the user value beyond research analysts.
+   Hardware 69 angrybirds | Rigorous freshness-aware landing-zone logic with a sensible bench plan; clarify the practical deployment scenario for ground beacons.
+-- false alarms
+   HealthTe 70 Worriors | Specific four-role coordination loop with crash detection; explain how false alarms are handled and support the 30-40% target.
+   Cybersec 69 TEAMDARK | Creative AI-versus-AI deception gateway; the 36-hour plan exceeds 24 hours, and the 0% false-positive claim needs evidence
+   Cybersec 67 NextGen-Era | Practical inline egress redaction proxy with an hourly plan; support the sub-15 ms claim and explain how false positives are handled.
+   Cybersec 62 Straw hats | Ambitious autonomous red team; the "zero false positives" claim needs evidence, and scope enforcement must be demonstrated rigorously.
+-- typos/team details
+   AgriTech 69 BITrix | Clear 24-hour scope with backtesting and honest confidence ranges; fill in the placeholder metrics and sharpen the differentiator.
+   AgriTech 33 Floating Farm | Imaginative concept, but it skips the official template, team details and software plan, and a 24-hour build isn’t feasible.
+   HealthTe 52 TEAM APEX | Clear, realistic SOS workflow with honest caveats; the idea is common, so add a distinctive feature and fill in the track.
+   Cybersec 74 PromptPioneers | Well-scoped pre-payment UPI and QR check with explainable rules and a clear hourly plan; fix the team-name typo.
+   Cybersec 60 GEM-IN-AI | Relevant agent-shell gateway, but the slides mix Windows and Linux mechanisms; clarify the sandbox design and fill in the track.
+   Cybersec 59 ScamSathi AI | Clear, responsible scam explainer with a validation plan; the team details are unfilled, and English–Tamil support needs a stronger differentiator.
+   Cybersec 57 SentinelX AI | Clear, scoped anomaly-alert prototype with an hourly plan; the team details are unfilled, and the idea needs a sharper differentiator.
+   Cybersec 46 Tech Warriors | Generic SOC concept; specify the data sources, detection models and response actions, and fill in the track.
+-- blockchain
+   HealthTe 65 DataForge | Well-structured provenance plus anomaly detection; scope the blockchain and AI layers into a focused 24-hour demo
+   Cybersec 67 TEAM PRIME | Strong selective-disclosure design using salted Merkle proofs; the blockchain and Flutter scope is heavy for 24 hours.
+-- plan too long
+   FinTech 69 Backlog Coders | Strong, specific mule-tracing concept with detailed architecture; plan spans 12 weeks and relies on restricted data, so define a 24-hour scope.
+   FinTech 69 Infinity | Well-researched problem and thoughtful certainty-tagging design; the six-day roadmap should be condensed into a 24-hour plan.
+   HealthTe 45 Data Dynamo | Practical, unified feature set but weak HealthTech fit; remove the leftover template notes and replace the four-week roadmap with 24 hours.
+   Cybersec 69 TEAMDARK | Creative AI-versus-AI deception gateway; the 36-hour plan exceeds 24 hours, and the 0% false-positive claim needs evidence
+   Hardware 59 Blue Nex | Coordinated robots plus drone with honest caveats; the plan spans eight weeks and Wi-Fi CSI is ambitious, so define a 24-hour slice.
+-- too many parts
+   AgriTech 66 YUKTI | Strong farm-to-payment loop with a clear voice journey; eight agents are ambitious, so define a lean 24-hour build plan.
+   FinTech 67 Corsair Devs | Excellent architecture and clear agent roles; the heavy stack lacks a 24-hour timeline, so define a realistic demo scope.
+   HealthTe 70 Homie | Creative severity-aware routing with early simulation evidence; four modules plus an active bed is heavy for 24 hours.
+   HealthTe 68 LakeForge | Strong database-driven safety pipeline with doctor approval; the AWS stack and five roles are heavy for 24 hours.
+   HealthTe 65 Team Alpha | Inclusive voice-first scheme guidance with a responsible disclaimer; name the eligibility data source and simplify the large stack.
+   HealthTe 63 BROCODE | Detailed, budget-aware workflow with a good example; many input modes are ambitious, so prioritise one for 24 hours.
+   Cybersec 57 VANTER | Important multi-source investigation problem, but 13 engines and a cloud stack far exceed 24 hours; pick one core flow
+   Hardware 58 Code for India | Impressive multi-robot vision with ROS 2 simulation; five robots is unrealistic for 24 hours, so pick one robot plus the dashboard.
