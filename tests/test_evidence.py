@@ -21,6 +21,7 @@ def world(conn):
     seed.seed(conn)
     bank = load_bank()
     translator, printed = fp.render_translator_copy(key, 1, 23, bank), fp.render_print_copy(key, 1, 4821, bank)
+    first_trap = next(i for i, r in enumerate(translator) if r.is_trap)      # the key is random, so find where a trap landed
     ids = {
         "traced": leaks.add_manual_leak(conn, text=leak_text(translator[:14])),
         "lead": leaks.add_manual_leak(conn, text=leak_text(translator[20:26], options=False)),
@@ -28,7 +29,7 @@ def world(conn):
         "fake": leaks.add_manual_leak(conn, text=fake_paper_text()),
         "print": leaks.add_manual_leak(conn, text=leak_text(printed[:14])),
         "print_wide": leaks.add_manual_leak(conn, text=leak_text(printed[:30])),
-        "bio": leaks.add_manual_leak(conn, text=leak_text(translator[95:125])),
+        "bio": leaks.add_manual_leak(conn, text=leak_text(translator[first_trap - 10:first_trap + 20])),
     }
     conn.execute("""UPDATE leaks SET source = 'telegram', chat_title = 'Exam leaks demo', chat_username = 'examleaks_demo',
                     chat_id = -100123, message_id = 41, message_url = 'https://t.me/examleaks_demo/41',

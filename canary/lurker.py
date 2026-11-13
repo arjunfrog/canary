@@ -24,6 +24,8 @@ BACKFILL = 50                 # messages read from each watched chat on start
 MAX_PER_MINUTE = 10           # new leaks accepted per chat per minute
 MAX_FLOOD_WAIT = 3600
 REFRESH_SECONDS = 20          # how often the listener rereads the list of watched chats
+PORTS = (443, 5222, 80)       # Telegram's own ports. Some networks block MTProto on 443 but not on the others
+CONNECT_SECONDS = 25
 _USERNAME = re.compile(r"^[A-Za-z][A-Za-z0-9_]{3,31}$")
 
 
@@ -66,7 +68,58 @@ def clean_username(text: str) -> str:
     return name
 
 
-def make_client(vault, session: str | None = None) -> ReadOnlyTelegram:
+def ports() -> tuple[int, ...]:
+    """The ports to try, in order. CANARY_TG_PORT pins one."""
+    import os
+    pinned = os.environ.get("CANARY_TG_PORT", "").strip()
+    if pinned:
+        try:
+            return (int(pinned),)
+        except ValueError:
+            raise TelegramNotReady(f"CANARY_TG_PORT must be a port number, not {pinned!r}.") from None
+    return PORTS
+
+
+def connection_on(port: int):
+    """A Telethon connection class that always uses this port.
+
+    Every connection Telethon opens goes through this class: the first one, reconnects, and the ones it
+    opens when Telegram moves the account to another data centre. So once a port works, it is kept.
+    """
+    from telethon.network.connection import ConnectionTcpFull
+    if port == 443:
+        return ConnectionTcpFull
+
+    class OnPort(ConnectionTcpFull):
+        def __init__(self, ip, _port, dc_id, **kwargs):
+            super().__init__(ip, port, dc_id, **kwargs)
+
+    OnPort.__name__ = f"ConnectionTcpFullOnPort{port}"
+    return OnPort
+
+
+UNREACHABLE = ("Could not reach Telegram from this network on port {ports}. The network may be blocking it. "
+               "Try another network, such as a phone hotspot. Typed leaks still work.")
+
+
+async def connect_any(build):
+    """Connect on the first port that works. build(port) returns an unconnected client. Returns (client, port)."""
+    tried = ports()
+    for port in tried:
+        client = build(port)
+        try:
+            await asyncio.wait_for(client.connect(), CONNECT_SECONDS)
+            return client, port
+        except (OSError, EOFError, ConnectionError, asyncio.TimeoutError) as exc:   # EOFError: the server cut it off
+            log.info("Telegram did not answer on port %s (%s)", port, type(exc).__name__)
+            try:
+                await client.disconnect()
+            except Exception:
+                pass
+    raise TelegramNotReady(UNREACHABLE.format(ports=" or ".join(str(p) for p in tried)))
+
+
+def make_client(vault, session: str | None = None, port: int = 443) -> ReadOnlyTelegram:
     """A Telethon client built from the vault's values, with the session kept in memory only."""
     api_id, api_hash = vault.get("tg_api_id"), vault.get("tg_api_hash")
     if not api_id or not api_hash:
@@ -77,7 +130,8 @@ def make_client(vault, session: str | None = None) -> ReadOnlyTelegram:
     from telethon import TelegramClient
     from telethon.sessions import StringSession
     try:
-        return ReadOnlyTelegram(TelegramClient(StringSession(session), int(api_id), api_hash))
+        return ReadOnlyTelegram(TelegramClient(StringSession(session), int(api_id), api_hash,
+                                               connection=connection_on(port), connection_retries=1))
     except ValueError:
         raise TelegramNotReady("tg_api_id must be a number, and tg_session must be a session saved by tg-login.") from None
 
@@ -105,11 +159,26 @@ async def login(vault, ask=input, ask_secret=None) -> str:
     api_id, api_hash = vault.get("tg_api_id"), vault.get("tg_api_hash")
     if not api_id or not api_hash:
         raise TelegramNotReady("Add tg_api_id and tg_api_hash first, with: python -m canary vault set NAME")
+    from telethon.errors import RPCError
     ask_secret = ask_secret or getpass.getpass
-    client = TelegramClient(StringSession(), int(api_id), api_hash)
-    await client.start(phone=lambda: ask("Phone number, with country code: "),
-                       code_callback=lambda: ask("Login code sent by Telegram: "),
-                       password=lambda: ask_secret("Two-step password: "))
+    try:
+        api_id = int(api_id)
+    except ValueError:
+        raise TelegramNotReady("tg_api_id must be the number shown on my.telegram.org.") from None
+    client, port = await connect_any(lambda p: TelegramClient(StringSession(), api_id, api_hash,
+                                                               connection=connection_on(p), connection_retries=1))
+    if port != 443:
+        print(f"Reached Telegram on port {port}; this network blocks the usual one.")
+    try:
+        await client.start(phone=lambda: ask("Phone number, with country code: "),
+                           code_callback=lambda: ask("Login code sent by Telegram: "),
+                           password=lambda: ask_secret("Two-step password: "))
+    except RPCError as exc:
+        await client.disconnect()
+        raise TelegramNotReady(f"Telegram refused the login: {exc.__class__.__name__}. {exc.message or ''}".strip()) from None
+    except (OSError, EOFError, ConnectionError):
+        await client.disconnect()
+        raise TelegramNotReady("The connection to Telegram dropped during login. Run tg-login again.") from None
     try:
         me = await client.get_me()
         vault.set("tg_session", client.session.save())
@@ -121,8 +190,11 @@ async def login(vault, ask=input, ask_secret=None) -> str:
 async def watch(conn: sqlite3.Connection, vault, username: str, client=None) -> str:
     """Join a public channel or group if needed and add it to watched_chats. Returns its title."""
     name = clean_username(username)
-    client = client or make_client(vault)
-    await client.connect()
+    if client is None:
+        make_client(vault)                                     # says what is missing before any network use
+        client, _ = await connect_any(lambda port: make_client(vault, port=port))
+    else:
+        await client.connect()
     try:
         if not await client.is_user_authorized():
             raise TelegramNotReady("Telegram is not logged in. Run: python -m canary tg-login")
@@ -306,11 +378,13 @@ async def run_listener(conn: sqlite3.Connection, vault, stop: asyncio.Event, on_
                        state: ListenerState | None = None, client=None) -> None:
     """Listen to watched chats and insert a queued leak for each kept message, until `stop` is set."""
     state = state or ListenerState()
-    try:
-        client = client or make_client(vault)
-    except TelegramNotReady as exc:
-        state.connected, state.message = False, str(exc)
-        return
+    fixed = client                                             # tests hand in a fake client; normally it is built here
+    if fixed is None:
+        try:
+            make_client(vault)                                 # says what is missing before any network use
+        except TelegramNotReady as exc:
+            state.connected, state.message = False, str(exc)
+            return
     from telethon import events
     chats: dict[int, Chat] = {}
     limiter = RateLimit()
@@ -329,13 +403,19 @@ async def run_listener(conn: sqlite3.Connection, vault, stop: asyncio.Event, on_
 
     delay = 5
     while not stop.is_set():
+        client = fixed
         try:
-            await client.connect()
+            if fixed is None:
+                client, port = await connect_any(lambda p: make_client(vault, port=p))
+            else:
+                await client.connect()
+                port = 443
             if not await client.is_user_authorized():
                 state.connected, state.message = False, "Telegram is not logged in. Run: python -m canary tg-login"
                 return
             client.add_event_handler(on_message, events.NewMessage(incoming=True))
-            state.connected, state.message = True, "Telegram connected."
+            state.connected = True
+            state.message = "Telegram connected." if port == 443 else f"Telegram connected on port {port}."
             delay = 5
             done: set[int] = set()
             while not stop.is_set():
@@ -360,8 +440,9 @@ async def run_listener(conn: sqlite3.Connection, vault, stop: asyncio.Event, on_
             state.connected, state.message = False, "Telegram is not reachable. Typed leaks still work."
         finally:
             try:
-                client.remove_event_handler(on_message)
-                await client.disconnect()
+                if client is not None:
+                    client.remove_event_handler(on_message)
+                    await client.disconnect()
             except Exception:
                 pass
         if not stop.is_set():

@@ -40,6 +40,9 @@ Kept current so the work can be picked up again.
 - The worker runs each leak on one side thread, so a slow photo read never blocks the Telegram listener.
 - Backfill on start (last 50 messages) is not rate limited. Live messages are: 10 new leaks a minute per chat.
 - The Telegram client is wrapped in `ReadOnlyTelegram`, which only lets reading calls through.
+- Telegram is tried on ports 443, then 5222, then 80, and the first that works is kept for every connection,
+  including reconnects and moves to another data centre. Some networks (including the one this was built on)
+  cut MTProto off on 443 but let 5222 through. `CANARY_TG_PORT` pins one port.
 - Seed timestamps hang off the exam's creation time. Translator copies come back 3 days before it and printed
   copies reach the superintendent about 12 hours before it, so a leak posted after seeding finds the copy
   with the exam cell (translator copies) or the superintendent (printed copies). The Case screen shows who it

@@ -25,12 +25,13 @@ class StatusLine(QLabel):
         reader_up = has_key and reader_reachable is not False
         if not connected and not reader_up:
             parts = ["Offline. Typed leaks still work.", watching]
-            if telegram and telegram.message and "not reachable" not in telegram.message:
+            if telegram and telegram.message and "Typed leaks still work" not in telegram.message:
                 parts.append(telegram.message)
             if not has_key:
                 parts.append("No photo reader key in the vault.")
         else:
-            parts = [watching, "Telegram connected." if connected else (telegram.message if telegram else "Telegram is off.")]
+            parts = [watching, (telegram.message or "Telegram connected.") if connected
+                     else (telegram.message if telegram else "Telegram is off.")]
             if not has_key:
                 parts.append("No photo reader key in the vault, so photos cannot be read.")
             elif reader_reachable is False:

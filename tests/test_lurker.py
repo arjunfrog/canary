@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import inspect
 from datetime import datetime, timezone
 from types import SimpleNamespace
@@ -258,3 +259,121 @@ def test_the_listener_source_has_no_writing_calls():
                       "SendReactionRequest", "forward_", ".edit(", ".delete(", "get_dialogs", "iter_dialogs",
                       "ImportChatInviteRequest", ".click("):
         assert forbidden not in code, forbidden
+
+
+# ---- networks that block Telegram on its usual port
+
+class PortClient:
+    """A client whose connect works only on the ports a network lets through."""
+
+    def __init__(self, port, open_ports, log):
+        self.port, self.open_ports, self.log = port, open_ports, log
+
+    async def connect(self):
+        self.log.append(("connect", self.port))
+        if self.port not in self.open_ports:
+            raise asyncio.IncompleteReadError(b"", 8)           # what a blocked port looks like: cut off at once
+
+    async def disconnect(self):
+        self.log.append(("disconnect", self.port))
+
+
+def test_connect_falls_back_to_the_next_port_that_works(monkeypatch):
+    monkeypatch.delenv("CANARY_TG_PORT", raising=False)
+    log = []
+    client, port = go(lurker.connect_any(lambda p: PortClient(p, {5222}, log)))
+    assert port == 5222 and client.port == 5222
+    assert log == [("connect", 443), ("disconnect", 443), ("connect", 5222)]
+    log.clear()
+    assert go(lurker.connect_any(lambda p: PortClient(p, {443, 5222}, log)))[1] == 443 and log == [("connect", 443)]
+
+
+def test_when_every_port_is_blocked_it_says_so_in_plain_words(monkeypatch):
+    monkeypatch.delenv("CANARY_TG_PORT", raising=False)
+    with pytest.raises(lurker.TelegramNotReady, match="port 443 or 5222 or 80.*phone hotspot.*Typed leaks still work"):
+        go(lurker.connect_any(lambda p: PortClient(p, set(), [])))
+
+
+def test_a_port_can_be_pinned(monkeypatch):
+    monkeypatch.setenv("CANARY_TG_PORT", "5222")
+    log = []
+    assert go(lurker.connect_any(lambda p: PortClient(p, {443, 5222}, log)))[1] == 5222 and log == [("connect", 5222)]
+    monkeypatch.setenv("CANARY_TG_PORT", "five")
+    with pytest.raises(lurker.TelegramNotReady, match="port number"):
+        lurker.ports()
+
+
+def test_the_chosen_port_is_used_for_every_connection_even_after_a_move_to_another_data_centre():
+    from telethon.network.connection import ConnectionTcpFull
+    assert lurker.connection_on(443) is ConnectionTcpFull
+    forced = lurker.connection_on(5222)
+    assert issubclass(forced, ConnectionTcpFull)
+    for dc_id, ip in ((2, "149.154.167.51"), (5, "91.108.56.130")):       # Telegram asks for 443 when it moves the account
+        conn = forced(ip, 443, dc_id, loggers={"telethon.network.connection.connection": logging.getLogger("t")})
+        assert (conn._ip, conn._port) == (ip, 5222)
+
+
+def test_the_listener_reports_the_port_and_a_blocked_network(conn, monkeypatch):
+    monkeypatch.delenv("CANARY_TG_PORT", raising=False)
+
+    class Vault:
+        def get(self, name):
+            return {"tg_api_id": "12345", "tg_api_hash": "0" * 32, "tg_session": "1Aabc"}.get(name)
+
+    built = []
+
+    def make(vault, session=None, port=443):
+        client = FakeClient()
+        client.port = port
+
+        async def connect():
+            client.calls.append("connect")
+            if port != 5222:
+                raise asyncio.IncompleteReadError(b"", 8)
+            client.connected = True
+        client.connect = connect
+        built.append(client)
+        return client
+
+    monkeypatch.setattr(lurker, "make_client", make)
+    state = lurker.ListenerState()
+
+    async def scenario():
+        stop = asyncio.Event()
+        task = asyncio.create_task(lurker.run_listener(conn, Vault(), stop, state=state))
+        for _ in range(200):
+            await asyncio.sleep(0.01)
+            if state.connected:
+                break
+        assert state.message == "Telegram connected on port 5222."
+        stop.set()
+        await task
+    go(scenario())
+    assert [c.port for c in built if "connect" in c.calls] == [443, 5222]
+
+    monkeypatch.setenv("CANARY_TG_PORT", "443")
+    blocked = lurker.ListenerState()
+
+    async def blocked_scenario():
+        stop = asyncio.Event()
+        task = asyncio.create_task(lurker.run_listener(conn, Vault(), stop, state=blocked))
+        for _ in range(200):
+            await asyncio.sleep(0.01)
+            if "Could not reach" in blocked.message:
+                break
+        stop.set()
+        await task
+    go(blocked_scenario())
+    assert not blocked.connected and "phone hotspot" in blocked.message
+
+
+def test_login_explains_a_blocked_network_instead_of_crashing(monkeypatch):
+    monkeypatch.setenv("CANARY_TG_PORT", "1")                  # nothing answers there
+
+    class Vault:
+        def get(self, name):
+            return {"tg_api_id": "12345", "tg_api_hash": "0" * 32}.get(name)
+
+    monkeypatch.setattr(lurker, "CONNECT_SECONDS", 3)
+    with pytest.raises(lurker.TelegramNotReady, match="Could not reach Telegram"):
+        go(lurker.login(Vault(), ask=lambda prompt: pytest.fail("must not ask for a phone number"), ask_secret=lambda p: ""))
