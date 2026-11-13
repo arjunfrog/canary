@@ -210,3 +210,69 @@ def test_nonsense_in_the_remembered_model_file_is_ignored(canary_home, monkeypat
     config.ensure_home()
     (canary_home / "reader_model").write_text("../../etc/passwd\nrm -rf")
     assert reader.model_name() == reader.DEFAULT_MODEL
+
+
+# ---- when Google is busy
+
+class BusyClient(ModelAwareClient):
+    """Says 503 for the models in `busy`, for the first `times` requests to each (or always)."""
+
+    def __init__(self, busy, times=None):
+        super().__init__()
+        self.busy, self.times, self.seen = set(busy), times, {}
+
+    def generate_content(self, **kwargs):
+        from google.genai import errors
+        model = kwargs["model"]
+        self.seen[model] = self.seen.get(model, 0) + 1
+        if model in self.busy and (self.times is None or self.seen[model] <= self.times):
+            self.calls.append(kwargs)
+            raise errors.ServerError(503, {"error": {"message": "This model is currently experiencing high demand.",
+                                                     "status": "UNAVAILABLE"}})
+        return super().generate_content(**kwargs)
+
+
+@pytest.fixture
+def no_waiting(monkeypatch, canary_home):
+    waits = []
+    monkeypatch.setattr(reader, "_sleep", waits.append)
+    monkeypatch.delenv("CANARY_READER_MODEL", raising=False)
+    config.ensure_home()
+    (canary_home / "reader_model").write_text("gemini-2.5-flash")
+    return waits
+
+
+def test_a_busy_model_is_tried_again_after_a_short_pause(no_waiting):
+    client = BusyClient({"gemini-2.5-flash"}, times=2)
+    data = reader.read_image(PNG, "key", client=client, use_cache=False)
+    assert data["model"] == "gemini-2.5-flash" and no_waiting == [2.0, 5.0]
+
+
+def test_when_the_usual_model_stays_busy_the_next_flash_model_reads_this_one_photo(no_waiting, canary_home):
+    client = BusyClient({"gemini-2.5-flash"})
+    data = reader.read_image(PNG, "key", client=client, use_cache=False)
+    assert data["model"] == "gemini-2.0-flash"
+    assert reader.model_name() == "gemini-2.5-flash"                    # the usual model is kept for next time
+
+
+def test_when_every_model_is_busy_it_says_so_plainly_and_gives_up(no_waiting):
+    everything = {n.removeprefix("models/") for n, _ in LISTED}
+    client = BusyClient(everything)
+    with pytest.raises(reader.ReaderError, match="overloaded right now.*Read it again.*Typed leaks still work.*high demand"):
+        reader.read_image(PNG, "key", client=client, use_cache=False)
+    assert sum(client.seen.values()) == 3 + reader.FALLBACK_MODELS    # a bounded number of requests
+    assert not list((config.home() / "cache").glob("*.json"))          # a failed read is never cached
+
+
+def test_a_pinned_model_is_retried_but_never_swapped(no_waiting, monkeypatch):
+    monkeypatch.setenv("CANARY_READER_MODEL", "gemini-2.5-flash")
+    client = BusyClient({"gemini-2.5-flash"})
+    with pytest.raises(reader.ReaderError, match="overloaded"):
+        reader.read_image(PNG, "key", client=client, use_cache=False)
+    assert client.seen == {"gemini-2.5-flash": 3} and not getattr(client, "listed", False)
+
+
+def test_lite_models_are_only_ever_a_fallback():
+    ranked = reader.rank_flash_models(LISTED)
+    assert ranked[:2] == ["gemini-2.5-flash", "gemini-2.0-flash"] and ranked[-1] == "gemini-2.5-flash-lite"
+    assert reader.pick_flash_model([("models/gemini-2.5-flash-lite", ["generateContent"])]) is None

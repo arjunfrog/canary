@@ -10,6 +10,7 @@ import hashlib
 import json
 import os
 import re
+import time
 import unicodedata
 
 from . import config
@@ -98,22 +99,29 @@ def model_name() -> str:
     return found if re.fullmatch(r"[a-z0-9][a-z0-9.\-]{2,80}", found) else DEFAULT_MODEL
 
 
-def pick_flash_model(names_and_actions) -> str | None:
-    """The newest stable Gemini Flash model that can answer a request, from Google's list for this key.
+def rank_flash_models(names_and_actions) -> list[str]:
+    """The Gemini Flash models that can answer a request, best first, from Google's list for this key.
 
-    Takes (name, supported actions) pairs. Leaves out the lite, image, speech, live and experimental kinds,
-    and prefers a stable model to a preview.
+    Takes (name, supported actions) pairs. The standard models come first, newest and stable before preview.
+    The lite models come after them: they are a fallback when the others are busy, never the first choice.
+    Image, speech, live and experimental kinds are left out.
     """
-    best, best_rank = None, None
+    ranked = []
     for name, actions in names_and_actions:
         name = (name or "").removeprefix("models/")
         match = re.fullmatch(r"gemini-(\d+(?:\.\d+)?)-flash(-[a-z0-9.\-]+)?", name)
-        if not match or "generateContent" not in (actions or ()) or any(w in name for w in _SKIP_IN_NAME):
+        lite = "lite" in name
+        skip = [w for w in _SKIP_IN_NAME if w != "lite"]
+        if not match or "generateContent" not in (actions or ()) or any(w in name for w in skip):
             continue
-        rank = ("preview" not in name, float(match.group(1)), -len(name))
-        if best_rank is None or rank > best_rank:
-            best, best_rank = name, rank
-    return best
+        ranked.append(((not lite, "preview" not in name, float(match.group(1)), -len(name)), name))
+    return [name for _, name in sorted(ranked, reverse=True)]
+
+
+def pick_flash_model(names_and_actions) -> str | None:
+    """The best standard (not lite) Gemini Flash model this key can use."""
+    standard = [n for n in rank_flash_models(names_and_actions) if "lite" not in n]
+    return standard[0] if standard else None
 
 
 def _remember_model(name: str) -> None:
@@ -123,13 +131,16 @@ def _remember_model(name: str) -> None:
         handle.write(name)
 
 
-def _find_model(client) -> str | None:
-    """Ask Google which models this key may use, and pick a Flash model. Sends nothing but the key."""
+def _listed(client) -> list:
+    """Ask Google which models this key may use. Sends nothing but the key."""
     try:
-        listed = [(m.name, m.supported_actions) for m in client.models.list()]
+        return [(m.name, m.supported_actions) for m in client.models.list()]
     except Exception:
-        return None
-    return pick_flash_model(listed)
+        return []
+
+
+def _find_model(client) -> str | None:
+    return pick_flash_model(_listed(client))
 
 
 def image_type(image: bytes) -> str | None:
@@ -186,8 +197,23 @@ def _cache_path(sha: str):
     return config.home() / "cache" / f"{sha}.json"
 
 
+BUSY = (500, 502, 503, 504)       # Google is overloaded or failing: worth waiting a moment, or trying another model
+BUSY_WAITS = (2.0, 5.0)           # pauses before the second and third try on the same model
+FALLBACK_MODELS = 2               # other Flash models tried, once each, when the usual one stays busy
+_sleep = time.sleep
+
+
+def _code(exc) -> int | None:
+    return getattr(exc, "code", None)
+
+
 def _ask(image: bytes, mime: str, api_key: str, client=None):
-    """One request to Gemini: the image and the fixed instruction. Returns (text, model version)."""
+    """Read one image with Gemini. Returns (text, model version).
+
+    If the model name is unknown to this key, a Flash model the key can use is found and remembered.
+    If Google is busy, the same model is tried again after a short pause, and then other Flash models
+    are tried once each for this request only. A pinned model (CANARY_READER_MODEL) is never swapped.
+    """
     try:
         from google import genai
         from google.genai import errors, types
@@ -195,24 +221,51 @@ def _ask(image: bytes, mime: str, api_key: str, client=None):
         raise ReaderError("The google-genai library is not installed, so photos cannot be read.") from exc
     if client is None:
         client = genai.Client(api_key=api_key, http_options=types.HttpOptions(timeout=TIMEOUT_MS))
+    pinned = bool(os.environ.get("CANARY_READER_MODEL", "").strip())
+    model = model_name()
+
+    def busy_tries(name):
+        """Up to three tries on one model while Google says it is busy. Returns the result or raises the last error."""
+        for wait in (*BUSY_WAITS, None):
+            try:
+                return _generate(client, image, mime, name, types)
+            except errors.APIError as exc:
+                if _code(exc) not in BUSY or wait is None:
+                    raise
+                _sleep(wait)
+
     try:
-        return _generate(client, image, mime, model_name(), types)
+        return busy_tries(model)
     except errors.APIError as exc:
-        # The model name is not one this key can use. Unless one was pinned, find one and try once more.
-        if getattr(exc, "code", None) != 404 or os.environ.get("CANARY_READER_MODEL", "").strip():
+        if pinned:
             return _explain(exc, api_key)
-        found = _find_model(client)
-        if not found or found == model_name():
-            return _explain(exc, api_key)
-        _remember_model(found)
-        try:
-            return _generate(client, image, mime, found, types)
-        except errors.APIError as again:
-            return _explain(again, api_key)
-        except Exception as again:
-            return _explain(again, api_key)
+        first = exc
     except Exception as exc:
         return _explain(exc, api_key)
+
+    listed = _listed(client)
+    if _code(first) == 404:
+        found = pick_flash_model(listed)
+        if not found or found == model:
+            return _explain(first, api_key)
+        _remember_model(found)
+        try:
+            return busy_tries(found)
+        except Exception as exc:
+            first, model = exc, found
+            if not isinstance(exc, errors.APIError) or _code(exc) not in BUSY:
+                return _explain(exc, api_key)
+    if _code(first) not in BUSY:
+        return _explain(first, api_key)
+    for other in [n for n in rank_flash_models(listed) if n != model][:FALLBACK_MODELS]:
+        try:
+            return _generate(client, image, mime, other, types)    # this request only; the usual model is kept
+        except errors.APIError as exc:
+            if _code(exc) not in BUSY and _code(exc) != 404:
+                return _explain(exc, api_key)
+        except Exception as exc:
+            return _explain(exc, api_key)
+    return _explain(first, api_key)
 
 
 def _generate(client, image: bytes, mime: str, model: str, types):
@@ -246,6 +299,10 @@ def _explain(exc, api_key: str):
                           + said) from None
     if code is not None and 400 <= code < 500:
         raise ReaderError(f"The photo reader refused the request (error {code})." + said) from None
+    if code in BUSY:
+        raise ReaderError(f"Google's photo reader is overloaded right now (error {code}). Canary tried again and tried "
+                          "other Flash models, and all were busy. Wait a minute, then choose \"Read it again\". "
+                          "Typed leaks still work." + said) from None
     raise ReaderError(f"The photo reader is having trouble (error {code}). Try again shortly." + said) from None
 
 

@@ -40,6 +40,8 @@ Kept current so the work can be picked up again.
 - The photo reader asks for `gemini-flash-latest`. If Google says this key has no such model, it lists the models
   the key may use, picks the newest stable Gemini Flash (not lite, image, speech or live), keeps the name in
   `CANARY_HOME/reader_model` and retries once. `CANARY_READER_MODEL` pins a model and turns this off.
+- When Google says a model is busy (500 to 504), the reader waits 2 s and 5 s and tries again, then tries up to
+  two other Flash models once each for that photo only (lite models last). A pinned model is retried, never swapped.
 - The worker runs each leak on one side thread, so a slow photo read never blocks the Telegram listener.
 - Backfill on start (last 50 messages) is not rate limited. Live messages are: 10 new leaks a minute per chat.
 - The Telegram client is wrapped in `ReadOnlyTelegram`, which only lets reading calls through.
