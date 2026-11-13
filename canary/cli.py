@@ -1,8 +1,4 @@
-"""Command line: python -m canary <command>.
-
-Working now: init, vault set, verify-audit, add-leak, cases, run (opens the app), screenshot.
-Every other command is registered and says which task builds it.
-"""
+"""Command line: python -m canary <command>. Run `python -m canary --help` for the list."""
 import argparse
 import asyncio
 import getpass
@@ -13,12 +9,8 @@ from pathlib import Path
 from . import __version__, analyze, audit, config, db, worker
 from .vault import SECRET_NAMES, Vault, WrongPassphrase
 
-# command -> (help, task that builds it)
-NOT_BUILT = {
-    "check": ("Run the end-to-end health check", 13),
-    "reset": ("Delete leaks, cases and evidence files", 13),
-    "export-case": ("Save a case as a replay file", 13),
-}
+# command -> (help, task that builds it). Every task is built, so this is empty.
+NOT_BUILT: dict = {}
 
 
 def unlock() -> Vault:
@@ -220,6 +212,35 @@ def cmd_sim(args) -> int:
     return 0
 
 
+def cmd_check(args) -> int:
+    from . import check
+    vault = unlock()
+    return 0 if check.check(db.connect(), vault) else 1
+
+
+def cmd_reset(args) -> int:
+    from . import check
+    unlock()                                       # deleting every leak needs the passphrase
+    if not args.yes and input("This deletes every leak, case and evidence file. Type reset to go on: ").strip() != "reset":
+        print("Nothing was deleted.")
+        return 1
+    counts = check.reset(db.connect())
+    print("Deleted " + ", ".join(f"{count} {name}" for name, count in counts.items())
+          + ". The exam, copies and audit log are kept.")
+    return 0
+
+
+def cmd_export_case(args) -> int:
+    from . import check
+    try:
+        path = check.export_case(db.connect(), args.case_id)
+    except LookupError as exc:
+        sys.exit(str(exc))
+    print(f"Replay written to {path}")
+    print(f"Play it with: python -m canary run --replay {path.stem}")
+    return 0
+
+
 def cmd_verify_audit(args) -> int:
     ok, bad = audit.verify(db.connect())
     print("Audit log verifies." if ok else f"Audit log is broken at row {bad}.")
@@ -257,6 +278,14 @@ def cmd_cases(args) -> int:
 
 
 def cmd_run(args) -> int:
+    if args.replay:
+        from . import check
+        from .ui.app import run_app
+        try:
+            view = check.load_replay(args.replay)
+        except LookupError as exc:
+            sys.exit(str(exc))
+        return run_app(replay=view)
     if not args.headless:
         from .ui.app import run_app               # imported here so the other commands work without Qt
         return run_app()
@@ -350,6 +379,14 @@ def build_parser() -> argparse.ArgumentParser:
     sim.add_argument("--seed", type=int, default=7)
     sim.set_defaults(fn=cmd_sim)
 
+    sub.add_parser("check", help="Run the end-to-end health check").set_defaults(fn=cmd_check)
+    reset = sub.add_parser("reset", help="Delete all leaks, cases and evidence files")
+    reset.add_argument("--yes", action="store_true", help="do not ask to confirm")
+    reset.set_defaults(fn=cmd_reset)
+    export = sub.add_parser("export-case", help="Save a case as a replay file")
+    export.add_argument("case_id", type=int, metavar="ID")
+    export.set_defaults(fn=cmd_export_case)
+
     add = sub.add_parser("add-leak", help="Queue a leak by hand")
     source = add.add_mutually_exclusive_group(required=True)
     source.add_argument("--text", metavar="FILE")
@@ -361,7 +398,8 @@ def build_parser() -> argparse.ArgumentParser:
     cases.set_defaults(fn=cmd_cases)
 
     run = sub.add_parser("run", help="Open the Canary app")
-    run.add_argument("--headless", action="store_true", help="Run the worker with no window")
+    run.add_argument("--headless", action="store_true", help="Run the worker and listener with no window")
+    run.add_argument("--replay", metavar="NAME", help="Show one saved case from CANARY_HOME/replay, with no database or network")
     run.set_defaults(fn=cmd_run)
 
     shot = sub.add_parser("screenshot", help="Save an image of every screen, to check the design")
