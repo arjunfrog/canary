@@ -254,6 +254,14 @@ def cmd_score(args) -> int:
     return 0 if score.report(outcomes, digest) else 1
 
 
+def cmd_read_again(args) -> int:
+    from . import leaks
+    if not leaks.read_again(db.connect(), args.leak_id):
+        sys.exit(f"Leak {args.leak_id} is not one that failed, so there is nothing to read again.")
+    print(f"Leak {args.leak_id} is queued again. It is read when the app or run --headless is running.")
+    return 0
+
+
 def cmd_verify_audit(args) -> int:
     conn = db.connect()
     ok, bad = audit.verify(conn)
@@ -407,6 +415,10 @@ def build_parser() -> argparse.ArgumentParser:
     score = sub.add_parser("score", help="Score the tool on the fixed set of leaks with known answers")
     score.add_argument("--show", type=int, metavar="ID", help="print one leak's text. Set-aside leaks are refused")
     score.set_defaults(fn=cmd_score)
+
+    again = sub.add_parser("read-again", help="Queue a leak that could not be analysed, to read it again")
+    again.add_argument("leak_id", type=int, metavar="ID")
+    again.set_defaults(fn=cmd_read_again)
 
     add = sub.add_parser("add-leak", help="Queue a leak by hand")
     source = add.add_mutually_exclusive_group(required=True)

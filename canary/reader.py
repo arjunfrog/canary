@@ -150,18 +150,33 @@ def _ask(image: bytes, mime: str, api_key: str, client=None):
                                                response_mime_type="application/json", response_schema=SCHEMA))
     except errors.APIError as exc:
         code = getattr(exc, "code", None)
+        said = _google_says(exc, api_key)
         if code == 429:
-            raise ReaderError("The photo reader has used up its quota for now. Typed leaks still work.") from None
+            raise ReaderError("The photo reader has used up its quota for now. Typed leaks still work." + said) from None
         if code in (400, 401, 403):
-            raise ReaderError("The photo reader refused the request. Check the Gemini key in the vault.") from None
+            raise ReaderError("The photo reader refused the request. Check the Gemini key in the vault." + said) from None
+        if code == 402:
+            raise ReaderError("Google wants payment before this key can be used: check Billing for this key's project "
+                              "in Google AI Studio. Typed leaks still work." + said) from None
         if code == 404:
             raise ReaderError(f"Google has no model called {model_name()!r} for this key. Set CANARY_READER_MODEL to a "
-                              "current Gemini Flash model name, as listed in Google AI Studio.") from None
-        raise ReaderError(f"The photo reader is having trouble (error {code}). Try again shortly.") from None
+                              "current Gemini Flash model name, as listed in Google AI Studio." + said) from None
+        if code is not None and 400 <= code < 500:
+            raise ReaderError(f"The photo reader refused the request (error {code})." + said) from None
+        raise ReaderError(f"The photo reader is having trouble (error {code}). Try again shortly." + said) from None
     except Exception as exc:
         raise ReaderError(f"Could not reach the photo reader ({type(exc).__name__}). Check the network. "
                           "Typed leaks still work.") from None
     return getattr(response, "text", None), getattr(response, "model_version", None) or model_name()
+
+
+def _google_says(exc, api_key: str) -> str:
+    """Google's own reason for an error, as one short line of plain text. The key is blanked out if it appears."""
+    message = str(getattr(exc, "message", "") or "")
+    if api_key:
+        message = message.replace(api_key, "[key]")
+    message = " ".join("".join(ch for ch in message if unicodedata.category(ch)[0] != "C").split())[:240]
+    return f" Google said: {message}" if message else ""
 
 
 def read_image(image: bytes, api_key: str, client=None, use_cache: bool = True) -> dict:

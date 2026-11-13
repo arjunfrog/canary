@@ -39,7 +39,7 @@ def sentence(view) -> str:
     if view.status == "unreadable":
         return "Too little of this could be read to say whose paper it is, or whether it is ours at all."
     if view.status == "failed":
-        return "The leak is saved. It can be analysed again once the problem is fixed."
+        return "The leak is saved. Once the problem is fixed, choose \"Read it again\"."
     return "This leak has not been read yet."
 
 
@@ -96,6 +96,8 @@ class CasePage(Page):
         self.step_note = plain("", 14, role="muted")
         self.sentence = plain("", 16, wrap=True)
         self.read_in = plain("", 14, role="muted")
+        self.read_again = primary_button("Read it again")
+        self.read_again.clicked.connect(self._read_again)
         self.play_again = link_button("Play again")
         self.play_again.clicked.connect(self.funnel.play)
         side = QVBoxLayout()
@@ -126,6 +128,10 @@ class CasePage(Page):
         self.funnel_section.body.addWidget(self.funnel_row)
         self.funnel_section.body.addWidget(self.sentence)
         self.funnel_section.body.addWidget(self.banner)
+        again_row = QHBoxLayout()
+        again_row.addWidget(self.read_again)
+        again_row.addStretch(1)
+        self.funnel_section.body.addLayout(again_row)
         self.funnel_section.body.addStretch(1)
         upper = QHBoxLayout()
         upper.setSpacing(40)
@@ -251,6 +257,7 @@ class CasePage(Page):
         self.banner.set_verdict(view.verdict or view.status,
                                 note=(view.error or "The reason was not recorded.") if view.status == "failed" else None)
         self.sentence.setText(sentence(view))
+        self.read_again.setVisible(view.status == "failed" and view.replay_label is None)
         self.read_in.setText(read_time(view.elapsed_ms))
         if has_funnel:
             self.funnel.set_steps(view.candidates, view.steps, named, seed=view.leak_id)
@@ -341,6 +348,15 @@ class CasePage(Page):
         self.fit_value.setText(f"{self.funnel.count_at(index):,} of {total:,}")
         self.risk_value.setText(one_in(view.expected_false_matches if final else step["expected_false_matches"]))
         self.step_note.setText(f"After clue {index} of {len(view.steps)}")
+
+    def _read_again(self) -> None:
+        """Queue a failed leak again. The background thread picks it up and this screen updates when it is done."""
+        window = self.app_window
+        if self.view is None or window is None or window.locked or window.replay is not None:
+            return
+        from ... import leaks
+        if leaks.read_again(window.conn, self.view.leak_id):
+            window.open_leak(self.view.leak_id)
 
     def _copy_link(self) -> None:
         if self.view and self.view.message_url:

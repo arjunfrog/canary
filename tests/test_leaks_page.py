@@ -330,3 +330,28 @@ def test_a_leak_that_arrives_while_the_app_is_open_shows_up_and_plays_without_a_
         assert win.pages["leaks"].model.data(win.pages["leaks"].model.index(0, 4)) == "Traced: printed copy 4821"
     finally:
         win.close()
+
+
+def test_a_failed_leak_can_be_read_again_once_the_reader_is_fixed(window, tmp_path, capsys):
+    from canary import cli
+    from canary.reader import ReaderError
+    photo = tmp_path / "page1.png"
+    photo.write_bytes(PNG)
+    leak_id = leaks.add_manual_leak(window.conn, image_path=photo)
+
+    def unpaid(conn, leak):
+        raise ReaderError("Google wants payment before this key can be used.")
+    worker.process_next(window.conn, unpaid)
+    window.open_leak(leak_id)
+    case = window.pages["case"]
+    assert case.view.status == "failed" and not case.read_again.isHidden() and "Read it again" in case.sentence.text()
+    case.read_again.click()
+    assert window.conn.execute("SELECT status, error FROM leaks WHERE id = ?", (leak_id,)).fetchone()[:] == ("queued", None)
+    assert case.banner.title.text() == "Waiting to be read" and case.read_again.isHidden()
+    assert not leaks.read_again(window.conn, leak_id)                    # only failed leaks
+    with pytest.raises(SystemExit):
+        cli.main(["read-again", str(leak_id)])
+    worker.process_next(window.conn, unpaid)
+    assert cli.main(["read-again", str(leak_id)]) == 0 and "queued again" in capsys.readouterr().out
+    actions = [r[0] for r in db.connect().execute("SELECT action FROM audit_log WHERE action = 'leak queued again'")]
+    assert len(actions) == 2

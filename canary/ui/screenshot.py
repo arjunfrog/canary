@@ -45,9 +45,14 @@ def fixture_home(root: Path) -> list[int]:
     handler = lambda c, leak: analyze.analyze_leak(c, leak, FIXTURE_KEY, None, bank)
     while worker.process_next(conn, handler):
         pass
+    failed = leaks.add_manual_leak(conn, text=leak_text(printed[40:50]))
+    conn.execute("UPDATE leaks SET status = 'failed', error = ? WHERE id = ?",
+                 ("Google wants payment before this key can be used: check Billing for this key's project in Google AI "
+                  "Studio. Typed leaks still work.", failed))
+    conn.commit()
     queued = leaks.add_manual_leak(conn, text=leak_text(printed[30:40]))
     conn.close()
-    return ids + [queued]
+    return ids + [queued, failed]
 
 
 def render_all(out_dir: Path, width: int = 1440, height: int = 900) -> list[Path]:
@@ -94,7 +99,7 @@ def render_all(out_dir: Path, width: int = 1440, height: int = 900) -> list[Path
             window.open_case(case_ids[0], play=False)
             grab("case")
             extras = {"case_print": ("case", 1), "case_fake": ("case", 2), "case_inconclusive": ("case", 3),
-                      "case_unreadable": ("leak", 4), "case_lead": ("case", 5)}
+                      "case_unreadable": ("leak", 4), "case_lead": ("case", 5), "case_failed": ("leak", 7)}
             for name, (kind, index) in extras.items():
                 if kind == "case":
                     window.open_case(case_ids[index], play=False)

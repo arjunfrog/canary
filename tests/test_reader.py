@@ -118,3 +118,15 @@ def test_an_unknown_model_name_says_how_to_choose_another(canary_home, monkeypat
     missing = errors.ClientError(404, {"error": {"message": "models/gemini-nonexistent is not found", "status": "NOT_FOUND"}})
     with pytest.raises(reader.ReaderError, match="no model called 'gemini-nonexistent'.*CANARY_READER_MODEL"):
         reader.read_image(PNG, "key", client=FakeClient(error=missing))
+
+
+def test_a_payment_refusal_says_so_and_passes_on_googles_reason_without_the_key(canary_home):
+    from google.genai import errors
+    payment = errors.ClientError(402, {"error": {"code": 402, "status": "FAILED_PRECONDITION",
+                                                 "message": "Prepaid credits are depleted for key secret-key-1.\x1b[31m"}})
+    with pytest.raises(reader.ReaderError) as caught:
+        reader.read_image(PNG, "secret-key-1", client=FakeClient(error=payment))
+    text = str(caught.value)
+    assert "wants payment" in text and "Billing" in text and "Try again shortly" not in text
+    assert "Google said: Prepaid credits are depleted for key [key]." in text
+    assert "secret-key-1" not in text and "\x1b" not in text

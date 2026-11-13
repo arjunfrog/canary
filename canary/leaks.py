@@ -63,3 +63,16 @@ def add_manual_leak(conn: sqlite3.Connection, text: str | None = None, image_pat
     conn.commit()
     audit.record(conn, "leak added by hand", {"leak_id": cur.lastrowid, "kind": "image" if image_path else "text"})
     return cur.lastrowid
+
+
+def read_again(conn: sqlite3.Connection, leak_id: int) -> bool:
+    """Put a leak that could not be analysed back in the queue, for instance after the photo reader is fixed.
+
+    Only failed leaks can be read again. Returns False if the leak is not a failed one.
+    """
+    changed = conn.execute("UPDATE leaks SET status = 'queued', error = NULL WHERE id = ? AND status = 'failed'",
+                           (leak_id,)).rowcount
+    conn.commit()
+    if changed:
+        audit.record(conn, "leak queued again", {"leak_id": leak_id})
+    return bool(changed)
