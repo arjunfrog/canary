@@ -190,11 +190,26 @@ class Matcher:
                     continue
                 signature = (tuple(sorted(numbers_in(value_set.stem))), options)
                 self.signatures[signature] = None if signature in self.signatures else (q, set_no)
+        # Letter triples seen in the bank's own words. Words the bank has never seen are still mostly built
+        # from these, while the debris of a ruined scan is not.
+        self.triples = frozenset(t for q in bank.questions for text in (q.stem, *q.options)
+                                 for w in _words(text) for t in _triples(w)) | frozenset(
+            t for w in _COMMON for t in _triples(w))
         vocabulary = set(_COMMON)
         for q in bank.questions:
             for text in (q.stem, *q.options, *(o for v in q.value_sets for o in v.options)):
                 vocabulary.update(_words(text))
         self.vocabulary = frozenset(vocabulary)
+
+    def reads_like_words(self, text: str) -> bool:
+        """Is this made of word-like strings in Latin letters? False for a ruined scan or an unreadable script.
+
+        Judged by letter triples, not by a word list, so ordinary words the bank never uses still pass.
+        """
+        triples = [t for w in _words(text) for t in _triples(w)]
+        if len(triples) < 8:
+            return False
+        return sum(t in self.triples for t in triples) >= 0.6 * len(triples)
 
     def cleanly_written(self, text: str) -> bool:
         """Is this ordinary, undamaged writing? Most of its words are real words, and it has no stray symbols.
@@ -334,6 +349,11 @@ def _words(text: str) -> list[str]:
     return re.findall(r"[a-z]{3,}", unicodedata.normalize("NFKC", text).lower())
 
 
+def _triples(word: str) -> list[str]:
+    padded = f" {word} "
+    return [padded[i:i + 3] for i in range(len(padded) - 2)]
+
+
 _matchers: dict = {}
 
 
@@ -349,6 +369,11 @@ def collect(questions: list[ReadQuestion], bank) -> list[Finding]:
     findings, seen = [], set()
     for read in questions:
         finding = matcher.find(read)
+        if not finding.matched and read.legible and not matcher.reads_like_words(read.stem_for_matching):
+            # Typed text has no reader to flag what is hard to read. Text that is not made of word-like
+            # strings (a ruined scan, or a script nothing here can read) is treated as hard to read, so it
+            # can make a leak "unreadable" but never "not our paper".
+            read.legible = False
         if finding.question_id in seen:                      # the same question twice: keep the first reading only
             finding.clues = []
         elif finding.question_id:

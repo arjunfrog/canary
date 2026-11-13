@@ -58,3 +58,5 @@ Scores below are for both sets together: 84 readable leaks and 42 set aside.
 | Round | Change | Readable (84) | Set aside (42) | Wrong copy | Kept |
 |---|---|---|---|---|---|
 | 1 (restated) | Starting point for stage 2: the tool as round 1 left it. Set 2 alone: 12 of 24 readable, 5 of 12 set aside | 72 = 85.7% | 35 = 83.3% | none | |
+| 2 | A question is recognised by its numbers when its words do not match: the numbers in the stem (in any order) and all four options must equal exactly one value set of exactly one bank question. Before, a translator's paper typed in Hindi was called "not our paper", and a loosely retold one was unreadable | 78 = 92.9% | 38 = 90.5% | none | yes |
+| 3 | Typed questions that are not "cleanly written" (most words found in the bank's vocabulary) count as hard to read, so ruined text can be unreadable but never "not our paper". It fixed the ruined leaks but broke 8 fakes: ordinary words such as "bird" or "egg" are not in the bank, so clean fakes were taken for damage | 72 = 85.7% | 36 = 85.7% | none | no, reverted |
