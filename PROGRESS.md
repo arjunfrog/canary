@@ -10,7 +10,7 @@ Kept current so the work can be picked up again.
 | 2. Fingerprint engine | Done | `tests/test_fingerprint.py`, decode of 5,000 copies under 2 s |
 | 3. Papers as PDF | Done | `tests/test_pdf.py`: page 1 of a PDF decodes to its copy |
 | 4. Seed data | Done | `canary seed` takes 0.1 s: 300 people, 5,050 copies, 20,150 handovers |
-| 5. Photo reader | Done against a mocked Gemini | `tests/test_reader.py`. Never run against the real service |
+| 5. Photo reader | Done, on the Mac (Gemini removed) | `tests/test_reader.py`: a drawn translator page is read on this Mac and traced. The user's real photo reads all 8 questions |
 | 6. Analysing a leak | Done | `tests/test_analyze.py`, and `add-leak` while `run --headless` was running |
 | 7. Telegram listener | Done against fake messages | `tests/test_lurker.py`. Never run against real Telegram |
 | 8. App data layer and navigation | Done | `tests/test_queries.py`, `tests/test_app.py` |
@@ -37,11 +37,15 @@ Kept current so the work can be picked up again.
 - The "damaged questions make it unreadable" rule only applies when under half the questions matched, so a
   mostly clean leak with a few damaged questions is still decoded.
 - Matching score = (RapidFuzz ratio - 50) x 2 on normalised stems. Match at 70, clearly different under 40.
-- The photo reader asks for `gemini-flash-latest`. If Google says this key has no such model, it lists the models
-  the key may use, picks the newest stable Gemini Flash (not lite, image, speech or live), keeps the name in
-  `CANARY_HOME/reader_model` and retries once. `CANARY_READER_MODEL` pins a model and turns this off.
-- When Google says a model is busy (500 to 504), the reader waits 2 s and 5 s and tries again, then tries up to
-  two other Flash models once each for that photo only (lite models last). A pinned model is retried, never swapped.
+- The photo reader is Apple's Vision framework on the Mac itself, through PyObjC, chosen by the user over Gemini
+  (Gemini needed paid credits and was often overloaded). No key, no network. Each photo is read twice (English,
+  and Hindi which also reads Devanagari digits) and the reading that recognises more questions is kept. Lines the
+  recogniser doubts are marked hard to read. The models are loaded at unlock, so a cold start (up to ~40 s) never
+  lands on the first real photo. An old Gemini key is erased from the vault on the next unlock.
+- For photos: a question can be known by its four options alone when they are unique in the bank (385 of 459
+  value sets), and a lost ² or ³ ("m/s'") no longer hides a value set. Option groups are split into questions
+  even when the question lines were not read, and lenient labels ("D)", "(C]") are accepted, never "[A]".
+- Kannada is not read by the Mac. Numeric questions are still traced by numbers and options; text-only ones are not.
 - The worker runs each leak on one side thread, so a slow photo read never blocks the Telegram listener.
 - Backfill on start (last 50 messages) is not rate limited. Live messages are: 10 new leaks a minute per chat.
 - The Telegram client is wrapped in `ReadOnlyTelegram`, which only lets reading calls through.
@@ -97,7 +101,7 @@ Known limits, stated rather than fixed:
 
 ## Faked, and how to make it real
 
-- Photo reader: tested with a mocked Gemini client. Real: `python -m canary vault set gemini_api_key`.
+- Photo reader: nothing to connect. It runs on the Mac. Windows has none yet.
 - Telegram: tested with fake message objects. Real: `vault set tg_api_id`, `vault set tg_api_hash`,
   `python -m canary tg-login`, `python -m canary watch USERNAME`.
 - People, organisations and handover logs are synthetic, from `canary seed`.

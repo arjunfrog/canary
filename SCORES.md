@@ -26,7 +26,8 @@ wrong copy fails the whole run.
 | Typed with typing slips in the words | 6 | traced, that copy |
 | Photo reader output with two misread questions | 6 | traced, that copy |
 
-No page images are in the set, because the real photo reader is not connected.
+No page images are in the set. The "photo reader" leaks are reader output written out by hand. Real photos
+were checked separately with the Mac reader (see PROGRESS.md).
 
 ## Rounds
 

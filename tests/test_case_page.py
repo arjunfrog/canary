@@ -47,7 +47,7 @@ def fixture_view(verdict="traced", status="done", stage="print", copy_no=4821, t
     view.stage, view.candidates, view.steps = stage, total, steps(counts, total)
     view.clues_read, view.clues_matched = len(counts), len(counts) - (1 if named else 0)
     view.expected_false_matches = 3.7e-7 if verdict == "traced" else (2e-4 if named else 0.4)
-    view.elapsed_ms, view.reader = 38_000, "gemini-test-flash"
+    view.elapsed_ms, view.reader = 38_000, "Apple Vision, on this Mac"
     view.clues = [queries.ClueRow(i + 1, f"P{i + 1:03d}", i + 1, "order", i != 2, (i != 3) if named else None, 100.0)
                   for i in range(len(counts))]
     view.response = {"summary": "This leak shows 1 of the 180 real questions as printed.", "recommendation":

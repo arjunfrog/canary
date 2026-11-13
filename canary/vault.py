@@ -17,7 +17,8 @@ from cryptography.hazmat.primitives.kdf.scrypt import Scrypt
 
 MAGIC = b"CNRY1"
 SALT_LEN, NONCE_LEN = 16, 12
-SECRET_NAMES = ("fingerprint_key", "signing_key", "gemini_api_key", "tg_api_id", "tg_api_hash", "tg_session")
+SECRET_NAMES = ("fingerprint_key", "signing_key", "tg_api_id", "tg_api_hash", "tg_session")
+OBSOLETE = ("gemini_api_key",)        # photos are read on the Mac now; an old key is erased from the vault on unlock
 GENERATED = ("fingerprint_key", "signing_key")
 
 
@@ -44,6 +45,9 @@ class Vault:
     def create(cls, path: Path, passphrase: str, secrets: dict | None = None) -> "Vault":
         if path.exists():
             raise FileExistsError(f"{path} already exists")
+        unknown = set(secrets or {}) - set(SECRET_NAMES)
+        if unknown:
+            raise KeyError(f"unknown secret {sorted(unknown)[0]!r}; expected one of {', '.join(SECRET_NAMES)}")
         salt = os.urandom(SALT_LEN)
         vault = cls(path, _key(passphrase, salt), salt, {**new_keys(), **(secrets or {})})
         vault.save()
@@ -61,7 +65,12 @@ class Vault:
             plain = AESGCM(key).decrypt(nonce, sealed, MAGIC)
         except InvalidTag:
             raise WrongPassphrase("wrong passphrase, or the vault file was changed") from None
-        return cls(path, key, salt, json.loads(plain))
+        vault = cls(path, key, salt, json.loads(plain))
+        if any(name in vault._secrets for name in OBSOLETE):
+            for name in OBSOLETE:
+                vault._secrets.pop(name, None)
+            vault.save()                                   # rewritten without it, under the same passphrase
+        return vault
 
     def get(self, name: str) -> str | None:
         return self._secrets.get(name)

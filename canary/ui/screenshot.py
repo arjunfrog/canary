@@ -92,7 +92,7 @@ def render_all(out_dir: Path, width: int = 1440, height: int = 900) -> list[Path
             window.name.setVisible(True)
             window.nav_bar.setVisible(True)
             window.status.setVisible(True)
-            window.status.show_status(queries.status(window.conn), None, None)
+            window.status.show_status(queries.status(window.conn), None, (True, "Photo reader ready, on this Mac."))
             window.show_page("leaks")
             grab("leaks")
             case_ids = [queries.get_leak(window.conn, i).case_id for i in ids]

@@ -61,6 +61,6 @@ python -m canary sim         # the numbers behind the Limits screen
 ## What is and is not in the bundle
 
 - In: Python 3.11, PySide6 Essentials (QtCore, QtGui, QtWidgets only), NumPy, RapidFuzz, ReportLab, pypdf,
-  Telethon, google-genai, cryptography, the bank, the schema and the fonts.
+  Telethon, cryptography, PyObjC with Apple's Vision framework (the photo reader), the bank, the schema and the fonts.
 - Not in: any secret. The vault, the database and every leak stay in `CANARY_HOME`.
 - Not in: Qt Charts, Qt Data Visualization, Qt WebEngine, Qt Network or any other Qt add-on.

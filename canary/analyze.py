@@ -38,7 +38,11 @@ _LABEL_STYLES = (
     lambda c, n: rf"(?<![\w(.])[{c}{c.lower()}]\.(?=\s)",
     lambda c, n: rf"\(\s*{n}\s*\)",
     lambda c, n: rf"(?<![\w(.])\b{n}\)",
+    # Last resort, for text read from a photo: a bracket lost or misread, as in "D) 60 m" or "(C] 12 s".
+    # Never "[A]": chemistry writes concentrations that way. Used only when it finds all four options.
+    lambda c, n: rf"\(\s*[{c}{c.lower()}]\s*[)\]]|(?<![\w(\[])[{c}{c.lower()}][)\]](?=\s)",
 )
+_ANY_LABEL = re.compile(r"\(\s*([A-Da-d])\s*[)\]]|(?<![\w(\[])([A-Da-d])[)\]](?=\s)")
 
 
 @dataclass
@@ -99,6 +103,11 @@ def numbers_in(text: str) -> list[str]:
     return out
 
 
+def _without_powers(text: str) -> str:
+    """The text with superscript twos and threes taken out, as in m/s² or cm³."""
+    return re.sub(r"[²³]", "", text)
+
+
 def _option_key(option: str) -> tuple:
     """A numeric option as (is it negative, its numbers), so "-200 J" and "200 J" stay apart."""
     return bool(re.match(r"\s*[-\u2212\u2013]\s*\d", option)), tuple(numbers_in(option))
@@ -130,6 +139,7 @@ def parse_text(raw: str) -> list[ReadQuestion]:
     else:
         for m in re.finditer(r"\S(?:.*\S)?(?:\n[ \t]*\S.*)*", raw):
             blocks.append((None, m.start(), m.end(), m.start()))
+    blocks = [part for block in blocks for part in _option_runs(raw, *block)]
     questions = []
     for number, body, end, start in blocks[:MAX_QUESTIONS]:
         stem, options = _split_options(raw[body:end])
@@ -139,10 +149,34 @@ def parse_text(raw: str) -> list[ReadQuestion]:
     return questions
 
 
+def _option_runs(raw: str, number, body: int, end: int, start: int) -> list[tuple]:
+    """Split a block that holds several groups of options A to D into one block per question.
+
+    This happens when question numbers were not read, as in a photo of a page in a script the reader
+    cannot read: the option lines come through, the question lines do not. Whenever the option letters go
+    back (a new A after D, or C after D when lines were lost), a new question starts on the line after the
+    one holding the previous option.
+    """
+    labels = [(m.start(), (m.group(1) or m.group(2)).upper()) for m in _ANY_LABEL.finditer(raw, body, end)]
+    if len(labels) <= 4:
+        return [(number, body, end, start)]
+    cuts, previous, after_previous_line = [], None, None
+    for at, letter in labels:
+        if previous is not None and letter <= previous and after_previous_line is not None and after_previous_line <= at:
+            cuts.append(after_previous_line)
+        line_end = raw.find("\n", at, end)
+        previous, after_previous_line = letter, (line_end + 1 if line_end != -1 else None)
+    if not cuts:
+        return [(number, body, end, start)]
+    edges = [body, *cuts, end]
+    return [(number if i == 0 else None, a, b, start if i == 0 else a) for i, (a, b) in enumerate(zip(edges, edges[1:]))]
+
+
 def _split_options(block: str) -> tuple[str, list[str]]:
     """Find the four option labels in a question's text, whatever style they are written in."""
     best: tuple[str, list[str]] = (block, [])
-    for style in _LABEL_STYLES:
+    for index, style in enumerate(_LABEL_STYLES):
+        lenient = index == len(_LABEL_STYLES) - 1
         found, pos = [], 0
         for letter, digit in zip("ABCD", "1234"):
             m = re.compile(style(letter, digit)).search(block, pos)
@@ -150,12 +184,33 @@ def _split_options(block: str) -> tuple[str, list[str]]:
                 break
             found.append(m)
             pos = m.end()
-        if len(found) > len(best[1]) and len(found) >= 2:
+        if len(found) > len(best[1]) and len(found) >= (4 if lenient else 2):
             options = [" ".join(block[m.end():(found[i + 1].start() if i + 1 < len(found) else len(block))].split())
                        for i, m in enumerate(found)]
             best = (block[:found[0].start()], options)
         if len(best[1]) == 4:
             break
+    return best
+
+
+def questions_from_readings(data: dict, bank) -> list[ReadQuestion]:
+    """The photo reader's best reading as questions.
+
+    The reader returns the page read more than one way (English, Hindi). The reading that lets more
+    questions be recognised is kept, English on a tie. Questions on lines the reader was unsure of are
+    marked hard to read.
+    """
+    best, best_count = [], -1
+    for reading in data.get("readings", []):
+        text = str(reading.get("text") or "")[:MAX_TEXT]
+        questions = parse_text(text)
+        unsure = [tuple(span) for span in reading.get("unsure", []) if len(span) == 2]
+        for q in questions:
+            if q.span and any(a < q.span[1] and q.span[0] < b for a, b in unsure):
+                q.legible = False
+        count = sum(f.matched for f in collect(questions, bank))
+        if count > best_count:
+            best, best_count = questions, count
     return best
 
 
@@ -201,6 +256,15 @@ class Matcher:
         self.triples = frozenset(t for q in bank.questions for text in (q.stem, *q.options)
                                  for w in _words(text) for t in _triples(w)) | frozenset(
             t for w in _COMMON for t in _triples(w))
+        # The four options alone, for a question whose wording was not read at all.
+        self.option_signatures: dict = {}
+        for q in self.pool:
+            if q.kind != "numeric":
+                continue
+            for set_no, value_set in enumerate(q.value_sets):
+                options = tuple(sorted(_option_key(o) for o in value_set.options))
+                if all(k[1] for k in options):
+                    self.option_signatures[options] = None if options in self.option_signatures else (q, set_no)
         vocabulary = set(_COMMON)
         for q in bank.questions:
             for text in (q.stem, *q.options, *(o for v in q.value_sets for o in v.options)):
@@ -337,6 +401,24 @@ class Matcher:
                 return found
         return None
 
+    def by_options(self, read: ReadQuestion):
+        """(bank question, set number) when the four options alone point at exactly one value set in the bank.
+
+        For a question whose words could not be read. The numbers that were read from the question must not
+        contradict that set: if two or more were read and none of them is in it, the options are not trusted.
+        """
+        if len(read.options) != 4:
+            return None
+        options = tuple(sorted(_option_key(o) for o in read.options))
+        found = self.option_signatures.get(options) if all(k[1] for k in options) else None
+        if found is None:
+            return None
+        question, set_no = found
+        stem_numbers = set(numbers_in(read.stem))
+        if len(stem_numbers) >= 2 and not stem_numbers & set(self.set_numbers[question.id][set_no]):
+            return None
+        return found
+
     def by_numbers(self, read: ReadQuestion):
         """(bank question, set number) if the numbers alone identify this question, else None.
 
@@ -380,8 +462,8 @@ class Matcher:
                 question, known_set = numbered
                 score = max(score, 90.0)
             else:
-                numbered = self.by_stem_numbers(read)
-                if numbered is not None:                       # retold without options: the stem's numbers, backed by its words
+                numbered = self.by_stem_numbers(read) or self.by_options(read)
+                if numbered is not None:                       # the stem's numbers backed by its words, or the options alone
                     question, known_set = numbered
                     score = max(score, float(MATCH_THRESHOLD))
         finding = Finding(read, score=round(score, 1))
@@ -401,14 +483,22 @@ class Matcher:
         return finding
 
     def value_set(self, question, read: ReadQuestion) -> int | None:
-        """Which value set the leaked stem shows: its numbers must equal one set's numbers exactly."""
+        """Which value set the leaked stem shows: its numbers must equal one set's numbers exactly.
+
+        A photo often loses the small ² or ³ of a unit ("m/s²" read as "m/s'"). Those are the same in every
+        set of a question, so the numbers are also compared with them left out on both sides. If the stem
+        still settles nothing, four options that equal one set of this same question decide it.
+        """
         for text in (read.stem, read.stem_en):
             if not text:
                 continue
-            seen = numbers_in(text)
-            for set_no, numbers in enumerate(self.set_numbers[question.id]):
-                if seen == numbers:
+            seen, plain = numbers_in(text), numbers_in(_without_powers(text))
+            for set_no, value_set in enumerate(question.value_sets):
+                if seen == self.set_numbers[question.id][set_no] or plain == numbers_in(_without_powers(value_set.stem)):
                     return set_no
+        by_options = self.by_options(read)
+        if by_options is not None and by_options[0].id == question.id:
+            return by_options[1]
         return None
 
     def option_order(self, question, set_no: int | None, shown: list[str]) -> tuple[int, ...] | None:
@@ -621,9 +711,11 @@ def analyze_leak(conn: sqlite3.Connection, leak: sqlite3.Row, key: bytes, read_i
     started = time.monotonic()
     if leak["image_path"]:
         if read_image is None:
-            raise RuntimeError("The photo reader is not set up. Add a Gemini key with: python -m canary vault set gemini_api_key")
+            from .reader import available
+            raise RuntimeError(available()[1])
         data, reader = read_image(Path(leak["image_path"]).read_bytes())
-        questions = questions_from_reader(data)
+        bank = bank or load_bank()
+        questions = questions_from_readings(data, bank) if "readings" in data else questions_from_reader(data)
     else:
         questions, reader = parse_text(leak["raw_text"] or ""), "typed text"
     result = analyse_questions(questions, key, bank=bank)
@@ -631,17 +723,14 @@ def analyze_leak(conn: sqlite3.Connection, leak: sqlite3.Row, key: bytes, read_i
 
 
 def make_handler(vault, on_case=None):
-    """The worker's handler, holding the vault's keys in memory. `on_case(leak_id, case_id)` is told about results."""
+    """The worker's handler, holding the fingerprint key in memory. `on_case(leak_id, case_id)` is told about results."""
     from . import reader as photo_reader
 
     key = bytes.fromhex(vault.get("fingerprint_key"))
 
     def read_image(image: bytes):
-        api_key = vault.get("gemini_api_key")
-        if not api_key:
-            raise photo_reader.ReaderError("No Gemini key in the vault, so photos cannot be read. Typed leaks still work.")
-        data = photo_reader.read_image(image, api_key)
-        return data, data.get("model") or photo_reader.model_name()
+        data = photo_reader.read_image(image)
+        return data, data["model"]
 
     def handler(conn: sqlite3.Connection, leak: sqlite3.Row) -> None:
         case_id = analyze_leak(conn, leak, key, read_image)

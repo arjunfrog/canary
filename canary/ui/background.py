@@ -8,7 +8,7 @@ import threading
 
 from PySide6.QtCore import QThread, Signal
 
-from .. import db, lurker, reader, worker
+from .. import db, lurker, worker
 from ..analyze import make_handler
 
 
@@ -23,7 +23,6 @@ class Background(QThread):
         self._stop: asyncio.Event | None = None
         self._stop_requested = threading.Event()       # set even if stop() is called before the loop exists
         self.telegram = lurker.ListenerState()         # read by the status line
-        self.reader_reachable: bool | None = None      # None until checked, or when there is no key to use
 
     def run(self) -> None:
         conn = db.connect()            # SQLite connections belong to one thread, so this one opens its own
@@ -39,18 +38,10 @@ class Background(QThread):
 
         handler = make_handler(self._vault, on_case=on_case)
 
-        async def watch_reader() -> None:
-            """Once a minute, see whether the photo reader can be reached. Only if there is a key to use it with."""
-            while not self._stop.is_set():
-                self.reader_reachable = await reader.reachable() if self._vault.get("gemini_api_key") else None
-                try:
-                    await asyncio.wait_for(self._stop.wait(), timeout=60)
-                except asyncio.TimeoutError:
-                    pass
-
         async def main() -> None:
+            from .. import reader
+            asyncio.get_running_loop().run_in_executor(None, reader.warm_up)   # loads the photo models in the background
             await asyncio.gather(
-                watch_reader(),
                 worker.run_worker(handler, self._stop, on_done=self.leak_changed.emit),
                 lurker.run_listener(conn, self._vault, self._stop, on_leak=self.leak_changed.emit, state=self.telegram))
 

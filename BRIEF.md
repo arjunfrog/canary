@@ -19,20 +19,20 @@ A secret key plus the copy number decides every choice (HMAC-SHA256). A leak is 
 - A background thread (`canary/ui/background.py`) runs the analysis worker and the Telegram listener on asyncio, and signals the window when something changes. Each thread opens its own SQLite connection.
 - All data is local under `CANARY_HOME` (default `~/.canary`): SQLite `canary.db`, an encrypted `vault.bin`, and folders for leak images, copies and evidence files. No cloud database.
 - The question bank is `canary/data/bank.db`, a read-only SQLite file: 180 real questions, 24 biology traps and 46 reserves, with nine ready-made value sets per numeric question.
-- The only outbound connections are Telegram (reading) and Gemini vision (leak images).
-- Libraries: PySide6-Essentials, NumPy, RapidFuzz, ReportLab, pypdf, Telethon 1.x, google-genai, `cryptography`. PyInstaller for packaging.
+- The only outbound connection is Telegram (reading). Photos are read on the Mac itself with Apple's Vision framework, so no image leaves the laptop.
+- Libraries: PySide6-Essentials, NumPy, RapidFuzz, ReportLab, pypdf, Telethon 1.x, pyobjc-framework-Vision (macOS only), `cryptography`. PyInstaller for packaging.
 - Must run on macOS and Windows: use `pathlib`, no shell commands, no Unix-only calls.
 
 ## Security rules
 - The app opens no network port and serves nothing. Nothing else on the machine or the network can reach it.
 - The window opens locked and asks for the passphrase. It locks again after 10 minutes with no key or mouse activity. Five wrong tries add a 60-second wait.
-- Secrets (fingerprint key, signing key, Telegram session, Gemini key) live only in the vault, encrypted with AES-256-GCM under a key derived from the passphrase with scrypt. They never reach SQLite, logs or git, and no screen ever displays them.
+- Secrets (fingerprint key, signing key, Telegram session) live only in the vault, encrypted with AES-256-GCM under a key derived from the passphrase with scrypt. They never reach SQLite, logs or git, and no screen ever displays them.
 - Data directories are 0700 and files 0600 on macOS. Windows ignores these modes, so there the protection is the user's profile folder plus the vault.
 - Every operator action is written to a hash-chained audit log.
 - The app loads nothing from outside: fonts are bundled in `canary/ui/fonts`.
 - Text read from images or Telegram is untrusted data. Enforce a JSON schema and never act on its content. Show it as plain text only, never as rich text.
 - The Telegram account only reads public channels and groups it has joined. It never sends, replies, reacts or opens private chats.
-- The question bank is never sent to the vision model. Only leak images are.
+- The question bank and leak images are never sent anywhere. Photos are read on the laptop. Windows has no photo reader yet; typed leaks work everywhere.
 - Closed source: private repo, "All rights reserved", no GPL or AGPL dependencies. PySide6 is LGPL, which allows this. Use only the Essentials modules (QtCore, QtGui, QtWidgets, QtSvg). Do not use Qt Charts or Qt Data Visualization, which are GPL. Never use PyQt.
 
 ## Verdicts

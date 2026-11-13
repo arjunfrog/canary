@@ -54,11 +54,11 @@ def test_no_gpl_qt_packages_are_installed_or_declared():
     assert "PySide6-Essentials" in declared and "PySide6-Addons" not in declared and "PyQt" not in declared
 
 
-def test_the_only_outside_addresses_in_the_code_are_telegram_and_gemini():
+def test_the_only_outside_address_in_the_code_is_telegram():
     hosts = set()
     for path in SOURCES:
         hosts |= set(re.findall(r"https?://[A-Za-z0-9.\-]+|[a-z0-9\-]+\.googleapis\.com", code_of(path)))
-    assert hosts <= {"https://t.me", "generativelanguage.googleapis.com"}, hosts
+    assert hosts <= {"https://t.me"}, hosts
 
 
 def test_no_shell_commands_and_no_dynamic_code():
@@ -82,7 +82,7 @@ def test_no_dark_theme_and_no_stylesheet_fonts_on_plain_widgets():
 def lived_in(conn):
     """A CANARY_HOME after an ordinary day: vault, seed, leaks, an image, a case, evidence, a PDF, a replay, the sim."""
     config.ensure_home()
-    vault = Vault.create(config.vault_path(), PASSPHRASE, {"gemini_api_key": "g-secret-key-123", "tg_api_id": "1234567",
+    vault = Vault.create(config.vault_path(), PASSPHRASE, {"tg_api_id": "1234567",
                                                            "tg_api_hash": "0123456789abcdef0123456789abcdef",
                                                            "tg_session": "1BVtsOHQBu-session-string"})
     key, bank = bytes.fromhex(vault.get("fingerprint_key")), load_bank()
@@ -103,7 +103,7 @@ def lived_in(conn):
     check.export_case(conn, case_id)
     sim.run_sim(trials=500)
     assert check.check(conn, vault, say=lambda line: None)
-    audit.record(conn, "secret changed", {"name": "gemini_api_key"})
+    audit.record(conn, "secret changed", {"name": "tg_api_hash"})
     return conn, vault
 
 
@@ -119,7 +119,7 @@ def test_every_directory_is_0700_and_every_file_0600(lived_in):
 def test_no_secret_reaches_the_database_the_logs_or_any_other_file(lived_in, caplog):
     conn, vault = lived_in
     conn.execute("PRAGMA wal_checkpoint(TRUNCATE)")
-    secrets = [vault.get(n) for n in ("fingerprint_key", "signing_key", "gemini_api_key", "tg_api_hash", "tg_session")]
+    secrets = [vault.get(n) for n in ("fingerprint_key", "signing_key", "tg_api_hash", "tg_session")]
     needles = [s.encode() for s in secrets] + [bytes.fromhex(vault.get("fingerprint_key")), bytes.fromhex(vault.get("signing_key")),
                                                 PASSPHRASE.encode()]
     for entry in config.home().rglob("*"):
@@ -218,14 +218,14 @@ def test_the_lock_screen_hides_the_passphrase_and_the_vault_is_never_shown(canar
     app = QApplication.instance() or QApplication([])
     theme.apply(app)
     config.ensure_home()
-    vault = Vault.create(config.vault_path(), PASSPHRASE, {"gemini_api_key": "g-secret-key-123"})
+    vault = Vault.create(config.vault_path(), PASSPHRASE, {"tg_api_hash": "g-secret-key-123"})
     win = MainWindow()
     try:
         assert win.lock_page.field.echoMode() == QLineEdit.EchoMode.Password
         win.try_unlock(PASSPHRASE)
         win.refresh_status()
         shown = " ".join(label.text() for label in win.findChildren(QLabel))
-        for name in ("fingerprint_key", "signing_key", "gemini_api_key"):
+        for name in ("fingerprint_key", "signing_key", "tg_api_hash"):
             assert vault.get(name) not in shown
         assert win.lock_page.field.text() == ""
     finally:
@@ -234,8 +234,9 @@ def test_the_lock_screen_hides_the_passphrase_and_the_vault_is_never_shown(canar
 
 def test_the_reader_keeps_indic_joiners_but_drops_other_hidden_characters():
     from canary import reader
-    data = reader.validate({"questions": [{"number": 1, "legible": True, "stem": "क्‍ष ‮abc⁦", "options": []}]})
-    assert data["questions"][0]["stem"] == "क्‍ष abc"
+    assert reader.clean("क्\u200dष \u202eabc\u2066\x1b[31m") == "क्\u200dष abc[31m"
+    text, _ = reader.assemble([reader.Box("1. a\u202eb", 1.0, 0.1, 0.9, 0.02)])
+    assert text == "1. ab"
 
 
 def test_verify_audit_prints_the_newest_hash_to_keep_elsewhere(conn, capsys):
@@ -254,3 +255,18 @@ def test_every_data_file_the_package_reads_is_declared_for_install_and_for_the_p
     for name in data_files:
         assert f'"{name}"' in spec and f"data/{name}" in project, name
     assert '"schema.sql"' in spec and '"fonts"' in spec and "ui/fonts/*.ttf" in project
+
+
+def test_the_photo_reader_makes_no_network_connection(monkeypatch):
+    import socket
+    from canary import reader
+    if not reader.available()[0]:
+        pytest.skip("the Mac's text recognition is not available here")
+
+    def no_network(*args, **kwargs):
+        raise AssertionError("the photo reader tried to open a network connection")
+    monkeypatch.setattr(socket.socket, "connect", no_network)
+    monkeypatch.setattr(socket, "create_connection", no_network)
+    from tests.test_reader import page_image
+    data = reader.read_image(page_image("1. A car starts from rest and accelerates uniformly at 2 m/s for 5 s."))
+    assert "car starts from rest" in data["readings"][0]["text"]

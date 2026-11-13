@@ -3,7 +3,7 @@
   <img src="https://img.shields.io/badge/Qt-PySide6-41CD52?logo=qt&logoColor=white" alt="PySide6"/>
   <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey" alt="Platform"/>
   <img src="https://img.shields.io/badge/license-proprietary-red" alt="License"/>
-  <img src="https://img.shields.io/badge/tests-230%20passed-brightgreen" alt="Tests"/>
+  <img src="https://img.shields.io/badge/tests-244%20passed-brightgreen" alt="Tests"/>
 </p>
 
 #  Canary
@@ -103,11 +103,11 @@ From 4,000 trials across scenarios (full data in [`docs/research/sim_results.txt
 │                      │                               │
 │    ┌─────────────────▼──────────────────────┐       │
 │    │      Encrypted Vault (AES-256-GCM)     │       │
-│    │   keys · telegram session · gemini key  │       │
+│    │   keys · telegram session · signing key │       │
 │    └────────────────────────────────────────┘       │
 └─────────────────────────────────────────────────────┘
          ▲ read only              ▲ leak images only
-    Telegram channels          Gemini Vision API
+    Telegram channels      (photos are read on the Mac itself)
 ```
 
 - **Zero network surface** — no web server, no open ports, no cloud database
@@ -135,7 +135,7 @@ canary/                    the app — one Python package
   queries.py                 the one place the app reads the database
   pdf.py                     exam papers as PDF (ReportLab)
   seed.py                    creates copies, people, custody chains
-  reader.py                  photo → questions (Gemini Vision)
+  reader.py                  photo → text, on the Mac itself (Apple Vision)
   analyze.py                 full leak analysis pipeline
   lurker.py                  Telegram channel listener (Telethon)
   evidence.py                signed evidence files (Ed25519)
@@ -154,7 +154,7 @@ canary/                    the app — one Python package
     widgets/                   Bubble, OMRNumber, Funnel, CustodyTimeline, ClueTable, LeakView, LimitsChart…
     pages/                     Lock, Leaks, Case, Limits
     fonts/                     Khand & Mukta (bundled)
-tests/                     pytest suite (230 tests)
+tests/                     pytest suite (244 tests)
 bank/                      question sources & build_bank.py
 scripts/                   the scripts that built the frozen test leaks
 packaging/                 canary.spec for PyInstaller
@@ -189,7 +189,7 @@ uv pip install --python .venv/bin/python -e ".[dev]"
 ### Run
 
 ```bash
-# Run the test suite (230 tests)
+# Run the test suite (244 tests)
 python -m pytest
 
 # Initialize the encrypted vault (first time only). Prints the signing key fingerprint
@@ -224,7 +224,7 @@ python -m canary screenshot screenshots/
 | `canary add-leak --image FILE` | Queue a photo leak |
 | `canary cases` | List recent leaks and their verdicts |
 | `canary decode --text FILE` | Decode a typed leak and print the funnel |
-| `canary read PHOTO` | Read one photo with the photo reader |
+| `canary read PHOTO` | Read one photo on this Mac and print the questions found |
 | `canary tg-login`, `canary watch USERNAME`, `canary unwatch USERNAME` | Log the Telegram account in, and choose the chats to watch |
 | `canary evidence ID` | Issue the signed evidence file for a case |
 | `canary verify FILE [--expect FINGERPRINT]` | Check an evidence file. Needs no passphrase |
@@ -239,12 +239,18 @@ python -m canary screenshot screenshots/
 
 ### Connecting the real services
 
-Typed leaks need no network. To read photos and watch Telegram, put the three things only you have into the vault:
+Photos need nothing connecting: they are read on the Mac itself, with Apple's built-in text recognition (the
+engine behind Live Text). No key, no account, nothing sent anywhere. It reads English, Hindi and Marathi print.
+For other scripts, such as Kannada, physics, chemistry and maths questions are still recognised by their numbers
+and options; text-only questions are not. Windows has no photo reader yet. Typed leaks work everywhere.
 
 ```bash
-python -m canary vault set gemini_api_key     # the key from Google AI Studio
-python -m canary read PHOTO.jpg               # sends that one image to Gemini and prints what it read
+python -m canary read PHOTO.jpg               # read one photo on this Mac and print what it found
+```
 
+Telegram needs the one login only you can supply:
+
+```bash
 python -m canary vault set tg_api_id          # from my.telegram.org, "API development tools"
 python -m canary vault set tg_api_hash
 python -m canary tg-login                     # phone, code, two-step password. Saved in the vault only
@@ -252,7 +258,7 @@ python -m canary watch YOUR_DEMO_CHANNEL      # joins it if needed and starts wa
 python -m canary run                          # the listener starts when the window unlocks
 ```
 
-The photo reader asks for `gemini-flash-latest`. Set `CANARY_READER_MODEL` to use another Gemini Flash model.
+If a network blocks Telegram's usual port, Canary tries ports 5222 and 80 and remembers the one that works.
 
 ---
 
@@ -261,11 +267,11 @@ The photo reader asks for `gemini-flash-latest`. Set `CANARY_READER_MODEL` to us
 | Layer | Protection |
 |---|---|
 | **Network** | No web server, no open ports. Nothing on the machine or network can reach the app. |
-| **Vault** | All secrets (fingerprint key, signing key, Telegram session, Gemini key) encrypted with AES-256-GCM under scrypt-derived passphrase. Never in SQLite, logs, or on screen. |
+| **Vault** | All secrets (fingerprint key, signing key, Telegram session) encrypted with AES-256-GCM under scrypt-derived passphrase. Never in SQLite, logs, or on screen. |
 | **Access** | Window opens locked. Auto-locks after 10 min idle. 5 wrong passphrases → 60s cooldown. |
 | **Audit** | Every action is written to a hash-chained log. Any edit is detectable. |
 | **Data** | Directories are `0700`, files are `0600` (macOS). On Windows, protection is the user profile + vault encryption. |
-| **External calls** | Telegram (read-only, public channels only) and Gemini (leak images only, never the question bank). |
+| **External calls** | Telegram only (read-only, public channels only). Photos are read on the Mac itself, so no image or question ever leaves the laptop. |
 | **Supply chain** | No GPL dependencies. PySide6 Essentials only (LGPL). Fonts bundled. |
 | **Telegram** | The client is wrapped so it can only read. Sending, replying, reacting, marking as read and private chats do not exist in it. |
 | **Untrusted text** | Whatever is read from an image or a chat is checked against a schema, stored, and shown as plain text. It is never followed. |
@@ -291,7 +297,7 @@ Stated limits:
 | Second, harder set, at its start | 12 of 24 (50.0%) | 5 of 12 (41.7%) | never |
 | Both sets now | 84 of 84 | 42 of 42 | never |
 
-A further 1,300 random leaks (damaged, retold, merged from two or three copies, fakes with random numbers) named a wrong copy 0 times. None of this includes a real photo: the photo reader has only been tested against a mock.
+A further 1,300 random leaks (damaged, retold, merged from two or three copies, fakes with random numbers) named a wrong copy 0 times. The score sets are typed text and photo-reader output; real photos were checked separately on this Mac.
 
 ---
 
@@ -331,20 +337,8 @@ All 13 tasks in `docs/PROMPTS.md` are built. The optional extras are not. Detail
 | App screens: Lock, Leaks, Case with the funnel, Limits | ✅ Built & tested |
 | Evidence files, `verify`, recommended response | ✅ Built & tested |
 | Limits simulation, health check, reset, replay | ✅ Built & tested. `check` passes three times in a row |
-| Photo reader | ⚠️ Built, tested against a mocked Gemini only. No real photo has been read |
+| Photo reader | ✅ Built & tested on this Mac with Apple's own text recognition, on real and drawn pages. Mac only: Windows has no photo reader yet |
 | Telegram listener | ⚠️ Built, tested against fake messages only. Never run against Telegram |
 | Packaging | ⚠️ `Canary.app` builds and passes its own `check` on macOS. The Windows build has not been run |
-
----|---|
-| Storage, vault, audit log, hash chains | ✅ Built & tested |
-| Question bank & loader | ✅ Built & tested |
-| Fingerprint engine (keyed choice, probability math, verdicts) | ✅ Built & tested |
-| Worker pipeline & CLI | ✅ Built & tested |
-| App window (lock, idle lock, navigation, theme, widgets) | ✅ Built & tested |
-| Copy generation & decoding | 🔧 In progress |
-| PDF maker, seed data, photo reader | 🔧 In progress |
-| Telegram listener, analysis pipeline | 🔧 In progress |
-| App screens (Leaks, Case, Limits) | 🔧 In progress |
-| Evidence files, simulation, health check | 🔧 In progress |
 
 ---

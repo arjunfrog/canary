@@ -175,34 +175,30 @@ def test_verdict_words_never_name_a_copy_without_a_verdict_that_allows_it():
 
 # ---- the status line
 
-class FakeVault:
-    def __init__(self, key=None):
-        self.key = key
-
-    def get(self, name):
-        return self.key if name == "gemini_api_key" else None
+READY = (True, "Photo reader ready, on this Mac.")
 
 
 def test_the_status_line_reports_chats_telegram_and_the_photo_reader(app):
     line = StatusLine()
     status = queries.Status([("examleaks_demo", "Exam <b>leaks</b>"), ("neet_demo", "NEET")], {"queued": 1, "done": 3}, 4, True)
-    line.show_status(status, lurker.ListenerState(True, "Telegram connected.", 2), FakeVault("k"), reader_reachable=True)
-    assert line.text() == "Watching 2 chats.  Telegram connected.  Photo reader ready.  1 leak waiting to be read."
-    line.show_status(status, lurker.ListenerState(True, "Telegram connected.", 2), FakeVault("k"), reader_reachable=False)
-    assert "Photo reader not reachable." in line.text() and "Offline" not in line.text()
-    line.show_status(status, lurker.ListenerState(True, "Telegram connected.", 2), FakeVault(None))
-    assert "No photo reader key" in line.text()
+    line.show_status(status, lurker.ListenerState(True, "Telegram connected on port 5222.", 2), READY)
+    assert line.text() == ("Watching 2 chats.  Telegram connected on port 5222.  Photo reader ready, on this Mac.  "
+                           "1 leak waiting to be read.")
+    line.show_status(status, lurker.ListenerState(True, "Telegram connected.", 2),
+                     (False, "Photos can only be read on a Mac. Typed leaks still work."))
+    assert "Photos can only be read on a Mac." in line.text() and "Offline" not in line.text()
     assert line.textFormat() == Qt.TextFormat.PlainText and line.font().family() == "Mukta"
 
 
-def test_offline_it_says_typed_leaks_still_work(app):
+def test_offline_it_says_what_still_works(app):
     line = StatusLine()
     status = queries.Status([], {}, 0, False)
-    line.show_status(status, lurker.ListenerState(False, "Telegram is not reachable. Typed leaks still work."), FakeVault("k"),
-                     reader_reachable=False)
-    assert line.text().startswith("Offline. Typed leaks still work.") and "python -m canary seed" in line.text()
-    line.show_status(status, lurker.ListenerState(False, "Telegram is not logged in. Run: python -m canary tg-login"), FakeVault(None))
+    line.show_status(status, lurker.ListenerState(False, "Telegram is not reachable. Typed leaks still work."), READY)
+    assert line.text().startswith("Offline. Typed leaks and photos still work.") and "python -m canary seed" in line.text()
+    line.show_status(status, lurker.ListenerState(False, "Telegram is not logged in. Run: python -m canary tg-login"),
+                     (False, "Photos can only be read on a Mac. Typed leaks still work."))
     assert line.text().startswith("Offline. Typed leaks still work.") and "tg-login" in line.text()
+    assert "Photos can only be read on a Mac." not in line.text()
     line.show_replay()
     assert "Replay" in line.text()
 

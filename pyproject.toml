@@ -14,7 +14,7 @@ dependencies = [
     "rapidfuzz",         # matching leaked questions to the bank (task 6)
     "reportlab",         # exam papers as PDF (task 3)
     "pypdf",             # PDF round-trip test (task 3)
-    "google-genai",      # photo reader (task 5)
+    "pyobjc-framework-Vision; sys_platform == 'darwin'",   # photo reader: the Mac's own text recognition (MIT)
     "telethon>=1,<2",    # Telegram listener (task 7)
     "PySide6-Essentials",  # the desktop app (Qt), macOS and Windows. Essentials only: the add-on modules include GPL ones
 ]

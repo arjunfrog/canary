@@ -16,28 +16,20 @@ class StatusLine(QLabel):
     def show_replay(self) -> None:
         self.setText("Replay. Nothing is being read or watched, and no network is used.")
 
-    def show_status(self, status, telegram, vault, reader_reachable: bool | None = None) -> None:
-        """status: queries.Status. telegram: the listener's state, or None. reader_reachable: None if not checked."""
+    def show_status(self, status, telegram, photo: tuple[bool, str] | None = None) -> None:
+        """status: queries.Status. telegram: the listener's state, or None. photo: (available, sentence) from the reader."""
         chats = len(status.watched)
         watching = "Not watching any chats yet." if chats == 0 else f"Watching {chats} chat{'s' if chats != 1 else ''}."
-        connected = bool(telegram and telegram.connected)
-        has_key = bool(vault and vault.get("gemini_api_key"))
-        reader_up = has_key and reader_reachable is not False
-        if not connected and not reader_up:
-            parts = ["Offline. Typed leaks still work.", watching]
+        photo_ok, photo_words = photo if photo is not None else (False, "")
+        if telegram is not None and telegram.connected:
+            parts = [watching, telegram.message or "Telegram connected."]
+        else:
+            parts = ["Offline. Typed leaks still work." if not photo_ok else "Offline. Typed leaks and photos still work.",
+                     watching]
             if telegram and telegram.message and "Typed leaks still work" not in telegram.message:
                 parts.append(telegram.message)
-            if not has_key:
-                parts.append("No photo reader key in the vault.")
-        else:
-            parts = [watching, (telegram.message or "Telegram connected.") if connected
-                     else (telegram.message if telegram else "Telegram is off.")]
-            if not has_key:
-                parts.append("No photo reader key in the vault, so photos cannot be read.")
-            elif reader_reachable is False:
-                parts.append("Photo reader not reachable.")
-            else:
-                parts.append("Photo reader ready.")
+        if photo_words and (photo_ok or "Typed leaks still work" not in parts[0]):
+            parts.append(photo_words.replace(" Typed leaks still work.", ""))
         waiting = status.counts.get("queued", 0) + status.counts.get("reading", 0)
         if waiting:
             parts.append(f"{waiting} leak{'s' if waiting != 1 else ''} waiting to be read.")

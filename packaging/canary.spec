@@ -36,7 +36,7 @@ a = Analysis(
     [str(ROOT / "packaging" / "launch.py")],
     pathex=[str(ROOT)],
     datas=datas,
-    hiddenimports=["canary.ui.app", "canary.ui.screenshot", "telethon", "google.genai"],
+    hiddenimports=["canary.ui.app", "canary.ui.screenshot", "telethon", "objc", "Foundation", "Quartz", "Vision"],
     excludes=excludes,
     noarchive=False,
 )
