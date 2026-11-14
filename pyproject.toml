@@ -33,4 +33,5 @@ canary = ["schema.sql", "data/bank.db", "data/score_set.json", "data/score_set_2
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 addopts = "-q"
