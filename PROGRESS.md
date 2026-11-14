@@ -22,6 +22,7 @@ Kept current so the work can be picked up again.
 | Security review | Done | `tests/test_security.py`: 15 guard tests |
 | `canary score` and improvement rounds | Done | `SCORES.md`: set 1 from 93.3% to 100%, set 2 from 50.0% (41.7% set aside) to 100%, no wrong copy |
 | Fixes after the rounds | Done | `tests/test_robustness.py`: 1,300 random leaks, 0 wrong copies |
+| `canary prepare-demo` | Done | `tests/test_demo.py`. A Vision read of the rendered Hindi paper traced to its copy. Handwritten Hindi not tested |
 
 ## Decisions
 

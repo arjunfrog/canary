@@ -219,7 +219,7 @@ A cool, near-monochrome slate palette with one saturated blue, a small brand yel
 Each tone is an ink and fill pair, keyed in `theme.TONES`.
 - **Traced Green** (`traced-ink` on `traced-fill`): Traced.
 - **Lead Amber** (`lead-ink` on `lead-fill`): Strong lead.
-- **Slate** (`slate-ink` on `slate-fill`): Not enough to name anyone yet, We couldn't read this clearly, Waiting to be read, Being read now, and the "Mock exam, synthetic people" label.
+- **Slate** (`slate-ink` on `slate-fill`): Not enough to name anyone yet, We couldn't read this clearly, Waiting to be read, Being read now.
 - **Alarm Red** (`alarm-ink` on `alarm-fill`): Not our paper, and a leak that could not be analysed. The alarm ink (`theme.DANGER`) is also the colour of error messages, a broken handover chain, and the wrong-copy line in the limits chart, each always written out in words.
 
 ### Named Rules
@@ -261,7 +261,7 @@ Every screen uses `Page.frame()`: a 16px gutter (14px at the top) and 12px betwe
 
 Inside a panel: a title row with 8px vertical and 12px horizontal padding, a 1px divider, then a body with 12px padding (10px at the top) and 8px between items. Tables run flush to the panel edge. Figure cells use 14px horizontal padding and are separated by vertical 1px dividers, never by gaps.
 
-The sidebar has 10px side padding, 2px between nav items, the brand row then 14px of space, the screens, a stretch, the synthetic pill, and the status lines at the foot.
+The sidebar has 10px side padding, 2px between nav items, the brand row then 14px of space, the screens, a stretch, and the status lines at the foot.
 
 ### Named Rules
 **The One Screen Rule.** A decided case fits at 1440x900 without the page scrolling. Long content scrolls inside its panel.
@@ -311,7 +311,7 @@ A 30x18 track drawn with `QPainter`: Firm Line when off, Canary Blue when on, a 
 - Read-only text boxes (`QPlainTextEdit`) take a Hairline border; editable ones a Firm Line border; embedded ones lose border and padding.
 
 ### Navigation
-The sidebar (`QFrame#sidebar`): the Canary mark and a 17px SemiBold wordmark, then Leaks and Limits as checkable nav buttons (14px Medium, left-aligned, 5px 10px padding, 6px radius). Inactive items are Secondary Ink; hover fills Quiet Fill with Ink text; the active item fills Blue Wash with Blue Ink text. A case belongs to Leaks, so Leaks stays active on the case screen. The synthetic pill and the `StatusLine` (12px Secondary Ink, one fact per line) sit at the foot.
+The sidebar (`QFrame#sidebar`): the Canary mark and a 17px SemiBold wordmark, then Leaks and Limits as checkable nav buttons (14px Medium, left-aligned, 5px 10px padding, 6px radius). Inactive items are Secondary Ink; hover fills Quiet Fill with Ink text; the active item fills Blue Wash with Blue Ink text. A case belongs to Leaks, so Leaks stays active on the case screen. The `StatusLine` (12px Secondary Ink, one fact per line) sit at the foot.
 
 ### Tables (`RuledTable`)
 A console table, never default Qt table styling. No grid and no frame; a 30px header in Quiet Fill with 12px Medium Secondary Ink text and a Hairline rule beneath; rows 36px tall (30px in the clue table) with one Hairline rule under each and 10px cell padding. Hover fills Quiet Fill; selection fills Blue Wash and keeps Ink text. Cells are painted as plain text and elided, never as rich text. A cell may carry a 9px mark (filled Canary Blue for a clue that fits, hollow Faint Ink otherwise), a muted or error tone, or a pill.
@@ -334,7 +334,7 @@ Both are painted with `QPainter` in theme colours only: a 1.2px Firm Line spine,
 - **Do** put state colour only in a `Pill` or `VerdictBadge`, with the verdict in words on it.
 - **Do** keep the number behind a verdict next to the verdict, in the figures strip.
 - **Do** separate regions inside a panel with `divider()`, and lay screens out with `Page.frame()` (16px gutter, 12px gap).
-- **Do** give every screen a loading, empty and error state, and label demo data "Mock exam, synthetic people".
+- **Do** give every screen a loading, empty and error state, and label demo data synthetic in the exam title, papers and evidence files. The owner removed the on-screen label from the lock screen and sidebar (14 Nov 2026).
 - **Do** draw pills, the switch, funnel cells, table marks, timelines and charts with `QPainter`.
 - **Do** honour `CANARY_REDUCE_MOTION=1` by showing the funnel's final state.
 

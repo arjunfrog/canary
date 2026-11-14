@@ -4,7 +4,6 @@ from PySide6.QtWidgets import QFrame, QHBoxLayout, QLineEdit, QVBoxLayout, QWidg
 
 from ...lock import LockGuard
 from .. import theme
-from ..widgets.pill import Pill
 from ..widgets.text import heading, plain, primary_button
 
 
@@ -53,21 +52,10 @@ class LockPage(QWidget):
         inner.addWidget(self.button)
         inner.addWidget(self.message)
 
-        footnote = plain("Runs on this laptop only. Nothing is hosted.", 12, role="muted")
-        synthetic = Pill("Mock exam, synthetic people", "inconclusive", px=12)
-        foot = QHBoxLayout()
-        foot.setSpacing(10)
-        foot.addStretch(1)
-        foot.addWidget(synthetic)
-        foot.addWidget(footnote)
-        foot.addStretch(1)
-
         column = QVBoxLayout(self)
         column.setContentsMargins(16, 16, 16, 16)
         column.addStretch(3)
         column.addWidget(card, 0, Qt.AlignmentFlag.AlignHCenter)
-        column.addSpacing(14)
-        column.addLayout(foot)
         column.addStretch(4)
 
         self._countdown = QTimer(self)

@@ -48,11 +48,11 @@ Every clue has a chance rate: 1/8 for a decoy value set, the share of translator
 Concept: a security console at the craft of Linear, Vercel and Stripe Dashboard, with tight spacing (the owner's choice, 14 Nov 2026; the answer-sheet look is retired). Light theme only, the same on macOS and Windows. DESIGN.md records the system in full.
 - Colours, defined once in `canary/ui/theme.py`: ground `#F6F7F9`, white panels with `#E3E6EB` borders and 8px corners, ink `#0E1525` and `#525B71`, one accent, Canary blue `#2B59E8`, for primary actions, selection, links and live copies. Verdict pills carry state colour (Traced green, Strong lead amber, Not our paper red, the rest slate), always with the verdict in words. Canary yellow `#F2C200` is the brand mark only.
 - Fonts: Mukta for everything (`theme.body(px)`, `theme.heading(px)`). Set fonts with `setFont`, never with a stylesheet font rule, because that overrides `setFont`. Tabular numbers. Sentence case.
-- Layout: a white sidebar (screens, synthetic label, status), then each screen as a header (title, context, actions) over bordered panels (`Panel`). Panels are never nested. Gutters 16px, gaps 12px.
+- Layout: a white sidebar (screens, status), then each screen as a header (title, context, actions) over bordered panels (`Panel`). Panels are never nested. Gutters 16px, gaps 12px.
 - Draw the funnel, the handover timeline, pills, the switch and the limits chart with `QPainter`.
 - Never: dark theme, gradients, glass, coloured side borders on panels, shadows as decoration, all-caps labels, monospace labels, emoji or glyphs as icons, default Qt table styling.
 - The funnel is the only animation that plays on its own. If the setting `CANARY_REDUCE_MOTION=1` is on, show the final state instead.
-- Every screen has loading, empty and error states. Demo data is labelled synthetic.
+- Every screen has loading, empty and error states. Demo data is labelled synthetic in the exam title, papers and evidence files. There is no on-screen synthetic label (the owner's choice, 14 Nov 2026).
 - Words are plain and written for an exam controller: "Not enough to name anyone yet", never "Error" or "Analysis complete".
 
 ## Commands

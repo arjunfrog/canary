@@ -141,6 +141,7 @@ canary/                    the app — one Python package
   evidence.py                signed evidence files (Ed25519)
   sim.py                     limits simulation
   check.py                   health check, reset, replay
+  demo.py                    prepare-demo: demo leaks and the Hindi paper
   score.py                   the scored test sets (see SCORES.md)
   samples.py                 sample leaks with known answers
   data/bank.db               question bank (250 questions)
@@ -231,6 +232,7 @@ python -m canary screenshot screenshots/
 | `canary export-case ID` | Save a case as a replay file |
 | `canary sim` | Run the limits simulation |
 | `canary check` | End-to-end health check |
+| `canary prepare-demo` | Clear every leak, add six demo leaks put through the real analysis (four traced, a strong lead, a fake), and write a Hindi translator paper to leak live, with its English copy and sealed slip |
 | `canary score` | Score the tool on the frozen test leaks |
 | `canary reset` | Delete all leaks, cases and evidence files |
 | `canary verify-audit` | Verify the audit log hash chain |

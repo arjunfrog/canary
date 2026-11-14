@@ -10,7 +10,7 @@ from ..vault import Vault, WrongPassphrase
 from . import theme
 from .background import Background
 from .pages import CasePage, LeaksPage, LimitsPage, LockPage
-from .widgets import Pill, StatusLine
+from .widgets import StatusLine
 from .widgets.text import heading
 
 ACTIVITY = {QEvent.Type.KeyPress, QEvent.Type.MouseButtonPress, QEvent.Type.MouseMove, QEvent.Type.Wheel}
@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
         self.conn = db.connect()
         self._last_activity = time.monotonic()
 
-        # sidebar: the mark, the screens, the synthetic label and the status
+        # sidebar: the mark, the screens and the status
         self.nav_bar = QFrame()
         self.nav_bar.setObjectName("sidebar")
         self.nav_bar.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
@@ -73,9 +73,6 @@ class MainWindow(QMainWindow):
             side.addWidget(button)
             self._buttons[key] = button
         side.addStretch(1)
-        self.synthetic = Pill("Mock exam, synthetic people", "inconclusive", px=12)
-        side.addWidget(self.synthetic, 0, Qt.AlignmentFlag.AlignLeft)
-        side.addSpacing(10)
         self.status = StatusLine()
         self.status.setContentsMargins(4, 0, 4, 0)
         side.addWidget(self.status)

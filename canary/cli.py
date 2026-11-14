@@ -228,6 +228,31 @@ def cmd_reset(args) -> int:
     return 0
 
 
+def cmd_prepare_demo(args) -> int:
+    from . import demo
+    from .ui.widgets.pill import VERDICTS
+    vault = unlock()
+    if not args.yes and input("This deletes every leak, case and evidence file, then adds the demo leaks. "
+                              "Type reset to go on: ").strip() != "reset":
+        print("Nothing was changed.")
+        return 1
+    out = Path(args.out).expanduser() if args.out else config.home() / "demo"
+    try:
+        made = demo.prepare(db.connect(), fingerprint_key(vault), out, args.paper)
+    except ValueError as exc:
+        sys.exit(str(exc))
+    print("Cleared " + ", ".join(f"{count} {name}" for name, count in made["cleared"].items()) + ".")
+    print("Demo leaks, each put through the real analysis:")
+    for leak in made["leaks"]:
+        words = VERDICTS[leak.verdict][0] if leak.verdict in VERDICTS else "Not analysed"
+        named = f", copy {leak.found_copy}" if leak.found_copy is not None else ""
+        print(f"  {words + named:34} {leak.name}")
+    print(f"\nThe paper to leak is translator copy {made['paper_copy']}. Keep that to yourself until it is traced.")
+    for path in made["files"]:
+        print(f"  {path}")
+    return 0
+
+
 def cmd_export_case(args) -> int:
     from . import check
     try:
@@ -406,6 +431,11 @@ def build_parser() -> argparse.ArgumentParser:
     reset = sub.add_parser("reset", help="Delete all leaks, cases and evidence files")
     reset.add_argument("--yes", action="store_true", help="do not ask to confirm")
     reset.set_defaults(fn=cmd_reset)
+    demo = sub.add_parser("prepare-demo", help="Clear the leaks, add traced demo leaks, write a Hindi paper to leak")
+    demo.add_argument("--out", help="Folder for the papers and the sealed slip. Default: CANARY_HOME/demo")
+    demo.add_argument("--paper", type=int, help="Which translator copy the Hindi paper is. Default: one at random")
+    demo.add_argument("--yes", action="store_true", help="Do not ask before clearing")
+    demo.set_defaults(fn=cmd_prepare_demo)
     export = sub.add_parser("export-case", help="Save a case as a replay file")
     export.add_argument("case_id", type=int, metavar="ID")
     export.set_defaults(fn=cmd_export_case)
