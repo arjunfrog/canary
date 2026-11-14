@@ -119,6 +119,7 @@ def render_all(out_dir: Path, width: int = 1440, height: int = 900) -> list[Path
             window.pages["limits"].select(3)
             grab("limits_fails")
             window.vault = None                              # nothing was unlocked, so nothing to record on close
+            window.conn.close()
             window.close()
         finally:
             for name, value in (("CANARY_HOME", previous_home), ("CANARY_REDUCE_MOTION", previous_motion)):

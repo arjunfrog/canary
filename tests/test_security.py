@@ -267,6 +267,6 @@ def test_the_photo_reader_makes_no_network_connection(monkeypatch):
         raise AssertionError("the photo reader tried to open a network connection")
     monkeypatch.setattr(socket.socket, "connect", no_network)
     monkeypatch.setattr(socket, "create_connection", no_network)
-    from tests.test_reader import page_image
+    from .test_reader import page_image
     data = reader.read_image(page_image("1. A car starts from rest and accelerates uniformly at 2 m/s for 5 s."))
     assert "car starts from rest" in data["readings"][0]["text"]
