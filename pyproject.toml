@@ -15,6 +15,13 @@ dependencies = [
     "reportlab",         # exam papers as PDF (task 3)
     "pypdf",             # PDF round-trip test (task 3)
     "pyobjc-framework-Vision; sys_platform == 'darwin'",   # photo reader: the Mac's own text recognition (MIT)
+    "winrt-runtime; sys_platform == 'win32'",              # photo reader on Windows: Windows.Media.Ocr through PyWinRT (MIT)
+    "winrt-Windows.Foundation; sys_platform == 'win32'",
+    "winrt-Windows.Foundation.Collections; sys_platform == 'win32'",
+    "winrt-Windows.Globalization; sys_platform == 'win32'",
+    "winrt-Windows.Graphics.Imaging; sys_platform == 'win32'",
+    "winrt-Windows.Media.Ocr; sys_platform == 'win32'",
+    "winrt-Windows.Storage.Streams; sys_platform == 'win32'",
     "telethon>=1,<2",    # Telegram listener (task 7)
     "PySide6-Essentials",  # the desktop app (Qt), macOS and Windows. Essentials only: the add-on modules include GPL ones
 ]

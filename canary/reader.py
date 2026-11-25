@@ -1,11 +1,13 @@
-"""The photo reader: turns a leak image into text, on this Mac, with Apple's built-in text recognition.
+"""The photo reader: turns a leak image into text, on the laptop itself, with the system's built-in text recognition.
 
-Nothing leaves the laptop: the image is read by the Vision framework that ships with macOS, through
-PyObjC. There is no key, no account and no network use. Other systems have no photo reader yet, and
-there typed leaks still work.
+Nothing leaves the laptop. On a Mac the image is read by the Vision framework that ships with macOS, through
+PyObjC. On Windows it is read by Windows.Media.Ocr, which ships with Windows 10 and 11, through PyWinRT.
+There is no key, no account and no network use. Other systems have no photo reader, and there typed leaks
+still work.
 
 Each photo is read twice, once for English and once for Hindi (which also reads Devanagari digits). The
-analysis keeps whichever reading lets it recognise more questions. Lines the recogniser is unsure of are
+analysis keeps whichever reading lets it recognise more questions. Windows reads Hindi only when its Hindi
+text recognition is installed; otherwise it reads English alone. Lines the recogniser is unsure of are
 marked, so a poor photo can be called "unreadable" but never "not our paper".
 
 What is read is untrusted text. It is only ever parsed and compared with the bank.
@@ -16,7 +18,7 @@ from dataclasses import dataclass
 
 MAX_IMAGE_BYTES = 10 * 1024 * 1024
 MAX_SIDE = 12000                  # pixels; anything larger is refused rather than decoded
-READER_NAME = "Apple Vision, on this Mac"
+READER_NAME = "Windows text recognition, on this PC" if sys.platform == "win32" else "Apple Vision, on this Mac"
 LANGUAGE_PASSES = (("English", ("en-US",)), ("Hindi", ("hi-IN", "en-US")))
 UNSURE_BELOW = 0.5                # Vision's confidence is coarse (0.3, 0.5, 1.0); under this a line is marked unsure
 ROW_TOLERANCE = 0.5               # boxes whose centres are within half a line height are one row
@@ -39,8 +41,17 @@ def image_type(image: bytes) -> str | None:
 
 def available() -> tuple[bool, str]:
     """(can photos be read on this computer, a sentence saying so)."""
+    if sys.platform == "win32":
+        try:
+            if not _windows_supports("en-US"):
+                return False, "Windows has no English text recognition installed. Typed leaks still work."
+        except ImportError:
+            return False, "Windows text recognition is not installed (the winrt packages). Typed leaks still work."
+        if not _windows_supports("hi-IN"):
+            return True, "Photo reader ready, on this PC (English only)."
+        return True, "Photo reader ready, on this PC."
     if sys.platform != "darwin":
-        return False, "Photos can only be read on a Mac. Typed leaks still work."
+        return False, "Photos can only be read on a Mac or a Windows PC. Typed leaks still work."
     try:
         import Vision  # noqa: F401
     except ImportError:
@@ -92,6 +103,12 @@ def assemble(boxes: list[Box]) -> tuple[str, list[tuple[int, int]]]:
 
 
 def _recognise(image: bytes, languages: tuple[str, ...]) -> list[Box]:
+    if sys.platform == "win32":
+        return _recognise_windows(image, languages[0])
+    return _recognise_mac(image, languages)
+
+
+def _recognise_mac(image: bytes, languages: tuple[str, ...]) -> list[Box]:
     import Foundation
     import objc
     import Vision
@@ -116,8 +133,68 @@ def _recognise(image: bytes, languages: tuple[str, ...]) -> list[Box]:
         return boxes
 
 
+def _windows_supports(tag: str) -> bool:
+    """Whether Windows has text recognition installed for this language."""
+    from winrt.windows.globalization import Language
+    from winrt.windows.media.ocr import OcrEngine
+    return OcrEngine.is_language_supported(Language(tag))
+
+
+def _windows_decoder(image: bytes):
+    """A Windows image decoder over the bytes in memory, or None if Windows cannot open them."""
+    from winrt.windows.graphics.imaging import BitmapDecoder
+    from winrt.windows.storage.streams import DataWriter, InMemoryRandomAccessStream
+    stream = InMemoryRandomAccessStream()
+    writer = DataWriter(stream)
+    writer.write_bytes(image)
+    writer.store_async().get()
+    writer.detach_stream()
+    stream.seek(0)
+    try:
+        return BitmapDecoder.create_async(stream).get()
+    except OSError:
+        return None
+
+
+def _recognise_windows(image: bytes, language: str) -> list[Box]:
+    """Read the image with Windows' own text recognition. A language Windows has no recogniser for reads nothing."""
+    from winrt.windows.globalization import Language
+    from winrt.windows.graphics.imaging import (BitmapAlphaMode, BitmapPixelFormat, BitmapTransform,
+                                                ColorManagementMode, ExifOrientationMode)
+    from winrt.windows.media.ocr import OcrEngine
+    if not _windows_supports(language):
+        return []
+    decoder = _windows_decoder(image)
+    if decoder is None:
+        raise ReaderError("Windows could not read this image. It may be damaged or in an unusual format.")
+    transform = BitmapTransform()
+    scale = OcrEngine.max_image_dimension / max(decoder.pixel_width, decoder.pixel_height)
+    if scale < 1:                                          # Windows reads at most 10,000 pixels a side
+        transform.scaled_width = int(decoder.pixel_width * scale)
+        transform.scaled_height = int(decoder.pixel_height * scale)
+    bitmap = decoder.get_software_bitmap_async(
+        BitmapPixelFormat.BGRA8, BitmapAlphaMode.PREMULTIPLIED, transform,
+        ExifOrientationMode.RESPECT_EXIF_ORIENTATION, ColorManagementMode.DO_NOT_COLOR_MANAGE).get()
+    result = OcrEngine.try_create_from_language(Language(language)).recognize_async(bitmap).get()
+    width, height = bitmap.pixel_width, bitmap.pixel_height
+    boxes = []
+    for line in result.lines:
+        rects = [word.bounding_rect for word in line.words]
+        if not rects:
+            continue
+        top = min(r.y for r in rects)
+        bottom = max(r.y + r.height for r in rects)
+        # Windows gives no confidence, so every line counts as sure. Positions become fractions from the bottom left.
+        boxes.append(Box(line.text, 1.0, min(r.x for r in rects) / width,
+                         1 - (top + bottom) / 2 / height, (bottom - top) / height))
+    return boxes
+
+
 def _size(image: bytes) -> tuple[int, int] | None:
     """The image's width and height in pixels, read without decoding the whole image."""
+    if sys.platform == "win32":
+        decoder = _windows_decoder(image)
+        return (decoder.pixel_width, decoder.pixel_height) if decoder else None
     import Foundation
     import Quartz
     data = Foundation.NSData.dataWithBytes_length_(image, len(image))

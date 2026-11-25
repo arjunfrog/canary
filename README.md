@@ -107,7 +107,7 @@ From 4,000 trials across scenarios (full data in [`docs/research/sim_results.txt
 │    └────────────────────────────────────────┘       │
 └─────────────────────────────────────────────────────┘
          ▲ read only              ▲ leak images only
-    Telegram channels      (photos are read on the Mac itself)
+    Telegram channels      (photos are read on the laptop itself)
 ```
 
 - **Zero network surface** — no web server, no open ports, no cloud database
@@ -135,7 +135,7 @@ canary/                    the app — one Python package
   queries.py                 the one place the app reads the database
   pdf.py                     exam papers as PDF (ReportLab)
   seed.py                    creates copies, people, custody chains
-  reader.py                  photo → text, on the Mac itself (Apple Vision)
+  reader.py                  photo → text, on the laptop itself (Apple Vision / Windows OCR)
   analyze.py                 full leak analysis pipeline
   lurker.py                  Telegram channel listener (Telethon)
   evidence.py                signed evidence files (Ed25519)
@@ -225,7 +225,7 @@ python -m canary screenshot screenshots/
 | `canary add-leak --image FILE` | Queue a photo leak |
 | `canary cases` | List recent leaks and their verdicts |
 | `canary decode --text FILE` | Decode a typed leak and print the funnel |
-| `canary read PHOTO` | Read one photo on this Mac and print the questions found |
+| `canary read PHOTO` | Read one photo on this computer and print the questions found |
 | `canary tg-login`, `canary watch USERNAME`, `canary unwatch USERNAME` | Log the Telegram account in, and choose the chats to watch |
 | `canary evidence ID` | Issue the signed evidence file for a case |
 | `canary verify FILE [--expect FINGERPRINT]` | Check an evidence file. Needs no passphrase |
@@ -244,10 +244,14 @@ python -m canary screenshot screenshots/
 Photos need nothing connecting: they are read on the Mac itself, with Apple's built-in text recognition (the
 engine behind Live Text). No key, no account, nothing sent anywhere. It reads English, Hindi and Marathi print.
 For other scripts, such as Kannada, physics, chemistry and maths questions are still recognised by their numbers
-and options; text-only questions are not. Windows has no photo reader yet. Typed leaks work everywhere.
+and options; text-only questions are not.
+
+On Windows, photos are read with Windows' own text recognition (Windows.Media.Ocr), also with no key and
+nothing sent anywhere. It reads English; it reads Hindi only if Windows has Hindi text recognition installed,
+and the status line says "(English only)" when it does not. Typed leaks work everywhere.
 
 ```bash
-python -m canary read PHOTO.jpg               # read one photo on this Mac and print what it found
+python -m canary read PHOTO.jpg               # read one photo on this computer and print what it found
 ```
 
 Telegram needs the one login only you can supply:
@@ -273,7 +277,7 @@ If a network blocks Telegram's usual port, Canary tries ports 5222 and 80 and re
 | **Access** | Window opens locked. Auto-locks after 10 min idle. 5 wrong passphrases → 60s cooldown. |
 | **Audit** | Every action is written to a hash-chained log. Any edit is detectable. |
 | **Data** | Directories are `0700`, files are `0600` (macOS). On Windows, protection is the user profile + vault encryption. |
-| **External calls** | Telegram only (read-only, public channels only). Photos are read on the Mac itself, so no image or question ever leaves the laptop. |
+| **External calls** | Telegram only (read-only, public channels only). Photos are read on the laptop itself, so no image or question ever leaves it. |
 | **Supply chain** | No GPL dependencies. PySide6 Essentials only (LGPL). Fonts bundled. |
 | **Telegram** | The client is wrapped so it can only read. Sending, replying, reacting, marking as read and private chats do not exist in it. |
 | **Untrusted text** | Whatever is read from an image or a chat is checked against a schema, stored, and shown as plain text. It is never followed. |
@@ -339,7 +343,7 @@ All 13 tasks in `docs/PROMPTS.md` are built. The optional extras are not. Detail
 | App screens: Lock, Leaks, Case with the funnel, Limits | ✅ Built & tested |
 | Evidence files, `verify`, recommended response | ✅ Built & tested |
 | Limits simulation, health check, reset, replay | ✅ Built & tested. `check` passes three times in a row |
-| Photo reader | ✅ Built & tested on this Mac with Apple's own text recognition, on real and drawn pages. Mac only: Windows has no photo reader yet |
+| Photo reader | ✅ Built & tested on this Mac with Apple's own text recognition, on real and drawn pages. On Windows, built and tested with Windows' own text recognition (English) |
 | Telegram listener | ⚠️ Built, tested against fake messages only. Never run against Telegram |
 | Packaging | ⚠️ `Canary.app` builds and passes its own `check` on macOS. The Windows build has not been run |
 

@@ -10,7 +10,7 @@ from canary.samples import leak_text
 
 KEY = bytes.fromhex("11" * 32)
 PNG = b"\x89PNG\r\n\x1a\n" + b"\x00" * 64
-MAC = pytest.mark.skipif(not reader.available()[0], reason="the Mac's text recognition is not available here")
+READER = pytest.mark.skipif(not reader.available()[0], reason="this computer's text recognition is not available here")
 
 
 def page_image(text: str, width: int = 2400) -> bytes:
@@ -38,15 +38,32 @@ def test_files_that_are_not_images_are_never_read(monkeypatch):
         reader.read_image(PNG + b"\x00" * reader.MAX_IMAGE_BYTES)
 
 
-def test_other_systems_say_photos_need_a_mac(monkeypatch):
-    monkeypatch.setattr(sys, "platform", "win32")
+def test_other_systems_say_photos_need_a_mac_or_windows(monkeypatch):
+    monkeypatch.setattr(sys, "platform", "linux")
     ok, words = reader.available()
-    assert not ok and "only be read on a Mac" in words and "Typed leaks still work" in words
-    with pytest.raises(reader.ReaderError, match="only be read on a Mac"):
+    assert not ok and "only be read on a Mac or a Windows PC" in words and "Typed leaks still work" in words
+    with pytest.raises(reader.ReaderError, match="only be read on a Mac or a Windows PC"):
         reader.read_image(PNG)
 
 
-@MAC
+def test_windows_says_when_it_reads_english_only_or_has_no_recogniser(monkeypatch):
+    monkeypatch.setattr(sys, "platform", "win32")
+    monkeypatch.setattr(reader, "_windows_supports", lambda tag: tag == "en-US")
+    assert reader.available() == (True, "Photo reader ready, on this PC (English only).")
+    monkeypatch.setattr(reader, "_windows_supports", lambda tag: True)
+    assert reader.available() == (True, "Photo reader ready, on this PC.")
+    monkeypatch.setattr(reader, "_windows_supports", lambda tag: False)
+    ok, words = reader.available()
+    assert not ok and "Typed leaks still work" in words
+
+    def missing(tag):
+        raise ImportError("winrt")
+    monkeypatch.setattr(reader, "_windows_supports", missing)
+    ok, words = reader.available()
+    assert not ok and "winrt" in words and "Typed leaks still work" in words
+
+
+@READER
 def test_a_broken_image_is_refused_in_plain_words():
     with pytest.raises(reader.ReaderError, match="could not be opened"):
         reader.read_image(PNG)                                   # a PNG signature and nothing else
@@ -74,10 +91,10 @@ def test_the_reading_that_recognises_more_questions_is_kept_and_doubtful_questio
     assert [q.legible for q in questions] == [False, True, True, True]
 
 
-# ---- the real reader, on this Mac
+# ---- the real reader, on this computer
 
-@MAC
-def test_a_photo_of_a_translator_page_is_read_on_this_mac_and_traced(monkeypatch):
+@READER
+def test_a_photo_of_a_translator_page_is_read_on_this_computer_and_traced(monkeypatch):
     bank = load_bank()
     image = page_image(leak_text(fp.render_translator_copy(KEY, 1, 23, bank)[:6]))
     data = reader.read_image(image)
@@ -86,7 +103,7 @@ def test_a_photo_of_a_translator_page_is_read_on_this_mac_and_traced(monkeypatch
     assert (result.verdict, result.stage, result.copy_no) == ("traced", "translation", 23)
 
 
-@MAC
+@READER
 def test_a_page_with_no_options_lines_found_is_split_by_its_option_groups():
     bank = load_bank()
     copy = fp.render_print_copy(KEY, 1, 4821, bank)[:3]
@@ -108,7 +125,7 @@ def test_read_command_needs_no_passphrase_and_sends_nothing(canary_home, tmp_pat
     photo.write_bytes(PNG)
     assert cli.main(["read", str(photo)]) == 0
     out = capsys.readouterr().out
-    assert "2 questions read by Apple Vision, on this Mac. Nothing left this laptop." in out and "(D)" in out
+    assert f"2 questions read by {reader.READER_NAME}. Nothing left this laptop." in out and "(D)" in out
 
 
 def test_warming_up_reads_a_blank_image_and_never_raises(monkeypatch):
@@ -122,12 +139,12 @@ def test_warming_up_reads_a_blank_image_and_never_raises(monkeypatch):
         raise RuntimeError("anything at all")
     monkeypatch.setattr(reader, "read_image", broken)
     reader.warm_up()                                            # no exception
-    monkeypatch.setattr(reader, "available", lambda: (False, "not a Mac"))
-    monkeypatch.setattr(reader, "read_image", lambda image: pytest.fail("must not read off a Mac"))
+    monkeypatch.setattr(reader, "available", lambda: (False, "no reader here"))
+    monkeypatch.setattr(reader, "read_image", lambda image: pytest.fail("must not read without a reader"))
     reader.warm_up()
 
 
-@MAC
+@READER
 def test_the_blank_warm_up_image_is_a_real_image():
     data = reader.read_image(reader._blank_png())
     assert [r["text"] for r in data["readings"]] == ["", ""]

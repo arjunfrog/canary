@@ -36,7 +36,10 @@ a = Analysis(
     [str(ROOT / "packaging" / "launch.py")],
     pathex=[str(ROOT)],
     datas=datas,
-    hiddenimports=["canary.ui.app", "canary.ui.screenshot", "telethon", "objc", "Foundation", "Quartz", "Vision"],
+    hiddenimports=["canary.ui.app", "canary.ui.screenshot", "telethon"] + (
+        ["objc", "Foundation", "Quartz", "Vision"] if sys.platform == "darwin" else
+        ["winrt.windows.foundation", "winrt.windows.foundation.collections", "winrt.windows.globalization",
+         "winrt.windows.graphics.imaging", "winrt.windows.media.ocr", "winrt.windows.storage.streams"]),
     excludes=excludes,
     noarchive=False,
 )

@@ -46,7 +46,8 @@ folder, not the `.exe` alone. Double-click `Canary.exe` to open the lock screen.
 as `init`, `seed`, `check` and `tg-login` from the source tree with `.venv\Scripts\python -m canary ...`.
 They use the same `CANARY_HOME` as the packaged app.
 
-The Windows build has not been run yet. The Mac build has: see PROGRESS.md.
+Both builds have been run. On Windows 11 with Python 3.13, `Canary.exe` opens the lock screen, `Canary.exe screenshot DIR`
+draws every screen, and `Canary.exe read PHOTO` reads a photo with Windows' own text recognition.
 
 ## First run of a packaged app
 
@@ -61,6 +62,7 @@ python -m canary sim         # the numbers behind the Limits screen
 ## What is and is not in the bundle
 
 - In: Python 3.11, PySide6 Essentials (QtCore, QtGui, QtWidgets only), NumPy, RapidFuzz, ReportLab, pypdf,
-  Telethon, cryptography, PyObjC with Apple's Vision framework (the photo reader), the bank, the schema and the fonts.
+  Telethon, cryptography, PyObjC with Apple's Vision framework (the photo reader on a Mac), PyWinRT with Windows.Media.Ocr (the photo
+  reader on Windows), the bank, the schema and the fonts.
 - Not in: any secret. The vault, the database and every leak stay in `CANARY_HOME`.
 - Not in: Qt Charts, Qt Data Visualization, Qt WebEngine, Qt Network or any other Qt add-on.

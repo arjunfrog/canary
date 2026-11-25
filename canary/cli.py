@@ -402,7 +402,7 @@ def build_parser() -> argparse.ArgumentParser:
     chain.add_argument("--copy", type=int, required=True)
     chain.set_defaults(fn=cmd_verify_chain)
 
-    read = sub.add_parser("read", help="Read a photo on this Mac and print the questions found")
+    read = sub.add_parser("read", help="Read a photo on this computer and print the questions found")
     read.add_argument("photo", metavar="PHOTO")
     read.set_defaults(fn=cmd_read)
 

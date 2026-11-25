@@ -1,4 +1,5 @@
 import secrets
+import sys
 
 import pytest
 
@@ -47,8 +48,11 @@ def test_prepare_clears_old_leaks_and_adds_one_of_each_verdict(conn, tmp_path):
     names = sorted(path.name for path in made["files"])
     assert names == ["english-paper-translator-09.pdf", "hindi-paper-translator-09.pdf", "sealed-slip-translator-09.pdf"]
     for path in made["files"]:
-        assert path.read_bytes().startswith(b"%PDF") and (path.stat().st_mode & 0o777) == 0o600
-    assert (tmp_path / "demo").stat().st_mode & 0o777 == 0o700
+        assert path.read_bytes().startswith(b"%PDF")
+        if sys.platform != "win32":                          # Windows ignores file modes
+            assert (path.stat().st_mode & 0o777) == 0o600
+    if sys.platform != "win32":
+        assert (tmp_path / "demo").stat().st_mode & 0o777 == 0o700
     assert audit.verify(conn)[0]
 
 
